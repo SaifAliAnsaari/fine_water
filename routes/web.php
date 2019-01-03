@@ -78,3 +78,5 @@ Route::get('/DeleteTeam', 'Delivery@delete_team_entry');
 Route::get('/DeleteCity', 'Regions@delete_city_entry');
 Route::get('/DeleteArea', 'Regions@delete_area_entry');
 Route::get('/DeleteZone', 'Regions@delete_zone_entry');
+
+Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
