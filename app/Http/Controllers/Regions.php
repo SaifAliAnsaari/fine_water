@@ -17,6 +17,8 @@ class Regions extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     //City
     public function cities(){
         return view('region/cities');
     }
@@ -52,8 +54,40 @@ class Regions extends Controller
         }
     } 
 
+    public function get_city_data($id){
+        echo json_encode(array('info' => DB::table('city_info')->where("id", $id)->first()));
+    }
+
+    public function update_city(Request $request){
+        //echo json_encode($request->city_id. " - " . $request->city);
+        try{
+            $update_city = DB::table('city_info')
+        ->where('id', $request->city_id)
+        ->update([
+            'city_name' => $request->city]);
+            
+            echo json_encode("success"); 
+
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            echo json_encode('failed'); 
+        }
+    }
+
+    public function delete_city_entry(Request $request){
+        $delete_one_entry = DB::table('city_info')
+            ->where('id', $request->id)
+            ->delete();
+        if($delete_one_entry){
+            echo json_encode('success');
+        }else{
+            echo json_encode('failed');
+        }
+    }
 
 
+
+
+    //Area
     public function area(){
         $get_cities = DB::table('city_info')
             ->get();
@@ -85,8 +119,40 @@ class Regions extends Controller
             ->get());
     }
 
+    public function get_area_data($id){
+        echo json_encode(array('info' => DB::table('area_info')->where("id", $id)->first()));
+    }
+
+    public function update_area(Request $request){
+        //echo json_encode($request->city_id. " - " . $request->city);
+        try{
+            $update_area = DB::table('area_info')
+        ->where('id', $request->area_id)
+        ->update([
+            'area_name' => $request->area,
+            'city_id' => $request->city_name]);
+            
+            echo json_encode("success"); 
+
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            echo json_encode('failed'); 
+        }
+    }
+
+    public function delete_area_entry(Request $request){
+        $delete_one_entry = DB::table('area_info')
+            ->where('id', $request->id)
+            ->delete();
+        if($delete_one_entry){
+            echo json_encode('success');
+        }else{
+            echo json_encode('failed');
+        }
+    }
 
 
+
+    //Zone
     public function zone(){
         $get_areas = DB::table('area_info')
             ->get();
@@ -116,5 +182,37 @@ class Regions extends Controller
         ->selectRaw('id, zone_name, (Select area_name from area_info where id = zi.area_id) as area_name')
         ->get());
     }
+
+    public function get_zone_data($id){
+        echo json_encode(array('info' => DB::table('zone_info')->where("id", $id)->first()));
+    }
+
+    public function update_zone(Request $request){
+        //echo json_encode($request->city_id. " - " . $request->city);
+        try{
+            $update_zone = DB::table('zone_info')
+        ->where('id', $request->zone_id)
+        ->update([
+            'zone_name' => $request->zone,
+            'area_id' => $request->area_name]);
+            
+            echo json_encode("success"); 
+
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            echo json_encode('failed'); 
+        }
+    }
+
+    public function delete_zone_entry(Request $request){
+        $delete_one_entry = DB::table('zone_info')
+            ->where('id', $request->id)
+            ->delete();
+        if($delete_one_entry){
+            echo json_encode('success');
+        }else{
+            echo json_encode('failed');
+        }
+    }
+
 
 }

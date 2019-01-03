@@ -142,12 +142,61 @@
                 <img src="/images/loader.gif" width="30px" height="auto" style="position: absolute; left: 50%; top: 45%;">
             </div>
             <div id="HTMLtoPDF">
-                
+                {{-- <header>
+                    <div class = "row">
+                        <div class = "col-md-5" style = "padding:15px;">
+                            <div class = "row" style = "padding:15px;">
+                                <img src='images/logo.PNG' alt="Logo">
+                            </div>
+                            <div class = "row" style = "padding:15px;">
+                                <span style = "color:#354879; margin-left:20px; font-size: 20px; font-weight: bold;">Billed To:</span>
+                            </div>
+                            <div class = "row" style = "padding:15px;">
+                                <span style = "color:#354879; margin-left:20px; font-size: 16px; font-weight: bold;">Indus Motors Corporation</span>
+                                <br>
+                                <span style = "color:#354879; margin-left:20px; font-size: 14px;">House # 123, Street, Area, Rawalpindi</span>
+                                <br>
+                                <span style = "color:#354879; margin-left:20px; font-size: 14px;">STRN# : 0215457887787</span> 
+                                <br>
+                                <span style = "color:#354879; margin-left:20px; font-size: 14px;">NTN# : abc457845sa</span>
+                            </div>
+                        </div>
+                        <div class = "col-md-3"></div>
+                        <div class = "col-md-4" style = "padding:15px;">
+                            <div style = "background-color:#354879; width:100%; height:50px; position: relative;" >
+                                <span style = "color:white; margin-left: 15px; position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);">e-Invoice</span>
+                            </div>
+                            <div class = "row" style = "margin-left:15px;">
+                                <span style = "color:#354879; margin-top:10px; font-size: 12px;">Account Number : 123456</span>
+                            </div>
+                            <div class = "row" style = "margin-left:15px;">
+                                <span style = "color:#354879; margin-top:10px; font-size: 12px;">Invoice Number : 001</span>
+                            </div>
+                            <div class = "row" style = "margin-left:15px;">
+                                <span style = "color:#354879; margin-top:10px; font-size: 12px;">Invoice Date : 3/12/2018</span>
+                            </div>
+                            <div class = "row" style = "margin-left:15px;">
+                                <span style = "color:#354879; margin-top:10px; font-size: 12px;">Invoice Period : 1/12/2019 - 15/2/2019</span>
+                            </div> 
+                        </div>
+                    </div>
+                </header> --}}
                 <div class="body" style="display: none">
                 </div>
+                {{-- <footer align="center"> 
+                    <span style = "color:#354879; margin-left:20px; font-size: 16px; font-weight: bold;">H Shippers</span>
+                    <br>
+                    <span style = "color:#354879; margin-left:20px; font-size: 12px;">Complete address of company plus city and country</span>
+                    <br>
+                    <span style = "color:#354879; margin-left:20px; font-size: 12px;">| 03124678912 |</span>
+                    <br>
+                    <span style = "color:#354879; margin-left:20px; font-size: 12px;">| NTN#12345678 | GST#12346789 |</span>
+                    <br>
+                    <span style = "color:#354879; margin-left:20px; font-size: 12px;">website name</span> 
+                    <br>
+                </footer> --}}
             </div>
-        
-    </div>
+        </div>
     </div>
 </div>
 <a href="#" id ="download-btn" onclick="HTMLtoPDF()">Download</a>

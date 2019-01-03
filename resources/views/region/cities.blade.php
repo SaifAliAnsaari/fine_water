@@ -21,7 +21,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div id="floating-label" class="card p-20 top_border mb-3">
-
+                                        <input hidden type="text" name="city_id" value = "">
                                         <h2 class="_head03 PT-10">Add <span> City</span></h2>
                                         <div class="form-wrap p-0">
                                             <div class="row">
@@ -44,6 +44,7 @@
     </div>
     <div class="_cl-bottom">
         <button type="submit" class="btn btn-primary mr-2" id="saveCity">Save</button>
+        <button type="submit" class="btn btn-primary mr-2" id="updateCity" style = "display:none;">Update</button>
         <button id="pl-close" type="submit" class="btn btn-cancel mr-2" id="cancelCity">Cancel</button>
     </div>
 </div>

@@ -36,7 +36,9 @@ class Employee extends Controller
         $employee->address = $request->address;
         $employee->username = $request->username;
         if($request->password){
-            $employee->password = Hash::make($request->name);
+            //$employee->password = Hash::make($request->name);
+            $password = bcrypt($request->password);
+            $employee->password = $password;
         }
         $employee->hiring = $request->hiring;
         $employee->salary = $request->salary;

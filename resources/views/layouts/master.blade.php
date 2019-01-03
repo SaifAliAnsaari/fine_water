@@ -66,13 +66,15 @@
     <script src="/js/master.js?v=1.0" ></script>
     <script src="/js/jquery.form.min.js" ></script>
     <script src="/js/bootstrap-datepicker.js"></script>
+    {{-- <script src="/js/rasterize.js"></script> --}}
+    {{-- <script src="/js/html2canvas.js"></script>
     <script src="/js/jspdf.js"></script>
-    <script src="/js/pdfFromHTML.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.5/jspdf.plugin.autotable.js"></script>
+    <script src="/js/pdfFromHTML.js?v={{ time() }}"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.5/jspdf.plugin.autotable.js"></script> --}}
     @if($controller == "Customer")
         <script src="/js/custom/customer.js?v=1.0" ></script>
     @elseif($controller == "CustomerTypes")
-        <script src="/js/custom/customer-types.js?v={{ time() }}" ></script>
+        <script src="/js/custom/customer-types.js?v=1.0" ></script>
     @elseif($controller == "RegisterController")
         <script src="/js/custom/employee.js?v=1.0" ></script>
     @elseif($controller == "Clients")

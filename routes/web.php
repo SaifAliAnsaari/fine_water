@@ -52,7 +52,6 @@ Route::get('/GetCitiesList', 'Regions@cities_list');
 Route::get('/GetAreasList', 'Regions@areas_list');
 Route::get('/GetZonesList', 'Regions@zone_list');
 Route::get('/GetTeamsList', 'Delivery@delivery_team_list');
-Route::get('/DeleteTeam', 'Delivery@delete_team_entry');
 
 Route::get('/GetCityData', 'Regions@GetCityData');
 
@@ -60,7 +59,22 @@ Route::post('/City_save', 'Regions@add_city');
 Route::post('/Area_save', 'Regions@add_area');
 Route::post('/Zone_save', 'Regions@add_zone');
 Route::post('/DeliveryTeam_save', 'Delivery@add_team');
+
+//update
 Route::post('/team_update', 'Delivery@update_team');
+Route::post('/city_update', 'Regions@update_city');
+Route::post('/area_update', 'Regions@update_area');
+Route::post('/zone_update', 'Regions@update_zone');
 
 
+//Get data to show on update form
 Route::get('/team_data/{id}', 'Delivery@get_team_data');
+Route::get('/city_data/{id}', 'Regions@get_city_data');
+Route::get('/area_data/{id}', 'Regions@get_area_data');
+Route::get('/zone_data/{id}', 'Regions@get_zone_data');
+
+//Delete
+Route::get('/DeleteTeam', 'Delivery@delete_team_entry');
+Route::get('/DeleteCity', 'Regions@delete_city_entry');
+Route::get('/DeleteArea', 'Regions@delete_area_entry');
+Route::get('/DeleteZone', 'Regions@delete_zone_entry');

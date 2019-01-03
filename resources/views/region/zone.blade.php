@@ -21,7 +21,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div id="floating-label" class="card p-20 top_border mb-3">
-
+                                        <input type="text" value="" hidden name="zone_id">
                                         <h2 class="_head03 PT-10">Add <span> Zone</span></h2>
                                         <div class="form-wrap p-0">
                                             <div class="row">
@@ -34,7 +34,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <select class="form-control formselect" name="area_name" placeholder="Select Customer Type">
-                                                            <option value="0" disabled selected>Select City</option>
+                                                            <option value="0" disabled selected>Select Area</option>
                                                             <?php
                                                                 if(!$areas->isEmpty()){
                                                                     foreach($areas as $area){ ?>
@@ -58,6 +58,7 @@
     </div>
     <div class="_cl-bottom">
         <button type="submit" class="btn btn-primary mr-2" id="saveZone">Save</button>
+        <button type="submit" class="btn btn-primary mr-2" id="updateZone" style = "display:none;">Update</button>
         <button id="pl-close" type="submit" class="btn btn-cancel mr-2" id="cancelZone">Cancel</button>
     </div>
 </div>
