@@ -131,15 +131,17 @@ $(document).ready(function(){
 
     $(document).on('click', '#saveDeliveryTeam', function() {
 
-        // if (!$('input[name="username"]').val() || !$('input[name="password"]').val() || !$('input[name="client_name"]').val() || !$('input[name="email"]').val() ) {
-        //     $('#notifDiv').fadeIn();
-        //     $('#notifDiv').css('background', 'red');
-        //     $('#notifDiv').text('Please provide all the required information (*)');
-        //     setTimeout(() => {
-        //         $('#notifDiv').fadeOut();
-        //     }, 3000);
-        //     return;
-        // }
+        if (!$('input[name="team_name"]').val() || !$('input[name="vehical_make_model"]').val() || !$('input[name="vehical_type"]').val() || 
+            !$('input[name="vehical_license_num"]').val() || !$('input[name="vehical_capicity_filled"]').val() || !$('input[name="vehical_capicity_empty"]').val() ||
+            !$('select[name="select_memebr"]').val() || !$('select[name="area_name"]').val()) {
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text('Please provide all the required information (*)');
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 3000);
+            return;
+        }
 
         $('#saveAddAnotherCustomer').attr('disabled', 'disabled');
         $('#saveDeliveryTeam').attr('disabled', 'disabled');
@@ -316,7 +318,7 @@ function fetchTeamssList() {
             $('#teamListTable tbody').empty();
             var response = JSON.parse(response);
             response.forEach(element => {
-                $('#teamListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['team_name'] + '</td><td>' + element['vehical_type'] + '</td><td>' + element['vehical_license'] + '</td><td>' + element['capacity_filled'] + '</td><td>' + element['capacity_empty'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdateTeam edit_team_btn">Edit</button><a href="/CustomerProfile/' + element['id'] + '" id="' + element['id'] + '" class="btn btn-default">Profile</a><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deleteTeam" title="Delete">Delete</button></form></td></tr>');
+                $('#teamListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['team_name'] + '</td><td>' + element['vehical_type'] + '</td><td>' + element['vehical_license'] + '</td><td>' + element['capacity_filled'] + '</td><td>' + element['capacity_empty'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdateTeam edit_team_btn">Edit</button><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deleteTeam" title="Delete">Delete</button></form></td></tr>');
                 
             });
             $('#tblLoader').hide();

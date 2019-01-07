@@ -147,7 +147,8 @@ $(document).ready(function(){
     //save area
     $(document).on('click', '#saveArea', function() {
 
-        if (!$('input[name="area"]').val() || $('select[name="city_name"]').val() == 0) {
+        
+        if (!$('input[name="area"]').val() || $('select[name="city_name"]').val() == 0 || !$('select[name="city_name"]').val()) {
             $('#notifDiv').fadeIn();
             $('#notifDiv').css('background', 'red');
             $('#notifDiv').text('Please provide all the required information (*)');
@@ -156,6 +157,7 @@ $(document).ready(function(){
             }, 3000);
             return;
         }
+
 
         $('#saveArea').attr('disabled', 'disabled');
         $('#cancelArea').attr('disabled', 'disabled');
@@ -229,7 +231,7 @@ $(document).ready(function(){
     $(document).on('click', '#saveZone', function() {
 
         //alert('here');
-        if (!$('input[name="zone"]').val() || $('select[name="area_name"]').val() == 0) {
+        if (!$('input[name="zone"]').val() || $('select[name="area_name"]').val() == 0 || !$('select[name="area_name"]').val()) {
             $('#notifDiv').fadeIn();
             $('#notifDiv').css('background', 'red');
             $('#notifDiv').text('Please provide all the required information (*)');
@@ -712,7 +714,7 @@ $(document).ready(function(){
                 }
             });
         }
-    })
+    });
 
 });
 
@@ -727,7 +729,7 @@ function fetchCitiesList() {
             $('#clientsListTable tbody').empty();
             var response = JSON.parse(response);
             response.forEach(element => {
-                $('#clientsListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['city_name'] +  '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate edit_city_btn">Edit</button><a href="/CustomerProfile/' + element['id'] + '" id="' + element['id'] + '" class="btn btn-default">Profile</a><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deletebtn" title="Delete">Delete</button></form></td></tr>');
+                $('#clientsListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['city_name'] +  '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate edit_city_btn">Edit</button><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deletebtn" title="Delete">Delete</button></form></td></tr>');
             });
             $('#tblLoader').hide();
             $('.body').fadeIn();
@@ -747,7 +749,7 @@ function fetchAreasList(){
             $('#clientsListTable tbody').empty();
             var response = JSON.parse(response);
             response.forEach(element => {
-                $('#clientsListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['area_name'] +  '</td><td>' + element['city_name'] +  '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate edit_city_btn">Edit</button><a href="/CustomerProfile/' + element['id'] + '" id="' + element['id'] + '" class="btn btn-default">Profile</a><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deletebtn" title="Delete">Delete</button></form></td></tr>');
+                $('#clientsListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['area_name'] +  '</td><td>' + element['city_name'] +  '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate edit_city_btn">Edit</button><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deletebtn" title="Delete">Delete</button></form></td></tr>');
             });
             $('#tblLoader').hide();
             $('.body').fadeIn();
@@ -767,7 +769,7 @@ function fetchZoneList(){
             $('#clientsListTable tbody').empty();
             var response = JSON.parse(response);
             response.forEach(element => {
-                $('#clientsListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['zone_name'] +  '</td><td>' + element['area_name'] +  '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate edit_city_btn">Edit</button><a href="/CustomerProfile/' + element['id'] + '" id="' + element['id'] + '" class="btn btn-default">Profile</a><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deletebtn" title="Delete">Delete</button></form></td></tr>');
+                $('#clientsListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['zone_name'] +  '</td><td>' + element['area_name'] +  '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate edit_city_btn">Edit</button><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deletebtn" title="Delete">Delete</button></form></td></tr>');
             });
             $('#tblLoader').hide();
             $('.body').fadeIn();

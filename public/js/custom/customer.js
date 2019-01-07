@@ -188,19 +188,16 @@ $(document).ready(function() {
 
     $(document).on('click', '#saveCustomer', function() {
 
-        if (!$('input[name="compName"]').val() || !$('input[name="poc"]').val() || $('select[name="zone"]').val() == 0 || $('select[name="type"]').val() == 0 || $('select[name="country"]').val() == 0 || !$('input[name="businessPh"]').val() || !$('input[name="address"]').val() || !$('input[name="city"]').val() || $('select[name="documentTypes"]').val() == 0 || $('select[name="deliveryPorts"]').val() == 0) {
-            $('#notifDiv').fadeIn();
-            $('#notifDiv').css('background', 'red');
-            $('#notifDiv').text('Please provide all the required information (*)');
-            setTimeout(() => {
-                $('#notifDiv').fadeOut();
-            }, 3000);
-            return;
-        }
+        // if (!$('input[name="compName"]').val() || !$('input[name="poc"]').val() || $('select[name="zone"]').val() == 0 || $('select[name="type"]').val() == 0 || $('select[name="country"]').val() == 0 || !$('input[name="businessPh"]').val() || !$('input[name="address"]').val() || !$('input[name="city"]').val() || $('select[name="documentTypes"]').val() == 0 || $('select[name="deliveryPorts"]').val() == 0) {
+        //     $('#notifDiv').fadeIn();
+        //     $('#notifDiv').css('background', 'red');
+        //     $('#notifDiv').text('Please provide all the required information (*)');
+        //     setTimeout(() => {
+        //         $('#notifDiv').fadeOut();
+        //     }, 3000);
+        //     return;
+        // }
 
-        debugger;
-
-        // $('#saveAddAnotherCustomer').attr('disabled', 'disabled');
         $('#saveCustomer').attr('disabled', 'disabled');
         $('#cancelCustomer').attr('disabled', 'disabled');
         $('#saveCustomer').text('Processing..');

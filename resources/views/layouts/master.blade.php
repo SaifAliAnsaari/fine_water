@@ -26,7 +26,7 @@
             font-weight: 400;
             font-size: 15px;
             width: 350px;
-            position: absolute;
+            position: fixed;
             top: 80%;
             left: 5%;
             z-index: 1000;

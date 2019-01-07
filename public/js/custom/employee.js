@@ -147,9 +147,9 @@ $(document).ready(function() {
             return;
         }
 
-        // $('#saveEmployee').attr('disabled', 'disabled');
-        // $('#cancelEmployee').attr('disabled', 'disabled');
-        // $('#saveEmployee').text('Processing..');
+        $('#saveEmployee').attr('disabled', 'disabled');
+        $('#cancelEmployee').attr('disabled', 'disabled');
+        $('#saveEmployee').text('Processing..');
         var ajaxUrl = "/register";
 
         if ($('#operation').val() !== "add") {
