@@ -135,11 +135,11 @@
                                                     <div class="form-s2 pt-19">
                                                         <select name="department" class="form-control formselect" placeholder="Select Department">
                                                             <option value="0" selected>Select Department*</option>
-                                                            <option value="1">Services</option>
-                                                            <option value="2">Customer Care</option>
-                                                            <option value="3">Human Resource</option>
-                                                            <option value="4">Administration</option>
-                                                            <option value="5">Cashier</option> 
+                                                            <option value="0">Services</option>
+                                                            <option value="1">Customer Care</option>
+                                                            <option value="2">Human Resource</option>
+                                                            <option value="3">Administration</option>
+                                                            <option value="4">Cashier</option> 
                                                         </select>
                                                     </div>
                                                 </div>

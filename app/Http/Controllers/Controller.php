@@ -11,3 +11,21 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 }
+
+class JsonApiResponse{
+
+    public $status;
+    public $data;
+    public $code;
+
+    public function __construct($status, $code, $data){
+        $this->status = $status;
+        $this->code = $code;
+        $this->data = $data;
+    }
+
+    function apiResponse(){
+        return array('status' => $this->status, 'code' => $this->code, 'data' => $this->data);
+    }
+
+}

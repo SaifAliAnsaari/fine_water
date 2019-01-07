@@ -6,14 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>E-bob</title>
+    <title>Sell3Sixty</title>
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,600,700,800" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/style.css" rel="stylesheet">
 </head>
-<body style="background-color: #001e35">
+<body class="bg_main">
     <div id="wrapper">
         <div class="log_con">
             <div class="container-fluid">
@@ -22,13 +21,12 @@
                     <div class="table-cell vertical-align-middle auth-form-wrap">
                         <div class="auth-form">
                             <div class="row m-0">
-                                <div class="col-md-6" style="background-color: #efefef">
+                                <div class="col-md-6">
                                     <div class="login-left">
-                                        <div class="logo-company"> <img src="images/allomate-logo.svg" alt="" /> </div>
-                                        <h4>Customer Experience Solution</h4>
+                                        <div class="logo-company"> <img src="images/sell-360.svg" alt="" /> </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" style="background-color: #efefef">
                                     <div class="login-right">
                                         <h3>Login</h3>
                                         <form method="POST" action="{{ route('login') }}">
@@ -73,7 +71,7 @@
                                             @endif
 
                                             <div class="form-group">
-                                                <button type="submit" class="btn btn-info btn-login">Login</button>
+                                                <button type="submit" class="btn btn-info btn-login">LOG <span>IN</span></button>
                                             </div>
                                         </form>
                                     </div>
@@ -86,8 +84,8 @@
             </div>
         </div>
     </div>
-    <script src="js/jquery-3.3.1.slim.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 </body>
 </html>

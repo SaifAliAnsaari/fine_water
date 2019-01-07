@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function() {
 
     fetchClientsList();
 
@@ -61,7 +61,7 @@ $(document).ready(function(){
 
     $(document).on('click', '#saveClient', function() {
 
-        if (!$('input[name="username"]').val() || !$('input[name="password"]').val() || !$('input[name="client_name"]').val() || !$('input[name="email"]').val() ) {
+        if (!$('input[name="username"]').val() || !$('input[name="password"]').val() || !$('input[name="client_name"]').val() || !$('input[name="email"]').val()) {
             $('#notifDiv').fadeIn();
             $('#notifDiv').css('background', 'red');
             $('#notifDiv').text('Please provide all the required information (*)');
@@ -101,12 +101,12 @@ $(document).ready(function(){
                     }
 
                     $('#notifDiv').fadeIn();
-                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').css('background', '#0038ba');
                     $('#notifDiv').text('Client have been added successfully');
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();
                     }, 3000);
-                } else if(JSON.parse(response) == "failed"){
+                } else if (JSON.parse(response) == "failed") {
                     $('#saveClient').removeAttr('disabled');
                     $('#cancelClient').removeAttr('disabled');
                     $('#saveClient').text('Save');
@@ -116,7 +116,7 @@ $(document).ready(function(){
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();
                     }, 3000);
-                }else if(JSON.parse(response) == "already exist"){
+                } else if (JSON.parse(response) == "already exist") {
                     $('#saveClient').removeAttr('disabled');
                     $('#cancelClient').removeAttr('disabled');
                     $('#saveClient').text('Save');
@@ -153,8 +153,8 @@ $(document).ready(function(){
             },
             success: function(response) {
                 //console.log(response);
-                
-                
+
+
             }
         });
 
@@ -166,12 +166,12 @@ $(document).ready(function(){
         $('body').toggleClass('no-scroll');
 
         // $('input[name="compName"]').val("");
-            // $('input[name="compName"]').blur();
-            // $('input[name="poc"]').val("");
-            // $('input[name="poc"]').blur();
-            // $('input[name="jobTitle"]').val("");
-            // $('input[name="jobTitle"]').blur();
-        
+        // $('input[name="compName"]').blur();
+        // $('input[name="poc"]').val("");
+        // $('input[name="poc"]').blur();
+        // $('input[name="jobTitle"]').val("");
+        // $('input[name="jobTitle"]').blur();
+
     });
 
 

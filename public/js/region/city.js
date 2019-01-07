@@ -610,8 +610,8 @@ $(document).ready(function(){
     //Delete Button
     $(document).on('click', '.deletebtn', function(){
         if(action == "manage_cities"){
-            $('#deletebtn').text('PROCESSING....');
-            $('#deletebtn').attr("disabled", "disabled");
+            $(this).text('PROCESSING....');
+            $(this).attr("disabled", "disabled");
             var id = $(this).attr('id');
             $.ajax({
                 type: 'GET',
@@ -623,8 +623,8 @@ $(document).ready(function(){
                 success: function(response) {
                     if(JSON.parse(response) == "success"){
                         fetchCitiesList();
-                        $('#deletebtn').removeAttr('disabled');
-                        $('#deletebtn').text('Delete');
+                        // $(this).removeAttr('disabled');
+                        // $(this).text('Delete');
     
                         $('#notifDiv').fadeIn();
                         $('#notifDiv').css('background', 'green');
@@ -644,8 +644,8 @@ $(document).ready(function(){
                 }
             });
         }else if(action == "manage_area"){
-            $('#deletebtn').text('PROCESSING....');
-            $('#deletebtn').attr("disabled", "disabled");
+            $(this).text('PROCESSING....');
+            $(this).attr("disabled", "disabled");
             var id = $(this).attr('id');
             $.ajax({
                 type: 'GET',
@@ -658,8 +658,8 @@ $(document).ready(function(){
                     console.log(response);
                     if(JSON.parse(response) == "success"){
                         fetchAreasList();
-                        $('#deletebtn').removeAttr('disabled');
-                        $('#deletebtn').text('Delete');
+                        // $(this).removeAttr('disabled');
+                        // $(this).text('Delete');
     
                         $('#notifDiv').fadeIn();
                         $('#notifDiv').css('background', 'green');
@@ -679,8 +679,8 @@ $(document).ready(function(){
                 }
             });
         }else if(action == "manage_zone"){
-            $('#deletebtn').text('PROCESSING....');
-            $('#deletebtn').attr("disabled", "disabled");
+            $(this).text('PROCESSING....');
+            $(this).attr("disabled", "disabled");
             var id = $(this).attr('id');
             $.ajax({
                 type: 'GET',
@@ -693,8 +693,8 @@ $(document).ready(function(){
                     console.log(response);
                     if(JSON.parse(response) == "success"){
                         fetchZoneList();
-                        $('#deletebtn').removeAttr('disabled');
-                        $('#deletebtn').text('Delete');
+                        // $('#deletebtn').removeAttr('disabled');
+                        // $('#deletebtn').text('Delete');
     
                         $('#notifDiv').fadeIn();
                         $('#notifDiv').css('background', 'green');

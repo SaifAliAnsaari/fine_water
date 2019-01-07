@@ -278,8 +278,8 @@ $(document).ready(function(){
 
 
     $(document).on('click', '.deleteTeam', function(){
-        $('#deleteTeam').text('PROCESSING....');
-        $('#deleteTeam').attr("disabled", "disabled");
+        $(this).text('PROCESSING....');
+        $(this).attr("disabled", "disabled");
         var id = $(this).attr('id');
         $.ajax({
             type: 'GET',
@@ -291,8 +291,8 @@ $(document).ready(function(){
             success: function(response) {
                 //console.log(response);
                     fetchTeamssList();
-                    $('#deleteTeam').removeAttr('disabled');
-                    $('#deleteTeam').text('Delete');
+                    // $('#deleteTeam').removeAttr('disabled');
+                    // $('#deleteTeam').text('Delete');
 
                     $('#notifDiv').fadeIn();
                     $('#notifDiv').css('background', 'green');

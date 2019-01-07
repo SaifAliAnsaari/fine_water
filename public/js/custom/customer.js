@@ -10,6 +10,78 @@ $(document).ready(function() {
     }
     var lastOp = "add";
 
+    $(document).on('click', '.viewOnMap', function() {
+        initMap($(this).attr('id').split(',')[0], $(this).attr('id').split(',')[1]);
+    });
+
+    $('input[name="jobTitle"]').parent().parent().hide();
+    $('input[name="orgName"]').parent().parent().hide();
+    $('input[name="faxPh"]').parent().parent().hide();
+    $('input[name="strn"]').parent().parent().hide();
+    $('input[name="ntn"]').parent().parent().hide();
+    $('input[name="merchantName"]').parent().parent().hide();
+    $('select[name="merchant_type"]').parent().parent().hide();
+    $('input[name="faxPh"]').parent().parent().hide();
+    $('input[name="strn"]').parent().parent().hide();
+    $('input[name="ntn"]').parent().parent().hide();
+
+    $('input[name="compName"]').parent().parent().fadeIn();
+    $('input[name="homePh"]').parent().parent().fadeIn();
+    $('input[name="cnic"]').parent().parent().fadeIn();
+
+    $('select[name="type"]').change(function() {
+        if ($(this).val() == "1") {
+
+            $('input[name="jobTitle"]').parent().parent().hide();
+            $('input[name="orgName"]').parent().parent().hide();
+            $('input[name="faxPh"]').parent().parent().hide();
+            $('input[name="strn"]').parent().parent().hide();
+            $('input[name="ntn"]').parent().parent().hide();
+            $('input[name="merchantName"]').parent().parent().hide();
+            $('select[name="merchant_type"]').parent().parent().hide();
+            $('input[name="faxPh"]').parent().parent().hide();
+            $('input[name="strn"]').parent().parent().hide();
+            $('input[name="ntn"]').parent().parent().hide();
+
+            $('input[name="compName"]').parent().parent().fadeIn();
+            $('input[name="homePh"]').parent().parent().fadeIn();
+            $('input[name="cnic"]').parent().parent().fadeIn();
+        } else if ($(this).val() == "2") {
+
+            $('input[name="compName"]').parent().parent().hide();
+            $('input[name="homePh"]').parent().parent().hide();
+            $('input[name="cnic"]').parent().parent().hide();
+            $('input[name="merchantName"]').parent().parent().hide();
+            $('select[name="merchant_type"]').parent().parent().hide();
+            $('input[name="faxPh"]').parent().parent().hide();
+            $('input[name="strn"]').parent().parent().hide();
+            $('input[name="ntn"]').parent().parent().hide();
+
+            $('input[name="orgName"]').parent().parent().fadeIn();
+            $('input[name="faxPh"]').parent().parent().fadeIn();
+            $('input[name="strn"]').parent().parent().fadeIn();
+            $('input[name="ntn"]').parent().parent().fadeIn();
+            $('input[name="jobTitle"]').parent().parent().fadeIn();
+
+        } else {
+
+            $('input[name="compName"]').parent().parent().hide();
+            $('input[name="homePh"]').parent().parent().hide();
+            $('input[name="cnic"]').parent().parent().hide();
+            $('input[name="orgName"]').parent().parent().hide();
+            $('input[name="faxPh"]').parent().parent().hide();
+            $('input[name="strn"]').parent().parent().hide();
+            $('input[name="ntn"]').parent().parent().hide();
+
+            $('input[name="merchantName"]').parent().parent().fadeIn();
+            $('select[name="merchant_type"]').parent().parent().fadeIn();
+            $('input[name="faxPh"]').parent().parent().fadeIn();
+            $('input[name="strn"]').parent().parent().fadeIn();
+            $('input[name="ntn"]').parent().parent().fadeIn();
+            $('input[name="jobTitle"]').parent().parent().fadeIn();
+        }
+    });
+
     $(document).on('click', '.openDataSidebarForAddingCustomer', function() {
         if (lastOp == "update") {
             $('input[name="compName"]').val("");
@@ -71,14 +143,13 @@ $(document).ready(function() {
         $('.pc-cartlist').hide();
 
         var id = $(this).attr('id');
-        $('input[name="product_updating_id"]').val(id);
+        $('input[name="product_updating_id"]').val(id)
         if (!$('#saveCustomerForm input[name="_method"]').length) {
             $('#saveCustomerForm').append('<input name="_method" value="PUT" hidden />');
         }
 
         $('#dropifyImgDiv').empty();
         $('#dropifyImgDiv').append('<input type="file" name="compPicture" id="companyPic" class="dropify" />');
-
         $.ajax({
             type: 'GET',
             url: '/Customer/' + id,
@@ -88,6 +159,57 @@ $(document).ready(function() {
                 $('._cl-bottom').show();
                 $('.pc-cartlist').show();
                 $('#uploadedImg').remove();
+
+                if ($('select[name="type"]').val() == "1") {
+
+                    $('input[name="jobTitle"]').parent().parent().hide();
+                    $('input[name="orgName"]').parent().parent().hide();
+                    $('input[name="faxPh"]').parent().parent().hide();
+                    $('input[name="strn"]').parent().parent().hide();
+                    $('input[name="ntn"]').parent().parent().hide();
+                    $('input[name="merchantName"]').parent().parent().hide();
+                    $('select[name="merchant_type"]').parent().parent().hide();
+                    $('input[name="faxPh"]').parent().parent().hide();
+                    $('input[name="strn"]').parent().parent().hide();
+                    $('input[name="ntn"]').parent().parent().hide();
+
+                    $('input[name="compName"]').parent().parent().fadeIn();
+                    $('input[name="homePh"]').parent().parent().fadeIn();
+                    $('input[name="cnic"]').parent().parent().fadeIn();
+                } else if ($('select[name="type"]').val() == "2") {
+
+                    $('input[name="compName"]').parent().parent().hide();
+                    $('input[name="homePh"]').parent().parent().hide();
+                    $('input[name="cnic"]').parent().parent().hide();
+                    $('input[name="merchantName"]').parent().parent().hide();
+                    $('select[name="merchant_type"]').parent().parent().hide();
+                    $('input[name="faxPh"]').parent().parent().hide();
+                    $('input[name="strn"]').parent().parent().hide();
+                    $('input[name="ntn"]').parent().parent().hide();
+
+                    $('input[name="orgName"]').parent().parent().fadeIn();
+                    $('input[name="faxPh"]').parent().parent().fadeIn();
+                    $('input[name="strn"]').parent().parent().fadeIn();
+                    $('input[name="ntn"]').parent().parent().fadeIn();
+                    $('input[name="jobTitle"]').parent().parent().fadeIn();
+
+                } else {
+
+                    $('input[name="compName"]').parent().parent().hide();
+                    $('input[name="homePh"]').parent().parent().hide();
+                    $('input[name="cnic"]').parent().parent().hide();
+                    $('input[name="orgName"]').parent().parent().hide();
+                    $('input[name="faxPh"]').parent().parent().hide();
+                    $('input[name="strn"]').parent().parent().hide();
+                    $('input[name="ntn"]').parent().parent().hide();
+
+                    $('input[name="merchantName"]').parent().parent().fadeIn();
+                    $('select[name="merchant_type"]').parent().parent().fadeIn();
+                    $('input[name="faxPh"]').parent().parent().fadeIn();
+                    $('input[name="strn"]').parent().parent().fadeIn();
+                    $('input[name="ntn"]').parent().parent().fadeIn();
+                    $('input[name="jobTitle"]').parent().parent().fadeIn();
+                }
 
                 $('input[name="compName"]').focus();
                 $('input[name="compName"]').val(response.info.company_name);
@@ -145,18 +267,15 @@ $(document).ready(function() {
                 $('input[name="webpage"]').val(response.info.webpage);
                 $('input[name="webpage"]').blur();
 
-                debugger;
                 $('select[name="type"]').val(response.info.customer_type).trigger('change');
-                $('select[name="zone"]').val(response.info.zone_id).trigger('change');
                 $('select[name="parentCompnay"]').val(response.info.parent_company).trigger('change');
                 $('select[name="country"]').val(response.info.country).trigger('change');
                 $('select[name="acqSource"]').val(response.info.customer_acquisition_source).trigger('change');
+                $('select[name="zone"]').val(response.info.zone_id).trigger('change');
+
                 var imgUrl = response.base_url + '/storage/company/' + response.info.picture;
                 $.get(imgUrl)
                     .done(function() {
-                        // $('#dropifyImgDiv').append('<img src="" id="uploadedImg" style="width: 150px; height: auto; margin-top: 10px" />');
-                        // $('#uploadedImg').attr('src', imgUrl);
-
                         $("#companyPic").attr("data-height", '100px');
                         $("#companyPic").attr("data-default-file", imgUrl);
                         $('#companyPic').dropify();
@@ -187,6 +306,8 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '#saveCustomer', function() {
+
+        $('.validationErrors').remove();
 
         // if (!$('input[name="compName"]').val() || !$('input[name="poc"]').val() || $('select[name="zone"]').val() == 0 || $('select[name="type"]').val() == 0 || $('select[name="country"]').val() == 0 || !$('input[name="businessPh"]').val() || !$('input[name="address"]').val() || !$('input[name="city"]').val() || $('select[name="documentTypes"]').val() == 0 || $('select[name="deliveryPorts"]').val() == 0) {
         //     $('#notifDiv').fadeIn();
@@ -235,7 +356,7 @@ $(document).ready(function() {
                     }
 
                     $('#notifDiv').fadeIn();
-                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').css('background', '#0038ba');
                     $('#notifDiv').text('Customer have been added successfully');
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();
@@ -253,15 +374,17 @@ $(document).ready(function() {
                 }
             },
             error: function(err) {
+                $('#saveCustomer').removeAttr('disabled');
+                $('#cancelCustomer').removeAttr('disabled');
+                $('#saveCustomer').text('Save');
                 if (err.status == 422) {
                     $.each(err.responseJSON.errors, function(i, error) {
                         var el = $(document).find('[name="' + i + '"]');
-                        el.after($('<small style="color: red; position: absolute; width:100%; text-align: right; margin-left: -30px">' + error[0] + '</small>'));
+                        el.after($('<small class="validationErrors" style="color: red; position: absolute; width:100%; text-align: right; margin-left: -30px">' + error[0] + '</small>'));
                     });
                 }
             }
         });
-
     });
 
     $(document).on('click', '.deleteCustomer', function() {
@@ -276,7 +399,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (JSON.parse(response) == "success") {
                     $('#notifDiv').fadeIn();
-                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').css('background', '#0038ba');
                     $('#notifDiv').text('Customer have been deleted');
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();
@@ -324,15 +447,39 @@ function fetchCompaniesList() {
         url: '/GetCustomersList',
         success: function(response) {
             $('.body').empty();
-            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="companiesListTable" style="width:100%;"><thead><tr><th>ID</th><th>Company Name</th><th>POC</th><th>Country</th><th>Region</th><th>Customer Type</th><th>Parent Company</th><th>Action</th></tr></thead><tbody></tbody></table>');
+            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="companiesListTable" style="width:100%;"><thead><tr><th>ID</th><th>Customer Name</th><th>POC</th><th>Country</th><th>Region</th><th>Customer Type</th><th>Action</th></tr></thead><tbody></tbody></table>');
             $('#companiesListTable tbody').empty();
             var response = JSON.parse(response);
             response.forEach(element => {
-                $('#companiesListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['company_name'] + '</td><td>' + element['company_poc'] + '</td><td>' + element['country'] + '</td><td>' + element['region'] + '</td><td>' + element['customer_type'] + '</td><td>' + element['parent_company'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdateCustomer">Edit</button><a href="/CustomerProfile/' + element['id'] + '" id="' + element['id'] + '" class="btn btn-default">Profile</a><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deleteCustomer" title="Delete">Delete</button></form></td></tr>');
+                $('#companiesListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['company_name'] + '</td><td>' + element['company_poc'] + '</td><td>' + element['country'] + '</td><td>' + element['region'] + '</td><td>' + (element['customer_type'] == "1" ? "Residential" : (element['customer_type'] == "2" ? "Corporate" : "Commercial")) + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdateCustomer">Edit</button><a href="/CustomerProfile/' + element['id'] + '" id="' + element['id'] + '" class="btn btn-default">Profile</a><a href="#" class="btn btn-default viewOnMap" id="' + element['latitude'] + ',' + element['longitude'] + '" data-toggle="modal" data-target=".customerLocationModal">View on Map</a><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deleteCustomer" title="Delete">Delete</button></form></td></tr>');
             });
             $('#tblLoader').hide();
             $('.body').fadeIn();
             $('#companiesListTable').DataTable();
         }
     });
+}
+
+function initMap(latitude, longitude) {
+    var uluru = {
+        lat: parseFloat(latitude),
+        lng: parseFloat(longitude)
+    };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 18,
+        center: uluru
+    });
+
+    marker = new google.maps.Marker({
+        position: new google.maps.LatLng(latitude, longitude),
+        title: "Customer",
+        map: map,
+        animation: google.maps.Animation.DROP
+    });
+
+    google.maps.event.addListener(marker, 'click', function(e) {
+        infowindow.setContent(this.name);
+        infowindow.open(map, this);
+    }.bind(marker));
+
 }

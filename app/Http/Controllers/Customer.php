@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Customer as Cust;
+use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Http\Request;
 use DB;
 use URL;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManagerStatic as Image;
 use Validator;
 
 class Customer extends Controller
@@ -25,17 +25,13 @@ class Customer extends Controller
      */
     public function index()
     {
-        return view('customer.customer', [ 'customers' => Cust::selectRaw('id, company_name')->get(), 'types' => DB::table('customer_types')->get(), 'zone' => DB::table('zone_info')->get() ]);
+        return view('customer.list', [ 'customers' => Cust::selectRaw('id, company_name')->get(), 'zone' => DB::table('zone_info')->get() ]);
     }
 
     //Ajax Call from list-customers.js
     public function CustomersList(){
         // GetCustomersList
-        echo json_encode( DB::table('customers as cust')->select('id', 'company_name', 'company_poc', 'customer_type', 'country', DB::raw('IFNULL(region, "NA") as region'), DB::raw('IFNULL((SELECT company_name from customers where id = cust.parent_company), "NA") as parent_company'))->get());
-    }
-
-    public function viewProfile($customerId){
-        return view('customer.profile', [ 'customers' => Cust::select('id', 'company_name')->get(), 'types' => DB::table('customer_types')->get(), 'update_customer' => DB::table('customers')->where('id', $customerId)->first() ]);
+        echo json_encode( DB::table('customers as cust')->select('id', 'company_name', 'company_poc', 'latitude', 'longitude', 'customer_type', 'country', DB::raw('IFNULL(region, "NA") as region'), DB::raw('IFNULL((SELECT company_name from customers where id = cust.parent_company), "NA") as parent_company'))->get());
     }
 
     /**
@@ -54,34 +50,83 @@ class Customer extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        // $this->validate($request, [
-        //     'businessPh' => 'required|max:100|numeric',
-        //     'compName' => 'required|max:100'
-        // ]);
+    public function store(Request $request){
+        
         $customer = new Cust;
-        $customer->company_name = $request->compName;
-        $customer->company_poc = $request->poc;
-        $customer->job_title = $request->jobTitle;
-        $customer->business_phone = $request->businessPh;
-        $customer->home_phone = $request->homePh;
-        $customer->mobile_phone = $request->mobPh;
-        $customer->whatsapp_phone = $request->whatsappPh;
-        $customer->fax_number = $request->faxPh;
-        $customer->address = $request->address;
-        $customer->city = $request->city;
-        $customer->state = $request->state;
-        $customer->country = $request->country;
-        $customer->region = $request->region;
-        $customer->email = $request->email;
-        $customer->webpage = $request->webpage;
-        $customer->customer_acquisition_source = $request->acqSource;
-        $customer->remarks = $request->description;
+
+        $this->validate($request,[
+            'type' => 'required|numeric|min:1',
+            'zone' => 'required|numeric|min:1'
+        ]);
+
         $customer->customer_type = $request->type;
         $customer->zone_id = $request->zone;
-        $customer->parent_company = $request->parentCompnay;
+
+        if($request->type == 1){
+
+            $this->validate($request,[
+                'compName' => 'required|max:200',
+                'homePh' => 'required|max:30',
+                'cnic' => 'max:20'
+            ]);
+            $customer->company_name = $request->compName;
+            $customer->home_phone = $request->homePh;
+            $customer->cnic = $request->cnic;
+        }else if($request->type == 2){
+            $this->validate($request,[
+                'orgName' => 'required|max:200',
+                'faxPh' => 'max:50',
+                'jobTitle' => 'max:150',
+                'strn' => 'max:100',
+                'ntn' => 'max:100'
+            ]);
+            $customer->organization_name = $request->orgName;
+            $customer->fax_number = $request->faxPh;
+            $customer->job_title = $request->jobTitle;
+            $customer->strn = $request->strn;
+            $customer->ntn = $request->ntn;
+        }else if($request->type == 3){
+            $this->validate($request,[
+                'merchantName' => 'required|max:200',
+                'merchant_type' => 'required|max:100',
+                'faxPh' => 'max:50',
+                'jobTitle' => 'max:150',
+                'strn' => 'max:100',
+                'ntn' => 'max:100'
+            ]);
+            $customer->merchant_name = $request->merchantName;
+            $customer->merchant_type = $request->merchant_type;
+            $customer->fax_number = $request->faxPh;
+            $customer->job_title = $request->jobTitle;
+            $customer->strn = $request->strn;
+            $customer->ntn = $request->ntn;
+        }
         
+        $this->validate($request,[
+            'address' => 'max:500',
+            'city' => 'max:150',
+            'postal' => 'max:50',
+            'businessPh' => 'max:30',
+            'mobPh' => 'max:30',
+            'poc' => 'max:100',
+            'delivery' => 'max:100',
+            'day_of_delivery' => 'max:50',
+            'customer_acquisition_source' => 'max:200'
+        ]);
+
+        $customer->latitude = $request->latitude;
+        $customer->longitude = $request->longitude;
+        $customer->mobile_phone = $request->mobPh;
+        $customer->address = $request->address;
+        $customer->city = $request->city;
+        $customer->postal_code = $request->postal;
+        $customer->business_phone = $request->businessPh;
+        $customer->email = $request->email;
+        $customer->company_poc = $request->poc;
+        $customer->delivery = $request->delivery;
+        $customer->day_of_delivery = $request->day_of_delivery;
+        $customer->bottles_per_week = $request->bottles_per_week;
+        $customer->customer_acquisition_source = $request->customer_acquisition_source;
         if($request->hasFile('compPicture')){
             $completeFileName = $request->file('compPicture')->getClientOriginalName();
             $fileNameOnly = pathinfo($completeFileName, PATHINFO_FILENAME);
@@ -90,25 +135,10 @@ class Customer extends Controller
             $path = $request->file('compPicture')->storeAs('public/company', $compPic);
             $customer->picture = $compPic;
         }
-
-        if($customer->save()){
-            $delivPorts = explode(",", $request->delivery_ports);
-            foreach($delivPorts as $port){
-                DB::table('customer_delivery_ports')->insert(array('customer_id' => $customer->id, 'port_name' => $port));
-            }
-
-            $docTypes = explode(",", $request->document_types);
-            foreach($docTypes as $type){
-                DB::table('customer_documents')->insert(array('customer_id' => $customer->id, 'document_id' => $type));
-            }
+        $status = $customer->save();
+        if($status){
             echo json_encode('success');
-            
         }
-
-        // DB::table('customer_delivery_ports')->insert(array('customer_id' => $customer->id, 'port_name' => ));
-
-        // $customer->type = $request->documentTypes;
-        // $customer->type = $request->deliveryPorts;
     }
 
     /**
@@ -119,7 +149,7 @@ class Customer extends Controller
      */
     public function show($id)
     {
-        echo json_encode(array('info' => DB::table('customers as cust')->selectRaw('`id`, `company_name`, `company_poc`, `job_title`, `business_phone`, `home_phone`, `mobile_phone`, `whatsapp_phone`, `fax_number`, `address`, `city`, `state`, `country`, `region`, `email`, `webpage`, `remarks`, `customer_type`, `customer_acquisition_source`, `parent_company`, `picture`, `zone_id`')->where('id', $id)->first(), 'delivery_ports' => DB::table('customer_delivery_ports')->select('port_name')->where('customer_id', $id)->get(), 'document_types' => DB::table('customer_documents')->select('document_id')->where('customer_id', $id)->get(), 'base_url' => URL::to('/')));
+        echo json_encode(array('info' => DB::table('customers as cust')->selectRaw('`id`, `company_name`, `organization_name`, `merchant_name`, `company_poc`, `strn`, `cnic`, `ntn`, `job_title`, `business_phone`, `home_phone`, `mobile_phone`, `whatsapp_phone`, `fax_number`, `latitude`, `longitude`, `delivery`, `day_of_delivery`, `bottles_per_week`, `address`, `city`, `state`, `postal_code`, `country`, `region`, `email`, `webpage`, `remarks`, `customer_type`, `merchant_type`, `customer_acquisition_source`, `parent_company`, `zone_id`, `picture`')->where('id', $id)->first(), 'base_url' => URL::to('/')));
     }
 
     /**
@@ -145,6 +175,7 @@ class Customer extends Controller
         $customer = Cust::find($id);
 
         $customer->company_name = $request->compName;
+        $customer->zone_id = $request->zone;
         $customer->company_poc = $request->poc;
         $customer->job_title = $request->jobTitle;
         $customer->business_phone = $request->businessPh;
@@ -162,7 +193,6 @@ class Customer extends Controller
         $customer->customer_acquisition_source = $request->acqSource;
         $customer->remarks = $request->description;
         $customer->customer_type = $request->type;
-        $customer->zone_id = $request->zone;
         $customer->parent_company = $request->parentCompnay;
 
         if($request->hasFile('compPicture')){
@@ -193,6 +223,7 @@ class Customer extends Controller
                 DB::table('customer_documents')->insert(array('customer_id' => $id, 'document_id' => $type));
             }
             echo json_encode('success');
+            
         }
     }
 
@@ -206,7 +237,7 @@ class Customer extends Controller
     {
         DB::table('customer_documents')->where('customer_id', $customerId)->delete();
         DB::table('customer_delivery_ports')->where('customer_id', $customerId)->delete();
-
+        
         if(Storage::exists('public/company/'.Cust::find($customerId)->picture)){
             Storage::delete('public/company/'.Cust::find($customerId)->picture);
         }
@@ -226,7 +257,7 @@ class Customer extends Controller
 
     //Api Call
     public function customerMeta(){
-        $jar = new JsonApiResponse('success', '200', array('types' => array(array('id' => 1, 'title' => 'Residential'), array('id' => 2, 'title' => 'Corporate'), array('id' => 2, 'title' => 'Commercial')), 'acquisition_sources' => array('Source 1', 'Source 2', 'Source 3'), 'parent_company' => Cust::select('id', 'company_name')->get(), 'zones' => DB::table('zone_info')->select('id', 'zone_name')->get()));
+        $jar = new JsonApiResponse('success', '200', array('types' => array(array('id' => 1, 'title' => 'Residential'), array('id' => 2, 'title' => 'Corporate'), array('id' => 2, 'title' => 'Commercial')), 'zone' => DB::table('zone_info')->selectRaw('id as zone_id, zone_name')->get()));
         return $jar->apiResponse();
     }
 
@@ -237,7 +268,11 @@ class Customer extends Controller
 
         $rules = [
             'customer_type' => 'required|numeric',
+            'zone_id' => 'required|numeric|min:1'
         ];
+
+        $customer->customer_type = $request->type;
+        $customer->zone_id = $request->zone_id;
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -458,4 +493,5 @@ class Customer extends Controller
         }
         return false;
     }
+
 }

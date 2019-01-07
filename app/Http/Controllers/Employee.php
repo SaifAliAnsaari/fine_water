@@ -22,8 +22,6 @@ class Employee extends Controller
 
     public function UpdateEmployee(Request $request, $id)
     {
-        $employee->department_id = $request->department; die;
-        
         $employee = User::find($id);
         
         $employee->name = $request->name;
@@ -36,7 +34,6 @@ class Employee extends Controller
         $employee->address = $request->address;
         $employee->username = $request->username;
         if($request->password){
-            //$employee->password = Hash::make($request->name);
             $password = bcrypt($request->password);
             $employee->password = $password;
         }
@@ -59,6 +56,11 @@ class Employee extends Controller
         }
 
         echo json_encode($employee->save());
+    }
+
+    public function getProfile(Request $req){
+        $jar = new JsonApiResponse('success', '200', $req->user());
+        return $jar->apiResponse();
     }
 
 }

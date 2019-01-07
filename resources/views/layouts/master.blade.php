@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>E-bob</title>
+    <title>Sell3Sixty</title>
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,600,700,800" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
@@ -16,33 +16,20 @@
     <link rel="stylesheet" type="text/css" href="/css/datatables.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="/css/select2-bootstrap4.css">
-    <link rel="stylesheet" type="text/css" href="/css/style.min.css?v=1.2">
+    <link rel="stylesheet" type="text/css" href="/css/style.min.css?v=1.1">
     <link rel="stylesheet" type="text/css" href="/css/dropify.min.css" />
-    <style>
-        #notifDiv{
-            display: none;
-            background: red;
-            color:white;
-            font-weight: 400;
-            font-size: 15px;
-            width: 350px;
-            position: fixed;
-            top: 80%;
-            left: 5%;
-            z-index: 1000;
-            padding: 10px 20px
-        }
-    </style>
+
 </head>
 
 <body id="page-top">
 
     <div class="overlay"></div>
     
-    <div id="notifDiv">
+    <div id="notifDiv" style="z-index:10000; display: none; background: green; font-weight: 450; width: 350px; position: fixed; top: 80%; left: 5%; color: white; padding: 5px 20px">
     </div>
 
     @include('includes.nav')
+    @include('includes.modals')
     <div id="wrapper">
         @include('includes.sidebar-menu')
         
@@ -66,16 +53,12 @@
     <script src="/js/master.js?v=1.0" ></script>
     <script src="/js/jquery.form.min.js" ></script>
     <script src="/js/bootstrap-datepicker.js"></script>
-    {{-- <script src="/js/rasterize.js"></script> --}}
-    {{-- <script src="/js/html2canvas.js"></script>
-    <script src="/js/jspdf.js"></script>
-    <script src="/js/pdfFromHTML.js?v={{ time() }}"></script> --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.5/jspdf.plugin.autotable.js"></script> --}}
     @if($controller == "Customer")
-        <script src="/js/custom/customer.js?v=1.0" ></script>
-    @elseif($controller == "CustomerTypes")
-        <script src="/js/custom/customer-types.js?v=1.0" ></script>
+        <script src="/js/custom/customer.js?v=2.1" ></script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuhmMCJmm69FrsFzQdhjq5B86AIDor9Q0">
+        </script>
     @elseif($controller == "RegisterController")
+        <script src="/js/custom/employee.js?v=1.0" ></script>
         <script src="/js/custom/employee.js?v=1.0" ></script>
     @elseif($controller == "Clients")
         <script src="/js/client/clients.js?v=1.0" ></script>

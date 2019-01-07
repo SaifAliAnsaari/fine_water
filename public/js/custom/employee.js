@@ -136,6 +136,17 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '#saveEmployee', function() {
+        if ($('#operation').val() == "add") {
+            if (!$('input[name="password"]').val()) {
+                $('#notifDiv').fadeIn();
+                $('#notifDiv').css('background', 'red');
+                $('#notifDiv').text('Please provide all the required information (*)');
+                setTimeout(() => {
+                    $('#notifDiv').fadeOut();
+                }, 3000);
+                return;
+            }
+        }
 
         if (!$('input[name="name"]').val() || !$('input[name="city"]').val() || !$('input[name="username"]').val() || !$('input[name="password"]').val() || $('select[name="country"]').val() == 0 || $('select[name="designation"]').val() == 0 || $('select[name="department"]').val() == 0) {
             $('#notifDiv').fadeIn();
@@ -176,7 +187,7 @@ $(document).ready(function() {
                     }
 
                     $('#notifDiv').fadeIn();
-                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').css('background', '#0038ba');
                     $('#notifDiv').text('Employee have been added successfully');
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();

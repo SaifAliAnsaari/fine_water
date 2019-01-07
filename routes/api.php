@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->get('/profile', 'Employee@getProfile');
+Route::middleware('auth:api')->get('/customers', 'Customer@getCustomers');
+Route::middleware('auth:api')->post('/storeCustomer', 'Customer@storeCustomer');
+Route::middleware('auth:api')->get('/getCustomerMeta', 'Customer@customerMeta');

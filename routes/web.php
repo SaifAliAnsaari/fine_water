@@ -16,33 +16,15 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::Resource('/Customer', 'Customer');
-
-Route::Resource('/ProspectCustomers', 'ProspectCustomers');
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/GetCustomersList', 'Customer@CustomersList');
-Route::get('/GetClientsList', 'Clients@ClientsList');
-
+Route::Resource('/Customer', 'Customer');
 Route::get('/EmployeesList', 'Auth\RegisterController@EmployeesList');
 Route::post('/UploadUserImage', 'Auth\RegisterController@UploadUserImage');
 Route::get('/Employee/{id}', 'Employee@GetEmployeeInfo');
 Route::post('/UpdateEmployee/{id}', 'Employee@UpdateEmployee');
-Route::get('/CustomerTypes', 'CustomerTypes@index');
-Route::post('/SaveCustomerType', 'CustomerTypes@store');
-Route::get('/GetCustomerTypes', 'CustomerTypes@customerTypesList');
-Route::delete('/DeleteCustomerType/{typeId}', 'CustomerTypes@deleteCustomerType');
-Route::get('/GetCustomerTypeInfo/{typeId}', 'CustomerTypes@getCustomerTypeInfo');
-Route::post('/UpdateCustomerType/{typeId}', 'CustomerTypes@update');
-Route::get('/CustomerProfile/{customerId}', 'Customer@viewProfile');
-
-Route::get('/clients', 'Clients@clients');
-
-Route::post('/Client_save', 'Clients@save_client');
-Route::get('/GetClientData', 'Clients@GetClientData');
-
-
-
+Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get('/manage_cities', 'Regions@cities');
 Route::get('/manage_area', 'Regions@area');
@@ -78,5 +60,3 @@ Route::get('/DeleteTeam', 'Delivery@delete_team_entry');
 Route::get('/DeleteCity', 'Regions@delete_city_entry');
 Route::get('/DeleteArea', 'Regions@delete_area_entry');
 Route::get('/DeleteZone', 'Regions@delete_zone_entry');
-
-Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');

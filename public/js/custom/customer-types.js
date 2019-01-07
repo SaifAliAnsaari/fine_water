@@ -88,7 +88,7 @@ $(document).ready(function() {
                     }
 
                     $('#notifDiv').fadeIn();
-                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').css('background', '#0038ba');
                     $('#notifDiv').text('Customer type have been added successfully');
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();
@@ -132,7 +132,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (JSON.parse(response) == "success") {
                     $('#notifDiv').fadeIn();
-                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').css('background', '#0038ba');
                     $('#notifDiv').text('Customer Type have been deleted');
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();

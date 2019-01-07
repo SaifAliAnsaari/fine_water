@@ -31,19 +31,17 @@
                                                         <input type="text" name="area" class="form-control" placeholder="" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <select class="form-control formselect" name="city_name" placeholder="Select Customer Type">
-                                                            <option value="0" disabled selected>Select City</option>
-                                                            <?php
-                                                                if(!$cities->isEmpty()){
-                                                                    foreach($cities as $city){ ?>
-                                                                        <option value="<?= $city->id ?>"><?= $city->city_name ?></option>
-                                                                    <?php }
-                                                                }
-                                                            ?>
-                                                        </select>
-                                                    </div>
+                                                <div class="form-s2 col-md-12">
+                                                    <select class="form-control formselect" name="city_name" placeholder="Select Customer Type">
+                                                        <option value="0" disabled selected>Select City</option>
+                                                        <?php
+                                                            if(!$cities->isEmpty()){
+                                                                foreach($cities as $city){ ?>
+                                                                    <option value="<?= $city->id ?>"><?= $city->city_name ?></option>
+                                                                <?php }
+                                                            }
+                                                        ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
