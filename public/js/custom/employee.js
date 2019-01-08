@@ -72,6 +72,7 @@ $(document).ready(function() {
             type: 'GET',
             url: '/Employee/' + id,
             success: function(response) {
+                console.log(response);
                 var response = JSON.parse(response);
                 $('#dataSidebarLoader').hide();
                 $('._cl-bottom').show();
@@ -136,19 +137,21 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '#saveEmployee', function() {
-        if ($('#operation').val() == "add") {
-            if (!$('input[name="password"]').val()) {
-                $('#notifDiv').fadeIn();
-                $('#notifDiv').css('background', 'red');
-                $('#notifDiv').text('Please provide all the required information (*)');
-                setTimeout(() => {
-                    $('#notifDiv').fadeOut();
-                }, 3000);
-                return;
-            }
-        }
+        // if ($('#operation').val() == "add") {
+        //     if (!$('input[name="password"]').val()) {
+        //         $('#notifDiv').fadeIn();
+        //         $('#notifDiv').css('background', 'red');
+        //         $('#notifDiv').text('Please provide all the required information (*)');
+        //         setTimeout(() => {
+        //             $('#notifDiv').fadeOut();
+        //         }, 3000);
+        //         return;
+        //     }
+        // }
 
-        if (!$('input[name="name"]').val() || !$('input[name="city"]').val() || !$('input[name="username"]').val() || !$('input[name="password"]').val() || $('select[name="country"]').val() == 0 || $('select[name="designation"]').val() == 0 || $('select[name="department"]').val() == 0) {
+        if (!$('input[name="name"]').val() || !$('input[name="city"]').val() || !$('input[name="email"]').val() || !$('input[name="username"]').val() || !$('input[name="password"]').val() || $('select[name="country"]').val() == 0 || $('select[name="designation"]').val() == 0 || $('select[name="department"]').val() == 0 || $('select[name="reporting"]').val() == 0
+        || !$('select[name="country"]').val() || !$('select[name="designation"]').val() || !$('select[name="department"]').val()
+        || !$('select[name="reporting"]').val()) {
             $('#notifDiv').fadeIn();
             $('#notifDiv').css('background', 'red');
             $('#notifDiv').text('Please provide all the required information (*)');
@@ -157,6 +160,7 @@ $(document).ready(function() {
             }, 3000);
             return;
         }
+        
 
         $('#saveEmployee').attr('disabled', 'disabled');
         $('#cancelEmployee').attr('disabled', 'disabled');
@@ -173,32 +177,56 @@ $(document).ready(function() {
             data: $('#saveEmployeeForm').serialize(),
             cache: false,
             success: function(response) {
-                debugger;
-                if (response) {
+                //console.log(response);
+                if (JSON.parse(response) == "success") {
                     fetchEmployeesList();
                     $('#saveEmployee').removeAttr('disabled');
                     $('#cancelEmployee').removeAttr('disabled');
                     $('#saveEmployee').text('Save');
-
                     if ($('#operation').val() !== "update") {
                         $('#saveEmployeeForm').find("input[type=text], textarea").val("");
                         $('#saveEmployeeForm').find("select").val("0").trigger('change');
                         $('.dropify-clear').click();
                     }
-
                     $('#notifDiv').fadeIn();
-                    $('#notifDiv').css('background', '#0038ba');
+                    $('#notifDiv').css('background', 'green');
                     $('#notifDiv').text('Employee have been added successfully');
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();
                     }, 3000);
-                } else {
+                } else if(JSON.parse(response) == "email_exist") {
                     $('#saveEmployee').removeAttr('disabled');
                     $('#cancelEmployee').removeAttr('disabled');
                     $('#saveEmployee').text('Save');
                     $('#notifDiv').fadeIn();
                     $('#notifDiv').css('background', 'red');
-                    $('#notifDiv').text('Failed to add Employee at the moment');
+                    $('#notifDiv').text('Email already exist.');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }else if(JSON.parse(response) == "updated") {
+                    fetchEmployeesList();
+                    $('#saveEmployee').removeAttr('disabled');
+                    $('#cancelEmployee').removeAttr('disabled');
+                    $('#saveEmployee').text('Save');
+                    if ($('#operation').val() !== "update") {
+                        $('#saveEmployeeForm').find("input[type=text], textarea").val("");
+                        $('#saveEmployeeForm').find("select").val("0").trigger('change');
+                        $('.dropify-clear').click();
+                    }
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').text('Employee have been updated successfully');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }else if(JSON.parse(response) == "failed"){
+                    $('#saveEmployee').removeAttr('disabled');
+                    $('#cancelEmployee').removeAttr('disabled');
+                    $('#saveEmployee').text('Save');
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Failed to add Employee at the moment......');
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();
                     }, 3000);
@@ -224,6 +252,83 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on('click', '.activate_btn', function(){
+        var id = $(this).attr('id');
+        $(this).text('PROCESSING....');
+        $(this).attr("disabled", "disabled");
+
+        $.ajax({
+            type: 'GET',
+            url: '/activate_employee',
+            data: {
+                _token: '{!! csrf_token() !!}',
+               id: id
+           },
+            success: function(response) {
+                if(JSON.parse(response) == "success"){
+                    fetchEmployeesList();
+                    $(this).removeAttr('disabled');
+                    $(this).text('Deactivate');
+                    $(this).removeClass("activate_btn");
+                    $(this).addClass("deactivate_btn");
+
+
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').text('Activated successfully');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }else if(JSON.parse(response) == "failed"){
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Unable to activate employee');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }    
+            }
+        });
+    });
+
+    $(document).on('click', '.deactivate_btn', function(){
+        var id = $(this).attr('id');
+        $(this).text('PROCESSING....');
+        $(this).attr("disabled", "disabled");
+
+        $.ajax({
+            type: 'GET',
+            url: '/deactivate_employee',
+            data: {
+                _token: '{!! csrf_token() !!}',
+               id: id
+           },
+            success: function(response) {
+                if(JSON.parse(response) == "success"){
+                    fetchEmployeesList();
+                    $(this).removeAttr('disabled');
+                    $(this).text('Deactivate');
+                    $(this).removeClass("deactivate_btn");
+                    $(this).addClass("activate_btn");
+
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').text('Deactivated successfully');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }else if(JSON.parse(response) == "failed"){
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Unable to deactivate employee');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }    
+            }
+        });
+    });
+
 });
 
 function fetchEmployeesList() {
@@ -232,11 +337,11 @@ function fetchEmployeesList() {
         url: '/EmployeesList',
         success: function(response) {
             $('.body').empty();
-            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="employeesListTable" style="width:100%"><thead><tr><th>Emp ID</th><th>Employee Name</th><th>Phone</th><th>Designation</th><th>Department</th><th>Action</th></tr></thead><tbody></tbody></table>');
+            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="employeesListTable" style="width:100%"><thead><tr><th>Emp ID</th><th>Employee Name</th><th>Phone</th><th>City</th><th>Email</th><th>Action</th></tr></thead><tbody></tbody></table>');
             $('#employeesListTable tbody').empty();
             var response = JSON.parse(response);
             response.forEach(element => {
-                $('#employeesListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['name'] + '</td><td>' + element['phone'] + '</td><td>' + element['designation'] + '</td><td>' + element['department'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdateEmployee">Edit</button><button id="' + element['id'] + '" class="btn btn-default">Active</button><button id="' + element['id'] + '" class="btn btn-default" title="View Detail">View Detail</button></td></tr>');
+                $('#employeesListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['name'] + '</td><td>' + element['phone'] + '</td><td>' + element['city'] + '</td><td>' + element['email'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdateEmployee">Edit</button>'+ (element["is_active"] ? '<button id="' + element['id'] + '" class="btn btn-default red-bg  deactivate_btn" title="View Detail">Deactivate</button>' : '<button id="' + element['id'] + '" class="btn btn-default activate_btn">Activete</button>') +'</td></tr>');
             });
             $('#tblLoader').hide();
             $('.body').fadeIn();

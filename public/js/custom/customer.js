@@ -114,6 +114,24 @@ $(document).ready(function() {
             $('input[name="email"]').blur();
             $('input[name="webpage"]').val("");
             $('input[name="webpage"]').blur();
+            $('input[name="orgName"]').val("");
+            $('input[name="orgName"]').blur();
+            $('input[name="merchantName"]').val("");
+            $('input[name="merchantName"]').blur();
+            $('input[name="cnic"]').val("");
+            $('input[name="cnic"]').blur();
+            $('input[name="strn"]').val("");
+            $('input[name="strn"]').blur();
+            $('input[name="ntn"]').val("");
+            $('input[name="ntn"]').blur();
+            $('input[name="latitude"]').val("");
+            $('input[name="latitude"]').blur();
+            $('input[name="longitude"]').val("");
+            $('input[name="longitude"]').blur();
+            $('input[name="day_of_delivery"]').val("");
+            $('input[name="day_of_delivery"]').blur();
+            $('input[name="bottles_per_week"]').val("");
+            $('input[name="bottles_per_week"]').blur();
             $('textarea[name="description"]').val("");
 
             $('#saveCustomerForm').find("select").val("0").trigger('change');
@@ -155,6 +173,7 @@ $(document).ready(function() {
             url: '/Customer/' + id,
             success: function(response) {
                 var response = JSON.parse(response);
+                console.log(response);
                 $('#dataSidebarLoader').hide();
                 $('._cl-bottom').show();
                 $('.pc-cartlist').show();
@@ -176,6 +195,7 @@ $(document).ready(function() {
                     $('input[name="compName"]').parent().parent().fadeIn();
                     $('input[name="homePh"]').parent().parent().fadeIn();
                     $('input[name="cnic"]').parent().parent().fadeIn();
+
                 } else if ($('select[name="type"]').val() == "2") {
 
                     $('input[name="compName"]').parent().parent().hide();
@@ -214,6 +234,10 @@ $(document).ready(function() {
                 $('input[name="compName"]').focus();
                 $('input[name="compName"]').val(response.info.company_name);
                 $('input[name="compName"]').blur();
+
+                $('input[name="orgName"]').focus();
+                $('input[name="orgName"]').val(response.info.organization_name);
+                $('input[name="orgName"]').blur();
 
                 $('input[name="poc"]').focus();
                 $('input[name="poc"]').val(response.info.company_poc);
@@ -267,10 +291,48 @@ $(document).ready(function() {
                 $('input[name="webpage"]').val(response.info.webpage);
                 $('input[name="webpage"]').blur();
 
-                $('select[name="type"]').val(response.info.customer_type).trigger('change');
+                $('input[name="bottles_per_week"]').focus();
+                $('input[name="bottles_per_week"]').val(response.info.bottles_per_week);
+                $('input[name="bottles_per_week"]').blur();
+
+                $('input[name="cnic"]').focus();
+                $('input[name="cnic"]').val(response.info.cnic);
+                $('input[name="cnic"]').blur();
+
+                $('input[name="day_of_delivery"]').focus();
+                $('input[name="day_of_delivery"]').val(response.info.day_of_delivery);
+                $('input[name="day_of_delivery"]').blur();
+
+                $('input[name="latitude"]').focus();
+                $('input[name="latitude"]').val(response.info.latitude);
+                $('input[name="latitude"]').blur();
+
+                $('input[name="longitude"]').focus();
+                $('input[name="longitude"]').val(response.info.longitude);
+                $('input[name="longitude"]').blur();
+
+                $('input[name="postal"]').focus();
+                $('input[name="postal"]').val(response.info.postal_code);
+                $('input[name="postal"]').blur();
+
+                $('input[name="ntn"]').focus();
+                $('input[name="ntn"]').val(response.info.ntn);
+                $('input[name="ntn"]').blur();
+
+                $('input[name="strn"]').focus();
+                $('input[name="strn"]').val(response.info.strn);
+                $('input[name="strn"]').blur();
+
+                $('input[name="merchantName"]').focus();
+                $('input[name="merchantName"]').val(response.info.merchant_name);
+                $('input[name="merchantName"]').blur();
+
+                $('select[name="type"]').val(response.info.customer_type).trigger('change')
+                $('select[name="merchant_type"]').val(response.info.merchant_type).trigger('change');
                 $('select[name="parentCompnay"]').val(response.info.parent_company).trigger('change');
                 $('select[name="country"]').val(response.info.country).trigger('change');
-                $('select[name="acqSource"]').val(response.info.customer_acquisition_source).trigger('change');
+                $('select[name="customer_acquisition_source"]').val(response.info.customer_acquisition_source).trigger('change');
+                $('select[name="delivery"]').val(response.info.delivery).trigger('change');
                 $('select[name="zone"]').val(response.info.zone_id).trigger('change');
 
                 var imgUrl = response.base_url + '/storage/company/' + response.info.picture;
@@ -281,18 +343,18 @@ $(document).ready(function() {
                         $('#companyPic').dropify();
                     })
 
-                var docTypes = [];
-                response.document_types.forEach(element => {
-                    docTypes.push(element["document_id"]);
-                });
+                // var docTypes = [];
+                // response.document_types.forEach(element => {
+                //     docTypes.push(element["document_id"]);
+                // });
 
-                var delivPorts = [];
-                response.delivery_ports.forEach(element => {
-                    delivPorts.push(element["port_name"]);
-                });
+                // var delivPorts = [];
+                // response.delivery_ports.forEach(element => {
+                //     delivPorts.push(element["port_name"]);
+                // });
 
-                $('select[name="deliveryPorts"]').val(delivPorts).trigger("change");
-                $('select[name="documentTypes"]').val(docTypes).trigger("change");
+                //$('select[name="deliveryPorts"]').val(delivPorts).trigger("change");
+                //$('select[name="documentTypes"]').val(docTypes).trigger("change");
                 $('textarea[name="description"]').val(response.info.remarks);
 
             }
@@ -309,15 +371,47 @@ $(document).ready(function() {
 
         $('.validationErrors').remove();
 
-        // if (!$('input[name="compName"]').val() || !$('input[name="poc"]').val() || $('select[name="zone"]').val() == 0 || $('select[name="type"]').val() == 0 || $('select[name="country"]').val() == 0 || !$('input[name="businessPh"]').val() || !$('input[name="address"]').val() || !$('input[name="city"]').val() || $('select[name="documentTypes"]').val() == 0 || $('select[name="deliveryPorts"]').val() == 0) {
-        //     $('#notifDiv').fadeIn();
-        //     $('#notifDiv').css('background', 'red');
-        //     $('#notifDiv').text('Please provide all the required information (*)');
-        //     setTimeout(() => {
-        //         $('#notifDiv').fadeOut();
-        //     }, 3000);
-        //     return;
-        // }
+        if($('select[name="type"]').val() == 0 || !$('select[name="type"]').val()){
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text('Please provide all the required information (*)');
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 3000);
+            return;
+        }else{
+            if($('select[name="type"]').val() == 1){
+                if (!$('input[name="compName"]').val() || $('select[name="zone"]').val() == 0 || !$('input[name="homePh"]').val() || !$('input[name="address"]').val() || !$('input[name="city"]').val() ) {
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Please provide all the required information (*)');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                    return;
+                }
+            }else if($('select[name="type"]').val() == 2){
+                if (!$('input[name="orgName"]').val() || $('select[name="zone"]').val() == 0 || !$('input[name="address"]').val() || !$('input[name="city"]').val() ) {
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Please provide all the required information (*)');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                    return;
+                }
+            }else{
+                if (!$('input[name="merchantName"]').val() || $('select[name="zone"]').val() == 0 || $('select[name="merchant_type"]').val() == 0 || !$('input[name="address"]').val() || !$('input[name="city"]').val() ) {
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Please provide all the required information (*)');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                    return;
+                }
+            }
+        }
 
         $('#saveCustomer').attr('disabled', 'disabled');
         $('#cancelCustomer').attr('disabled', 'disabled');

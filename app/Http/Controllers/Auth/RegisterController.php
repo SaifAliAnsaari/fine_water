@@ -88,29 +88,34 @@ class RegisterController extends Controller
             $userPicture = './storage/employees/' . time().'-'.str_replace(' ', '_', basename($_FILES["employeePicture"]["name"]));
             move_uploaded_file($_FILES["employeePicture"]["tmp_name"], $userPicture);
         }
-        $status = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'username' => $data['username'],
-            'cnic' => $data['cnic'],
-            'city' => $data['city'],
-            'state' => $data['state'],
-            'country' => $data['country'],
-            'reporting_to' => $data['reporting'],
-            'address' => $data['address'],
-            'hiring' => $data['hiring'],
-            'designation' => $data['designation'],
-            'department' => $data['department'],
-            'salary' => $data['salary'],
-            'picture' => $userPicture,
-            'password' => Hash::make($data['password']),
-        ]);
-        if($status){
-            echo json_encode('success');
-            die;
+        if(is_null(User::whereEmail($data['email'])->first())){
+            $status = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'username' => $data['username'],
+                'cnic' => $data['cnic'],
+                'city' => $data['city'],
+                'state' => $data['state'],
+                'country' => $data['country'],
+                'reporting_to' => $data['reporting'],
+                'address' => $data['address'],
+                'hiring' => $data['hiring'],
+                'designation' => $data['designation'],
+                'department_id' => $data['department'],
+                'salary' => $data['salary'],
+                'picture' => $userPicture,
+                'password' => Hash::make($data['password']),
+            ]);
+            if($status){
+                echo json_encode('success');
+                die;
+            }else{
+                echo json_encode("failed");
+                die;
+            }
         }else{
-            echo json_encode($status);
+            echo json_encode('email_exist'); 
             die;
         }
     }

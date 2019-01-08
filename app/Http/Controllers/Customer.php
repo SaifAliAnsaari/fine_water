@@ -119,6 +119,11 @@ class Customer extends Controller
         $customer->mobile_phone = $request->mobPh;
         $customer->address = $request->address;
         $customer->city = $request->city;
+        $customer->region = $request->region;
+        $customer->country = $request->country;
+        $customer->cnic = $request->cnic;
+        $customer->state = $request->state;
+        $customer->webpage = $request->webpage;
         $customer->postal_code = $request->postal;
         $customer->business_phone = $request->businessPh;
         $customer->email = $request->email;
@@ -127,6 +132,8 @@ class Customer extends Controller
         $customer->day_of_delivery = $request->day_of_delivery;
         $customer->bottles_per_week = $request->bottles_per_week;
         $customer->customer_acquisition_source = $request->customer_acquisition_source;
+        $customer->ntn = $request->ntn;
+        $customer->strn = $request->strn;
         if($request->hasFile('compPicture')){
             $completeFileName = $request->file('compPicture')->getClientOriginalName();
             $fileNameOnly = pathinfo($completeFileName, PATHINFO_FILENAME);
@@ -174,26 +181,107 @@ class Customer extends Controller
     {
         $customer = Cust::find($id);
 
-        $customer->company_name = $request->compName;
-        $customer->zone_id = $request->zone;
-        $customer->company_poc = $request->poc;
-        $customer->job_title = $request->jobTitle;
-        $customer->business_phone = $request->businessPh;
-        $customer->home_phone = $request->homePh;
-        $customer->mobile_phone = $request->mobPh;
-        $customer->whatsapp_phone = $request->whatsappPh;
-        $customer->fax_number = $request->faxPh;
-        $customer->address = $request->address;
-        $customer->city = $request->city;
-        $customer->state = $request->state;
-        $customer->country = $request->country;
-        $customer->region = $request->region;
-        $customer->email = $request->email;
-        $customer->webpage = $request->webpage;
-        $customer->customer_acquisition_source = $request->acqSource;
-        $customer->remarks = $request->description;
-        $customer->customer_type = $request->type;
-        $customer->parent_company = $request->parentCompnay;
+        if($request->type == 1){
+            $customer->company_name = $request->compName;
+            $customer->zone_id = $request->zone;
+            $customer->company_poc = $request->poc;
+            $customer->business_phone = $request->businessPh;
+            $customer->home_phone = $request->homePh;
+            $customer->mobile_phone = $request->mobPh;
+            $customer->whatsapp_phone = $request->whatsappPh;
+            $customer->address = $request->address;
+            $customer->city = $request->city;
+            $customer->state = $request->state;
+            $customer->country = $request->country;
+            $customer->latitude = $request->latitude;
+            $customer->longitude = $request->longitude;
+            $customer->postal_code = $request->postal;
+            $customer->region = $request->region;
+            $customer->email = $request->email;
+            $customer->delivery = $request->delivery;
+            $customer->day_of_delivery = $request->day_of_delivery;
+            $customer->webpage = $request->webpage;
+            $customer->customer_acquisition_source = $request->customer_acquisition_source;
+            $customer->remarks = $request->description;
+            $customer->customer_type = $request->type;
+            $customer->bottles_per_week = $request->bottles_per_week;
+            $customer->parent_company = $request->parentCompnay;
+            $customer->cnic = $request->cnic;
+            $customer->job_title = null;
+            $customer->fax_number = null;
+            $customer->ntn = null;
+            $customer->strn = null;
+            $customer->organization_name = null;
+            $customer->merchant_name = null;
+            $customer->merchant_type = null;
+        }else if($request->type == 2){
+            $customer->zone_id = $request->zone;
+            $customer->company_poc = $request->poc;
+            $customer->job_title = $request->jobTitle;
+            $customer->business_phone = $request->businessPh;
+            $customer->mobile_phone = $request->mobPh;
+            $customer->whatsapp_phone = $request->whatsappPh;
+            $customer->address = $request->address;
+            $customer->city = $request->city;
+            $customer->state = $request->state;
+            $customer->country = $request->country;
+            $customer->latitude = $request->latitude;
+            $customer->longitude = $request->longitude;
+            $customer->postal_code = $request->postal;
+            $customer->region = $request->region;
+            $customer->email = $request->email;
+            $customer->delivery = $request->delivery;
+            $customer->day_of_delivery = $request->day_of_delivery;
+            $customer->webpage = $request->webpage;
+            $customer->customer_acquisition_source = $request->customer_acquisition_source;
+            $customer->remarks = $request->description;
+            $customer->customer_type = $request->type;
+            $customer->bottles_per_week = $request->bottles_per_week;
+            $customer->parent_company = $request->parentCompnay;
+            $customer->organization_name = $request->orgName;
+            $customer->fax_number = $request->faxPh;
+            $customer->ntn = $request->ntn;
+            $customer->strn = $request->strn;
+            $customer->company_name = null;
+            $customer->home_phone = null;
+            $customer->cnic = null;
+            $customer->merchant_name = null;
+            $customer->merchant_type = null;
+        }else{
+            $customer->zone_id = $request->zone;
+            $customer->company_poc = $request->poc;
+            $customer->job_title = $request->jobTitle;
+            $customer->business_phone = $request->businessPh;
+            $customer->mobile_phone = $request->mobPh;
+            $customer->whatsapp_phone = $request->whatsappPh;
+            $customer->fax_number = $request->faxPh;
+            $customer->address = $request->address;
+            $customer->city = $request->city;
+            $customer->state = $request->state;
+            $customer->country = $request->country;
+            $customer->latitude = $request->latitude;
+            $customer->longitude = $request->longitude;
+            $customer->postal_code = $request->postal;
+            $customer->region = $request->region;
+            $customer->email = $request->email;
+            $customer->delivery = $request->delivery;
+            $customer->day_of_delivery = $request->day_of_delivery;
+            $customer->webpage = $request->webpage;
+            $customer->customer_acquisition_source = $request->customer_acquisition_source;
+            $customer->remarks = $request->description;
+            $customer->customer_type = $request->type;
+            $customer->bottles_per_week = $request->bottles_per_week;
+            $customer->parent_company = $request->parentCompnay;
+            $customer->ntn = $request->ntn;
+            $customer->strn = $request->strn;
+            $customer->merchant_name = $request->merchantName;
+            $customer->merchant_type = $request->merchant_type;
+            $customer->home_phone = null;
+            $customer->organization_name = null;
+            $customer->company_name = null;
+            $customer->cnic = null;
+        }
+        
 
         if($request->hasFile('compPicture')){
             $existingImg = $customer->picture;
@@ -211,17 +299,17 @@ class Customer extends Controller
 
         $customer->save();
         if($customer->save()){
-            DB::table('customer_delivery_ports')->where('customer_id', $id)->delete();
-            $delivPorts = explode(",", $request->delivery_ports);
-            foreach($delivPorts as $port){
-                DB::table('customer_delivery_ports')->insert(array('customer_id' => $id, 'port_name' => $port));
-            }
+            // DB::table('customer_delivery_ports')->where('customer_id', $id)->delete();
+            // $delivPorts = explode(",", $request->delivery_ports);
+            // foreach($delivPorts as $port){
+            //     DB::table('customer_delivery_ports')->insert(array('customer_id' => $id, 'port_name' => $port));
+            // }
 
-            DB::table('customer_documents')->where('customer_id', $id)->delete();
-            $docTypes = explode(",", $request->document_types);
-            foreach($docTypes as $type){
-                DB::table('customer_documents')->insert(array('customer_id' => $id, 'document_id' => $type));
-            }
+            // DB::table('customer_documents')->where('customer_id', $id)->delete();
+            // $docTypes = explode(",", $request->document_types);
+            // foreach($docTypes as $type){
+            //     DB::table('customer_documents')->insert(array('customer_id' => $id, 'document_id' => $type));
+            // }
             echo json_encode('success');
             
         }

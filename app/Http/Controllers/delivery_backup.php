@@ -106,11 +106,32 @@ class Delivery extends Controller
         //     ->where('delivery_team_id', $id)
         //     ->get();
 
+
         $get_members = DB::table('delivery_team_members as dt')
             ->selectRaw('id, user_id, delivery_team_id, (Select username from users where id = dt.user_id) as name')
             ->where('delivery_team_id', $id)
             ->get();
-        echo json_encode(array('info' => $get_team, 'members' => $get_members));
+
+            $get_members = DB::table('users')
+                ->selectRaw('id, username')
+                ->whereRaw('id NOT IN (SELECT user_id from delivery_team_members)')
+                ->get();
+
+            $get_members_current = DB::table('users')
+                ->selectRaw('id, username')
+                ->whereRaw('id IN (SELECT user_id from delivery_team_members where delivery_team_id = '.$id.')')
+                ->get();
+
+            $data = array();
+            foreach ($get_members_current as $value) {
+                $data[] = array('id' => $value->id, 'username' => $value->username);
+            }
+
+            foreach ($get_members as $value) {
+                $data[] = array('id' => $value->id, 'username' => $value->username);
+            }
+
+        echo json_encode(array('info' => $get_team, 'members' => $data));
     
     }
 

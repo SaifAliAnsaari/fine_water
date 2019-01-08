@@ -55,12 +55,37 @@ class Employee extends Controller
             $employee->picture = './storage/employees/'.$empPicture;
         }
 
-        echo json_encode($employee->save());
+        if($employee->save()){
+            echo json_encode("success");
+        }else{
+            echo json_encode("failed");
+        }
+        
     }
 
     public function getProfile(Request $req){
         $jar = new JsonApiResponse('success', '200', $req->user());
         return $jar->apiResponse();
+    }
+
+    public function activate_employee(Request $request){
+        $employee = User::find($request->id);
+        $employee->is_active = 1;
+        if($employee->save()){
+            echo json_encode('success');
+        }else{
+            echo json_encode('failed');
+        }
+    }
+
+    public function deactivate_employee(Request $request){
+        $employee = User::find($request->id);
+        $employee->is_active = 0;
+        if($employee->save()){
+            echo json_encode('success');
+        }else{
+            echo json_encode('failed');
+        }
     }
 
 }

@@ -68,22 +68,16 @@
                                         <div class="form-wrap p-0">
                                             <div class="form-s2">
                                                 <label class="PT-10 font12">Select Team Member*</label>
-                                                <select class="form-control sd-type" name="select_memebr" multiple="multiple">
+                                                <select class="form-control sd-type" id = "select_memebr" name="select_memebr" multiple="multiple">
                                                     <option value="0" disabled>Select Team Member</option>
-                                                    <?php
-                                                        if(!$users->isEmpty()){
-                                                            foreach($users as $user){ ?>
-                                                                <option value="<?= $user->id ?>"><?= $user->username ?></option>
-                                                            <?php }
-                                                        }
-                                                    ?>
+                                                    <option value="0" disabled>Select Team Member</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <h2 class="_head03 PT-10">Assign Delivery <span> Team Area</span></h2>
+                                        <h2 class="_head03 PT-10">Assign Delivery <span> Team Area*</span></h2>
                                         <div class="form-s2">
                                             <select class="form-control formselect" name="area_name" placeholder="Select Area">
-                                                <option value="0" disabled selected>Select Area</option>
+                                                <option value="0" disabled selected>Select Area*</option>
                                                 <?php
                                                     if(!$areas->isEmpty()){
                                                         foreach($areas as $area){ ?>

@@ -58,8 +58,7 @@
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuhmMCJmm69FrsFzQdhjq5B86AIDor9Q0">
         </script>
     @elseif($controller == "RegisterController")
-        <script src="/js/custom/employee.js?v=1.0" ></script>
-        <script src="/js/custom/employee.js?v=1.0" ></script>
+        <script src="/js/custom/employee.js?v=2.0" ></script>
     @elseif($controller == "Clients")
         <script src="/js/client/clients.js?v=1.0" ></script>
     @elseif($controller == "Regions")

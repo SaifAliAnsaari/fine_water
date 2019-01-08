@@ -35,6 +35,8 @@ Route::get('/GetAreasList', 'Regions@areas_list');
 Route::get('/GetZonesList', 'Regions@zone_list');
 Route::get('/GetTeamsList', 'Delivery@delivery_team_list');
 
+Route::get('/get_all_user', 'Delivery@Get_all_users');
+
 Route::get('/GetCityData', 'Regions@GetCityData');
 
 Route::post('/City_save', 'Regions@add_city');
@@ -60,3 +62,7 @@ Route::get('/DeleteTeam', 'Delivery@delete_team_entry');
 Route::get('/DeleteCity', 'Regions@delete_city_entry');
 Route::get('/DeleteArea', 'Regions@delete_area_entry');
 Route::get('/DeleteZone', 'Regions@delete_zone_entry');
+
+//Deactive or Active Employee
+Route::get('/activate_employee', 'Employee@activate_employee');
+Route::get('/deactivate_employee', 'Employee@deactivate_employee');

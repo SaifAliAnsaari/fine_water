@@ -37,7 +37,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="control-label mb-10">Email ID</label>
+                                                        <label class="control-label mb-10">Email ID*</label>
                                                         <input type="text" name="email" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
@@ -66,7 +66,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-s2 pt-19">
                                                         <select name="country" class="form-control formselect" placeholder="select Country">
-                                                            <option value="0" selected>Select Country*</option>
+                                                            <option value="0" disabled selected>Select Country*</option>
                                                             <option value="usa">USA</option>
                                                             <option value="uk">UK</option> 
                                                         </select>
@@ -124,7 +124,7 @@
                                                     </div>
                                                     <div class="form-s2 pt-19">
                                                         <select name="reporting" class="form-control formselect" placeholder="Reporting To">
-                                                            <option value="0" selected>Reporting To</option>
+                                                            <option value="0" disabled selected>Reporting To*</option>
                                                             <option value="1">Admin</option>
                                                             <option value="2">Manager</option>
                                                             <option value="3">Salesman</option>
@@ -134,12 +134,12 @@
                                                     </div>
                                                     <div class="form-s2 pt-19">
                                                         <select name="department" class="form-control formselect" placeholder="Select Department">
-                                                            <option value="0" selected>Select Department*</option>
-                                                            <option value="0">Services</option>
-                                                            <option value="1">Customer Care</option>
-                                                            <option value="2">Human Resource</option>
-                                                            <option value="3">Administration</option>
-                                                            <option value="4">Cashier</option> 
+                                                            <option value="0" disabled selected>Select Department*</option>
+                                                            <option value="1">Services</option>
+                                                            <option value="2">Customer Care</option>
+                                                            <option value="3">Human Resource</option>
+                                                            <option value="4">Administration</option>
+                                                            <option value="5">Cashier</option> 
                                                         </select>
                                                     </div>
                                                 </div>
@@ -155,8 +155,8 @@
         </form>
     </div>
     <div class="_cl-bottom">
-        <button type="submit" class="btn btn-primary mr-2" id="saveEmployee">Save</button>
-        <button id="pl-close" type="submit" class="btn btn-cancel mr-2" id="cancelEmployee">Cancel</button>
+        <button type="button" class="btn btn-primary mr-2" id="saveEmployee">Save</button>
+        <button id="pl-close" type="button" class="btn btn-cancel mr-2" id="cancelEmployee">Cancel</button>
     </div>
 </div>
 @endsection

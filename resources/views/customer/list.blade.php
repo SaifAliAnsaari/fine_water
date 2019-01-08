@@ -124,7 +124,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="control-label mb-10">Address</label>
+                                                        <label class="control-label mb-10">Address*</label>
                                                         <input type="text" name="address" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
@@ -136,7 +136,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="control-label mb-10">City</label>
+                                                        <label class="control-label mb-10">City*</label>
                                                         <input type="text" name="city" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
