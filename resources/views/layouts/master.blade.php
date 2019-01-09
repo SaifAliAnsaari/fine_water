@@ -65,6 +65,8 @@
         <script src="/js/region/city.js?v=1.0" ></script>
     @elseif($controller == "Delivery")
         <script src="/js/delivery/delivery_team.js?v=1.0" ></script>
+    @elseif($controller == "InventoryMenagement")
+        <script src="/js/inventory/inventory_menagment.js?v=1.0" ></script>
     @endif
 
 </body>

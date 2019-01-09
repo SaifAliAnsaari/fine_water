@@ -70,7 +70,6 @@
                                                 <label class="PT-10 font12">Select Team Member*</label>
                                                 <select class="form-control sd-type" id = "select_memebr" name="select_memebr" multiple="multiple">
                                                     <option value="0" disabled>Select Team Member</option>
-                                                    <option value="0" disabled>Select Team Member</option>
                                                 </select>
                                             </div>
                                         </div>

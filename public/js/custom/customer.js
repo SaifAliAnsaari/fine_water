@@ -134,8 +134,14 @@ $(document).ready(function() {
             $('input[name="bottles_per_week"]').blur();
             $('textarea[name="description"]').val("");
 
-            $('#saveCustomerForm').find("select").val("0").trigger('change');
-            $('select[name="deliveryPorts"], select[name="documentTypes"]').val("").trigger('change');
+            $('select[name="type"]').val(1).trigger('change');
+            $('select[name="zone"]').val(1).trigger('change');
+            $('select[name="merchant_type"]').val(0).trigger('change');
+            $('select[name="country"]').val(0).trigger('change');
+            $('select[name="delivery"]').val(0).trigger('change');
+            $('select[name="customer_acquisition_source"]').val(0).trigger('change');
+            //$('#saveCustomerForm').find("select").val("0").trigger('change');
+            //$('select[name="deliveryPorts"], select[name="documentTypes"]').val("").trigger('change');
         }
         lastOp = 'add';
         if ($('#saveCustomerForm input[name="_method"]').length) {

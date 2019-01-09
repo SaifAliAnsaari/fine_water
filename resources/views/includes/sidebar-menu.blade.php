@@ -35,4 +35,13 @@
             <a class="dropdown-item" href="/manage_zone">Zone</a>
         </div>
     </li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navi-l1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="/images/icon-organization.svg" alt="" />
+            <span>Inventory Management</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navi-l1">
+            <a class="dropdown-item" href="/inventory_list">Inventory List</a>
+        </div>
+    </li>
 </ul>

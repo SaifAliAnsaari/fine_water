@@ -98,7 +98,9 @@ class Delivery extends Controller
 
 
     public function get_team_data($id){
-        //echo json_encode($id);
+        //Jo users free hain
+        $users = DB::table('users')->select('id', 'username')->whereRaw('id NOT IN (Select user_id from delivery_team_members)')->get();
+
         $get_team = DB::table('delivery_team')
             ->where('id', $id)
             ->first();
@@ -110,7 +112,9 @@ class Delivery extends Controller
             ->selectRaw('id, user_id, delivery_team_id, (Select username from users where id = dt.user_id) as name')
             ->where('delivery_team_id', $id)
             ->get();
-        echo json_encode(array('info' => $get_team, 'members' => $get_members));
+
+
+        echo json_encode(array('info' => $get_team, 'members' => $get_members, 'free_users' =>$users));
     
     }
 

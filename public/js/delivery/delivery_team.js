@@ -29,9 +29,6 @@ $(document).ready(function(){
         $('#dataSidebarLoader').show();
         $('._cl-bottom').hide();
         $('.pc-cartlist').hide();
-
-        
-
         $.ajax({
             type: 'GET',
             url: '/get_all_user',
@@ -49,12 +46,8 @@ $(document).ready(function(){
                 .append('<option disabled value="0">Select Team Members</option>')
                 .val(-1);
                 response.forEach(element => {
-
                     data.push({ id: element["id"], name: element["username"] });
-                    // ids.push(element["id"]);
-                    // names.push(element['username']);
                 });
-                console.log(data.length);
                 var remaining_options = "";
                 for(var j = 0; j < data.length; j++) {
                     remaining_options += "<option value='" + data[j]['id'] + "'>" + data[j]['name'] + "</option>";
@@ -62,7 +55,6 @@ $(document).ready(function(){
                 $( 'select[name="select_memebr"]' ).append( remaining_options );
             }
         });
-        
         
 
         $('#saveDeliveryTeam').show();
@@ -108,34 +100,44 @@ $(document).ready(function(){
         $('#dropifyImgDiv').append('<input type="file" name="compPicture" id="companyPic" class="dropify" />');
         $('#companyPic').dropify();
     });
-
+    var counter = 0;
 
     $(document).on('click', '.openDataSidebarForUpdateTeam', function() {
+
+        $('#dataSidebarLoader').show();
+        $('._cl-bottom').hide();
+        $('.pc-cartlist').hide();
 
         //Form ki id change kr de hai
         $('#saveDeliveryForm').prop('id','updateDeliveryForm');
 
-        $.ajax({
-            type: 'GET',
-            url: '/get_all_user',
-            success: function(response) {
-                console.log(response);
-                var response = JSON.parse(response);
-                $('#dataSidebarLoader').hide();
-                $('._cl-bottom').show();
-                $('.pc-cartlist').show();
-                data = [];
-                $('#select_memebr')
-                .find('option')
-                .remove()
-                .end()
-                .append('<option value="0" disabled>Select Team Member</option>')
-                .val(-1);
-                response.forEach(element => {
-                    data.push({ id: element["id"], name: element["username"] });
-                });
-            }
-        });
+        // $.ajax({
+        //     type: 'GET',
+        //     url: '/get_all_user',
+        //     //async: false,
+        //     success: function(response) {
+        //         // debugger;
+        //         // // console.log(response);
+        //         // var response = JSON.parse(response);
+        //         // $('#dataSidebarLoader').hide();
+        //         // $('._cl-bottom').show();
+        //         // $('.pc-cartlist').show();
+        //         // data = [];
+        //         // $('#select_memebr')
+        //         // .find('option')
+        //         // .remove()
+        //         // .end()
+        //         // .append('<option value="0" disabled>Select Team Member</option>')
+        //         // .val(-1);
+        //         // if(!response == ""){
+        //         //     response.forEach(element => {
+        //         //         data.push({ id: element["id"], name: element["username"] });
+        //         //     });
+        //         // }else{
+        //         //     data = [];
+        //         // }
+        //     }
+        // });
 
         $('input[id="operation"]').val('update');
         lastOp = 'update';
@@ -156,7 +158,7 @@ $(document).ready(function(){
             type: 'GET',
             url: '/team_data/' + id,
             success: function(response) {
-                console.log(response);
+                //console.log(response);
                 var response = JSON.parse(response);
                 $('#dataSidebarLoader').hide();
                 $('._cl-bottom').show();
@@ -191,28 +193,37 @@ $(document).ready(function(){
 
                 $('select[name="area_name"]').val(response.info.area_id).trigger('change');
                 
+
+                $( 'select[name="select_memebr"]' ).empty();
+                
                 var _members = [];
                 var _mem_names = [];
+                var _free_mem_id = [];
+                var _free_mem_name = [];
                 response.members.forEach(element => {
                     _members.push(element["user_id"]);
                     _mem_names.push(element['name']);
                 });
 
                
-                var optionsAsString = "";
-                var remaining_options = "";
+                response.free_users.forEach(element => {
+                    _free_mem_id.push(element["id"]);
+                    _free_mem_name.push(element['username']);
+                });
+               
+               //console.log(_free_mem_name);
 
                 for(var i = 0; i < _members.length; i++) {
-                    optionsAsString += "<option value='" + _members[i] + "'>" + _mem_names[i] + "</option>";
+                    // $( 'select[name="select_memebr"]' ).append("<option value='" + _members[i] + "'>" + _mem_names[i] + "</option>");
+                    var newState = new Option(_mem_names[i], _members[i], true, true);
+                    $("select[name='select_memebr']").append(newState).trigger('change');
                 }
-               
-                for(var j = 0; j < data.length; j++) {
-                    remaining_options += "<option value='" + data[j]['id'] + "'>" + data[j]['name'] + "</option>";
+
+                for(var j = 0; j < _free_mem_id.length; j++) {
+                    // $( 'select[name="select_memebr"]' ).append("<option value='" + _members[i] + "'>" + _mem_names[i] + "</option>");
+                    //var newState = new Option(_free_mem_name[j], _free_mem_id[j], true, true);
+                    $("select[name='select_memebr']").append("<option value='" + _free_mem_id[j] + "'>" + _free_mem_name[j] + "</option>");
                 }
-                //console.log(data.length);
-                $( 'select[name="select_memebr"]' ).append( remaining_options );
-                $( 'select[name="select_memebr"]' ).append( optionsAsString );
-                $('select[name="select_memebr"]').val(_members).trigger("change");
 
                 $('#saveDeliveryTeam').hide();
                 $('#updateDeliveryTeam').show();
@@ -336,7 +347,7 @@ $(document).ready(function(){
                     $('#pl-close').click();
                     fetchTeamssList();
                     $('#updateDeliveryTeam').removeAttr('disabled');
-                    $('#updateDeliveryTeam').text('Save');
+                    $('#updateDeliveryTeam').text('Update');
 
                     $('#notifDiv').fadeIn();
                     $('#notifDiv').css('background', 'green');
@@ -347,7 +358,7 @@ $(document).ready(function(){
                 } else if(JSON.parse(response) == "failed"){
                     $('#saveDeliveryTeam').removeAttr('disabled');
                     $('#cancelDeliveryTeam').removeAttr('disabled');
-                    $('#saveDeliveryTeam').text('Save');
+                    $('#saveDeliveryTeam').text('Update');
                     $('#notifDiv').fadeIn();
                     $('#notifDiv').css('background', 'red');
                     $('#notifDiv').text('Failed to update team at the moment');
@@ -357,7 +368,7 @@ $(document).ready(function(){
                 }else if(JSON.parse(response) == "already exist"){
                     $('#saveDeliveryTeam').removeAttr('disabled');
                     $('#cancelDeliveryTeam').removeAttr('disabled');
-                    $('#saveDeliveryTeam').text('Save');
+                    $('#saveDeliveryTeam').text('Update');
                     $('#notifDiv').fadeIn();
                     $('#notifDiv').css('background', 'red');
                     $('#notifDiv').text('Team already exist');

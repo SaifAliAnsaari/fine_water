@@ -237,6 +237,8 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-wrap pt-19" id="dropifyImgDiv">
+                                                    <div class="upload-pic"></div>
+                                                    <input type="file" name="compPicture" id="input-file-now" class="dropify" />
                                                 </div>
                                             </div>
                                         </div>
