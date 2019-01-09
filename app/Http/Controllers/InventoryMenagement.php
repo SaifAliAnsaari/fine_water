@@ -131,4 +131,67 @@ class InventoryMenagement extends Controller
             echo json_encode('failed');
         }
     }
+
+
+
+    public function add_ons(){
+        return view('inventory_managment.add_ons');
+    }
+
+    public function add_addOns(Request $request){
+        if(DB::table('add_ons')->select('id')->whereRaw('name = "'.$request->name.'" AND quantity = "'.$request->quantity.'" AND purchase_price = "'.$request->purchase_price.'"')->first()){
+            echo json_encode('already exist');
+        }else{
+            $insert_addOns = DB::table('add_ons')->insert(
+                ['name' => $request->name, 
+                'purchase_price' => $request->purchase_price,
+                'quantity' => $request->quantity
+                ]);
+            if($insert_addOns){
+                echo json_encode('success');
+            }else{
+                echo json_encode('failed');
+            }
+        }
+    }
+
+    public function addOns_list(){
+        echo json_encode( DB::table('add_ons') ->get());
+    }
+
+    public function get_add_ons_data($id){
+        echo json_encode(array('info' => DB::table('add_ons')->where("id", $id)->first()));
+    }
+
+    public function update_addOns(Request $request){
+        if(DB::table('add_ons')->select('id')->whereRaw('name = "'.$request->name.'" AND quantity = "'.$request->quantity.'" AND purchase_price = "'.$request->purchase_price.'"')->first()){
+            echo json_encode('already exist');
+        }else{
+            try{
+                $update_addOns = DB::table('add_ons')
+                ->where('id', $request->addOns_id)->update(
+                    ['name' => $request->name, 
+                    'purchase_price' => $request->purchase_price,
+                    'quantity' => $request->quantity
+                    ]);
+                    
+                echo json_encode('success');
+                
+            } catch(\Illuminate\Database\QueryException $ex){ 
+                echo json_encode('failed'); 
+            }
+        }
+    }
+
+    public function delete_addOns_entry(Request $request){
+        $delete_one_entry = DB::table('add_ons')
+            ->where('id', $request->id)
+            ->delete();
+        if($delete_one_entry){
+            echo json_encode('success');
+        }else{
+            echo json_encode('failed');
+        }
+    }
+
 }

@@ -42,6 +42,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navi-l1">
             <a class="dropdown-item" href="/inventory_list">Inventory List</a>
+            <a class="dropdown-item" href="/add-ons">Add-Ons</a>
         </div>
     </li>
 </ul>
