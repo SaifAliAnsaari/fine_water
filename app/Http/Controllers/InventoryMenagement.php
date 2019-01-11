@@ -42,7 +42,6 @@ class InventoryMenagement extends Controller
                     'sku' => $request->sku, 
                     'purchase_price' => $request->purchase_price,
                     'returnable' => $request->returnable,
-                    'quantity' => $request->quantity,
                     'img' => $compPic
                     ]);
                 if($insert_inventory){
@@ -56,8 +55,7 @@ class InventoryMenagement extends Controller
                     'liter_capacity' => $request->liter_capacity,
                     'sku' => $request->sku, 
                     'purchase_price' => $request->purchase_price,
-                    'returnable' => $request->returnable,
-                    'quantity' => $request->quantity
+                    'returnable' => $request->returnable
                     ]);
                 if($insert_inventory){
                     echo json_encode('success');
@@ -97,7 +95,6 @@ class InventoryMenagement extends Controller
                     'sku' => $request->sku, 
                     'purchase_price' => $request->purchase_price,
                     'returnable' => $request->returnable,
-                    'quantity' => $request->quantity,
                     'img' => $compPic
                     ]);
                     
@@ -109,8 +106,7 @@ class InventoryMenagement extends Controller
                     'liter_capacity' => $request->liter_capacity,
                     'sku' => $request->sku, 
                     'purchase_price' => $request->purchase_price,
-                    'returnable' => $request->returnable,
-                    'quantity' => $request->quantity
+                    'returnable' => $request->returnable
                     ]);
                     
                 echo json_encode('success');
@@ -121,15 +117,28 @@ class InventoryMenagement extends Controller
     
     }
 
-    public function delete_inventory_entry(Request $request){
-        $delete_one_entry = DB::table('inventory_core')
-            ->where('id', $request->id)
-            ->delete();
-        if($delete_one_entry){
-            echo json_encode('success');
-        }else{
-            echo json_encode('failed');
+    public function activate_inventory(Request $request){
+        try{
+            $active_inventory = DB::table('inventory_core')->where('id', $request->id)
+            ->update(
+                ['is_active' => 1
+                ]);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            echo json_encode('failed'); 
         }
+        echo json_encode('success');
+    }
+
+    public function deactivate_inventory(Request $request){
+        try{
+            $active_inventory = DB::table('inventory_core')->where('id', $request->id)
+            ->update(
+                ['is_active' => 0
+                ]);
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            echo json_encode('failed'); 
+        }
+        echo json_encode('success');
     }
 
 
@@ -192,6 +201,226 @@ class InventoryMenagement extends Controller
         }else{
             echo json_encode('failed');
         }
+    }
+
+
+
+    public function stock(){
+        return view('inventory_managment.stock_managment'); 
+    }
+
+    public function stock_quantity_list(){
+        echo json_encode( DB::table('inventory_core as ic')->selectRaw('id,sku, (Select quantity from stock_managment where sku = ic.sku) as quantity')->get());
+    }
+
+    public function add_quantity_stock_managment(Request $request){
+        $check = DB::table('stock_managment')->select('id', 'quantity')->where('sku', $request->sku)->first();
+        if($check){
+
+            try{
+                $add = DB::table('stock_managment')
+                ->where('sku', $request->sku)->update(
+                    ['quantity' => $request->quantity + $check->quantity
+                    ]);
+                echo json_encode('success');
+            }catch(\Illuminate\Database\QueryException $ex){ 
+                echo json_encode('failed'); 
+            }
+           
+        }else{
+            $add = DB::table('stock_managment')->insert(
+                ['sku' => $request->sku, 
+                'quantity' => $request->quantity
+                ]);
+            if($add){
+                echo json_encode('success');
+            }else{
+                echo json_encode('failed');
+            }
+        }
+    }
+
+    public function remove_quantity_stock_managment(Request $request){
+
+        $check = DB::table('stock_managment')->select('id', 'quantity')->where('sku', $request->sku)->first();
+        if(!$check == null){
+            $total = $check->quantity - $request->quantity;
+            
+            if($check->quantity > 0 && $total >= 0){
+
+                try{
+                    $add = DB::table('stock_managment')
+                    ->where('sku', $request->sku)->update(
+                        ['quantity' => $check->quantity - $request->quantity 
+                        ]);
+                    echo json_encode('success');
+                }catch(\Illuminate\Database\QueryException $ex){ 
+                    echo json_encode('failed'); 
+                }
+               
+            }else{
+                echo json_encode('failed');
+            }
+        }else{
+            echo json_encode('failed');
+        }
+        
+    } 
+
+
+
+    public function assests(){
+        return view('inventory_managment.assests_management'); 
+    }
+
+    public function add_assests(Request $request){
+         $data_added = [];
+        $insert_assest_data = DB::table('assests')->insertGetId(
+            ['serial_no' => $request->serial_no, 
+            'purchase_price' => $request->purchase_price,
+            'seller' => $request->seller, 
+            'warrenty_start' => $request->warrenty_start,
+            'warrenty_end' => $request->warrenty_end,
+            'manufacture' => $request->manufactures
+            ]);
+        if($insert_assest_data){
+            if($request->hasFile('documents') ){
+                foreach($request->file('documents') as $file) :
+                    $completeFileName = $file->getClientOriginalName();
+                    $fileNameOnly = pathinfo($completeFileName, PATHINFO_FILENAME);
+                    $extension = $file->getClientOriginalExtension();
+                    $randomized = rand();
+                    $documents = str_replace(' ', '', $fileNameOnly).'-'.$randomized.''.time().'.'.$extension;
+                    $path = $file->storeAs('public/assest_documents', $documents);
+                    $insert_doc = DB::table('assests_documents')->insert([
+                        'document' => $documents,
+                        'assest_id' => $insert_assest_data
+                    ]);
+                endforeach;
+                if($insert_doc){
+                   // echo json_encode("success");
+                    $data_added[] = ['doc' => true];
+                }else{
+                    $data_added[] = ['doc' => false];
+                }
+            } 
+            if($request->hasFile('invoices') ){
+                foreach($request->file('invoices') as $file) :
+                    $completeFileName = $file->getClientOriginalName();
+                    $fileNameOnly = pathinfo($completeFileName, PATHINFO_FILENAME);
+                    $extension = $file->getClientOriginalExtension();
+                    $randomized = rand();
+                    $documents = str_replace(' ', '', $fileNameOnly).'-'.$randomized.''.time().'.'.$extension;
+                    $path = $file->storeAs('public/assest_invoice', $documents);
+                    $insert_doc = DB::table('assests_invoice')->insert([
+                        'invoice' => $documents,
+                        'assest_id' => $insert_assest_data
+                    ]);
+                endforeach;
+                if($insert_doc){
+                    $data_added[] = ['invoice' => true];
+                }else{
+                    $data_added[] = ['invoice' => false];
+                }
+            }
+            if($request->hasFile('pictures') ){
+                foreach($request->file('pictures') as $file) :
+                    $completeFileName = $file->getClientOriginalName();
+                    $fileNameOnly = pathinfo($completeFileName, PATHINFO_FILENAME);
+                    $extension = $file->getClientOriginalExtension();
+                    $randomized = rand();
+                    $documents = str_replace(' ', '', $fileNameOnly).'-'.$randomized.''.time().'.'.$extension;
+                    $path = $file->storeAs('public/assest_pictures', $documents);
+                    $insert_doc = DB::table('assests_pics')->insert([
+                        'pic' => $documents,
+                        'assest_id' => $insert_assest_data
+                    ]);
+                endforeach;
+                if($insert_doc){
+                    $data_added[] = ['pic' => true];
+                }else{
+                    $data_added[] = ['pic' => false];
+                }
+
+            }
+            else{
+                $data_added[] = ['asset' => true];
+            }
+        }else{
+            $data_added[] = ['asset' => false];
+        }
+        echo json_encode($data_added);
+    }
+
+    public function assests_list(){
+        echo json_encode( DB::table('assests') ->get()); 
+    }
+
+    public function get_assests_data($id){
+        echo json_encode(array('info' => DB::table('assests')->where("id", $id)->first()));
+    }
+
+    public function update_assests(Request $request){
+        try{
+            $update_assest = DB::table('assests')
+            ->where('id', $request->assests_id)->update(
+                ['purchase_price' => $request->purchase_price,
+                'serial_no' => $request->serial_no,
+                'seller' => $request->seller,
+                'warrenty_start' => $request->warrenty_start,
+                'warrenty_end' => $request->warrenty_end,
+                'manufacture' => $request->manufactures
+                ]);
+                
+            echo json_encode('success');
+            
+        } catch(\Illuminate\Database\QueryException $ex){ 
+            echo json_encode('failed'); 
+        }
+    }
+
+    public function delete_assest_entry(Request $request){
+        $data = [];
+        $delete_one_entry = DB::table('assests')
+        ->where('id', $request->id)
+        ->delete();
+        if($delete_one_entry){
+            $data[] = ['asset' => 'success'];
+            if(DB::table('assests_pics')->select('id')->where('assest_id', $request->id)->get()){
+                $delete_pic_entry = DB::table('assests_pics')
+                ->where('assest_id', $request->id)
+                ->delete();
+                if($delete_pic_entry){
+                    $data[] = ['pic' => 'success'];
+                }else{
+                    $data[] = ['pic' => 'success'];
+                }
+            }
+            if(DB::table('assests_invoice')->select('id')->where('assest_id', $request->id)->get()){
+                $delete_invoice_entry = DB::table('assests_invoice')
+                ->where('assest_id', $request->id)
+                ->delete();
+                if($delete_invoice_entry){
+                    $data[] = ['invoice' => 'success'];
+                }else{
+                    $data[] = ['invoice' => 'failed'];
+                }
+            }
+            if(DB::table('assests_documents')->select('id')->where('assest_id', $request->id)->get()){
+                $delete_doc_entry = DB::table('assests_documents')
+                ->where('assest_id', $request->id)
+                ->delete();
+                if($delete_doc_entry){
+                    $data[] = ['doc' => 'success'];
+                }else{
+                    $data[] = ['doc' => 'failed'];
+                }
+            }
+        }else{
+            $data[] = ['asset' => 'failed'];
+        }
+        echo json_encode($data);
+        
     }
 
 }

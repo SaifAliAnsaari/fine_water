@@ -1,12 +1,18 @@
 $(document).ready(function(){
 
-    
+    $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd'
+    });
     var segments = location.href.split('/');
     var action = segments[3];
     if(action == "inventory_list"){
         fetchInventoryList();
     }else if(action == "add-ons"){
         fetchAddOnsList();
+    }else if(action == "stock_managment"){
+        fetchStockList();
+    }else if(action == "assests_management"){
+        fetchAssestsList();
     }
 
     var lastOp = "add";
@@ -29,9 +35,6 @@ $(document).ready(function(){
                 $('input[name="purchase_price"]').val("");
                 $('input[name="purchase_price"]').blur();
 
-                $('input[name="quantity"]').val("");
-                $('input[name="quantity"]').blur();
-
                 $('input[name="inventory_id"]').val("");
                 $('input[name="old_img"]').val("");
                 $('select[name="returnable"]').val(-1).trigger('change');
@@ -52,14 +55,43 @@ $(document).ready(function(){
 
                 $('#saveAddOns').show();
                 $('#updateAddOns').hide();
-            }
-               
+            }else if(action == "assests_management"){
+                $('#updateAssestsForm').prop('id','saveAssestsForm');
+
+                $('input[name="sku"]').val("");
+                $('input[name="sku"]').blur();
+
+                $('input[name="serial_no"]').val("");
+                $('input[name="serial_no"]').blur();
+
+                $('input[name="purchase_price"]').val("");
+                $('input[name="purchase_price"]').blur();
+
+                $('input[name="seller"]').val("");
+                $('input[name="seller"]').blur();
+
+                $('input[name="warrenty_start"]').val("");
+                $('input[name="warrenty_start"]').blur();
+
+                $('input[name="warrenty_end"]').val("");
+                $('input[name="warrenty_end"]').blur();
+
+                $('input[name="manufactures"]').val("");
+                $('input[name="manufactures"]').blur();
+
+                $('input[name="invoices"]').val(null);
+                $('input[name="documents"]').val(null);
+
+                $('#saveAssests').show();
+                $('#saveAssests').text('Save');
+                $('#updateAssests').hide();
+            }   
            
         }
         lastOp = 'add';
-        if ($('#saveInventoryForm input[name="_method"]').length) {
-            $('#saveInventoryForm input[name="_method"]').remove();
-        }
+        // if ($('#saveInventoryForm input[name="_method"]').length) {
+        //     $('#saveInventoryForm input[name="_method"]').remove();
+        // }
         $('input[id="operation"]').val('add');
         $('#product-cl-sec').addClass('active');
         $('.overlay').addClass('active');
@@ -77,7 +109,7 @@ $(document).ready(function(){
     $(document).on('click', '#saveinventory', function() {
 
         if (!$('input[name="name"]').val() || !$('input[name="liter_capacity"]').val() || !$('input[name="sku"]').val()
-            || !$('input[name="purchase_price"]').val() || !$('input[name="quantity"]').val() || !$('select[name="returnable"]').val()) {
+            || !$('input[name="purchase_price"]').val() || !$('select[name="returnable"]').val()) {
             $('#notifDiv').fadeIn();
             $('#notifDiv').css('background', 'red');
             $('#notifDiv').text('Please provide all the required information (*)');
@@ -105,17 +137,22 @@ $(document).ready(function(){
                     $('#saveinventory').removeAttr('disabled');
                     $('#cancelinventory').removeAttr('disabled');
                     $('#saveinventory').text('Save');
-
-                    if ($('#operation').val() !== "update") {
-                        $('#saveInventoryForm').find("input[type=text]").val("");
-                    }
-
+                    // if ($('#operation').val() !== "update") {
+                    //     $('#saveInventoryForm').find("input[type=text]").val("");
+                    // }
                     $('#notifDiv').fadeIn();
                     $('#notifDiv').css('background', 'green');
                     $('#notifDiv').text('Item have been added successfully');
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();
                     }, 3000);
+                    // $('#saveInventoryForm').find('name').val('');
+                    // $('#saveInventoryForm').find('liter_capacity').val('');
+                    // $('#saveInventoryForm').find('sku').val('');
+                    // $('#saveInventoryForm').find('purchase_price').val('');
+                    // $('#saveInventoryForm').find('returnable').val(0).trigger('change');
+                    // $('#dropifyImgDiv').empty();
+                    // $('#dropifyImgDiv').append('<input type="file" name="compPicture" id="compPicture" />');
                 } else if(JSON.parse(response) == "failed"){
                     $('#saveinventory').removeAttr('disabled');
                     $('#cancelinventory').removeAttr('disabled');
@@ -187,7 +224,7 @@ $(document).ready(function(){
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();
                     }, 3000);
-                    $('#saveAddOnsForm').find("input").val('');
+                    //$('#saveAddOnsForm').find("input").val('');
                 } else if(JSON.parse(response) == "failed"){
                     $('#saveAddOns').removeAttr('disabled');
                     $('#cancelAddOns').removeAttr('disabled');
@@ -209,6 +246,72 @@ $(document).ready(function(){
                         $('#notifDiv').fadeOut();
                     }, 3000);
                 }
+            },
+            error: function(err) {
+                if (err.status == 422) {
+                    $.each(err.responseJSON.errors, function(i, error) {
+                        var el = $(document).find('[name="' + i + '"]');
+                        el.after($('<small style="color: red; position: absolute; width:100%; text-align: right; margin-left: -30px">' + error[0] + '</small>'));
+                    });
+                }
+            }
+        });
+
+    });
+
+    $(document).on('click', '#saveAssests', function() {
+
+        if (!$('input[name="purchase_price"]').val() || !$('input[name="serial_no"]').val() ||
+            !$('input[name="seller"]').val() || !$('input[name="warrenty_start"]').val() || !$('input[name="warrenty_end"]').val()
+            || !$('input[name="manufactures"]').val()) {
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text('Please provide all the required information (*)');
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 3000);
+            return;
+        }
+
+        $('#saveAssests').attr('disabled', 'disabled');
+        $('#updateAssests').attr('disabled', 'disabled');
+        $('#saveAssests').text('Processing..');
+
+        var ajaxUrl = "/add_assests";
+
+        $('#saveAssestsForm').ajaxSubmit({
+            type: "POST",
+            url: ajaxUrl,
+            data: $('#saveAssestsForm').serialize(),
+            cache: false,
+            success: function(response) {
+                var response = JSON.parse(response);
+                //console.log(response);
+                response.forEach(element => { 
+                    if(element.pic || element.invoice || element.doc || element.asset){
+                        fetchAssestsList();
+                        $('#saveAssests').removeAttr('disabled');
+                        $('#updateAssests').removeAttr('disabled');
+                        $('#saveAssests').text('Save');
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'green');
+                        $('#notifDiv').text('Assest have been added successfully');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                   // $('#saveAssestsForm').find("input").val('');
+                    }else{
+                        $('#saveAssests').removeAttr('disabled');
+                        $('#updateAssests').removeAttr('disabled');
+                        $('#saveAssests').text('Save');
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'red');
+                        $('#notifDiv').text('Failed to add Information at the moment');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                    }
+                });
             },
             error: function(err) {
                 if (err.status == 422) {
@@ -274,10 +377,6 @@ $(document).ready(function(){
                     $('input[name="purchase_price"]').val(response.info.purchase_price);
                     $('input[name="purchase_price"]').blur();
 
-                    $('input[name="quantity"]').focus();
-                    $('input[name="quantity"]').val(response.info.quantity);
-                    $('input[name="quantity"]').blur();
-
                     $('input[name="inventory_id"]').val(response.info.id);
                     $('input[name="old_img"]').val(response.info.img);
                     $('select[name="returnable"]').val(response.info.returnable).trigger('change');
@@ -335,6 +434,59 @@ $(document).ready(function(){
 
                     $('#saveAddOns').hide();
                     $('#updateAddOns').show();
+
+                }
+            });
+
+            $('#product-cl-sec').addClass('active');
+            $('.overlay').addClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            $('body').toggleClass('no-scroll');
+        }else if(action == "assests_management"){
+            //Form ki id change kr de hai
+            $('#saveAssestsForm').prop('id','updateAssestsForm');
+
+            var id = $(this).attr('id');
+            $.ajax({
+                type: 'GET',
+                url: '/assests_data/' + id,
+                success: function(response) {
+                   // console.log(response);
+                    var response = JSON.parse(response);
+                    $('#dataSidebarLoader').hide();
+                    $('._cl-bottom').show();
+                    $('.pc-cartlist').show();
+                    $('#uploadedImg').remove();
+
+                    $('input[name="purchase_price"]').focus();
+                    $('input[name="purchase_price"]').val(response.info.purchase_price);
+                    $('input[name="purchase_price"]').blur();
+
+                    $('input[name="serial_no"]').focus();
+                    $('input[name="serial_no"]').val(response.info.serial_no);
+                    $('input[name="serial_no"]').blur();
+
+                    $('input[name="seller"]').focus();
+                    $('input[name="seller"]').val(response.info.seller);
+                    $('input[name="seller"]').blur();
+
+                    $('input[name="warrenty_start"]').focus();
+                    $('input[name="warrenty_start"]').val(response.info.warrenty_start);
+                    $('input[name="warrenty_start"]').blur();
+
+                    $('input[name="warrenty_end"]').focus();
+                    $('input[name="warrenty_end"]').val(response.info.warrenty_end);
+                    $('input[name="warrenty_end"]').blur();
+
+                    $('input[name="manufactures"]').focus();
+                    $('input[name="manufactures"]').val(response.info.manufacture);
+                    $('input[name="manufactures"]').blur();
+
+                    $('input[name="assests_id"]').val(response.info.id);
+
+                    $('#saveAssests').hide();
+                    $('#updateAssests').show();
 
                 }
             });
@@ -459,41 +611,59 @@ $(document).ready(function(){
 
     });
 
+    $(document).on('click', '#updateAssests', function() {
+
+        $('#updateAssests').attr('disabled', 'disabled');
+        $('#cancelAssests').attr('disabled', 'disabled');
+        $('#updateAssests').text('Processing..');
+        var ajaxUrl = "/assests_update";
+        $('#updateAssestsForm').ajaxSubmit({
+            type: "POST",
+            url: ajaxUrl,
+            data: $('#updateAssestsForm').serialize(),
+            cache: false,
+            success: function(response) {
+               // console.log(response);
+                if (JSON.parse(response) == "success") {
+                    fetchAssestsList();
+                    $('#updateAssests').removeAttr('disabled');
+                    $('#cancelAssests').removeAttr('disabled');
+                    $('#updateAssests').text('Update');
+
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').text('Information have been updated successfully');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                } else if(JSON.parse(response) == "failed"){
+                    $('#updateAssests').removeAttr('disabled');
+                    $('#cancelAssests').removeAttr('disabled');
+                    $('#updateAssests').text('Update');
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Failed to update information at the moment');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }
+            },
+            error: function(err) {
+                if (err.status == 422) {
+                    $.each(err.responseJSON.errors, function(i, error) {
+                        var el = $(document).find('[name="' + i + '"]');
+                        el.after($('<small style="color: red; position: absolute; width:100%; text-align: right; margin-left: -30px">' + error[0] + '</small>'));
+                    });
+                }
+            }
+        });
+
+    });
+
 
     //Delete Button
     $(document).on('click', '.deletebtn', function(){
-        if(action == "inventory_list"){
-            $(this).text('PROCESSING....');
-            $(this).attr("disabled", "disabled");
-            var id = $(this).attr('id');
-            $.ajax({
-                type: 'GET',
-                url: '/DeleteInventory',
-                data: {
-                    _token: '{!! csrf_token() !!}',
-                    id: id
-                },
-                success: function(response) {
-                    if(JSON.parse(response) == "success"){
-                        fetchInventoryList();
-    
-                        $('#notifDiv').fadeIn();
-                        $('#notifDiv').css('background', 'green');
-                        $('#notifDiv').text('Inventory deleted successfully');
-                        setTimeout(() => {
-                            $('#notifDiv').fadeOut();
-                        }, 3000);
-                    }else if(JSON.parse(response) == "failed"){
-                        $('#notifDiv').fadeIn();
-                        $('#notifDiv').css('background', 'red');
-                        $('#notifDiv').text('Unable to delete inventory');
-                        setTimeout(() => {
-                            $('#notifDiv').fadeOut();
-                        }, 3000);
-                    }     
-                }
-            });
-        }else if(action == "add-ons"){
+        if(action == "add-ons"){
             $(this).text('PROCESSING....');
             $(this).attr("disabled", "disabled");
             var id = $(this).attr('id');
@@ -524,6 +694,226 @@ $(document).ready(function(){
                     }     
                 }
             });
+        }else if(action == "assests_management"){
+            $(this).text('PROCESSING....');
+            $(this).attr("disabled", "disabled");
+            var id = $(this).attr('id');
+            $.ajax({
+                type: 'GET',
+                url: '/DeleteAssests',
+                data: {
+                    _token: '{!! csrf_token() !!}',
+                    id: id
+                },
+                success: function(response) {
+                    var response = JSON.parse(response);
+                    response.forEach(element => { 
+                        if(element.pic || element.invoice || element.doc || element.asset){
+                            fetchAssestsList();
+                            $('#saveAssests').removeAttr('disabled');
+                            $('#updateAssests').removeAttr('disabled');
+                            $('#saveAssests').text('Delete');
+                            $('#notifDiv').fadeIn();
+                            $('#notifDiv').css('background', 'green');
+                            $('#notifDiv').text('Assest deleted successfully');
+                            setTimeout(() => {
+                                $('#notifDiv').fadeOut();
+                            }, 3000);
+                        $('#saveAssestsForm').find("input").val('');
+                        }else{
+                            $('#saveAssests').removeAttr('disabled');
+                            $('#updateAssests').removeAttr('disabled');
+                            $('#saveAssests').text('Delete');
+                            $('#notifDiv').fadeIn();
+                            $('#notifDiv').css('background', 'red');
+                            $('#notifDiv').text('Failed to delete at the moment');
+                            setTimeout(() => {
+                                $('#notifDiv').fadeOut();
+                            }, 3000);
+                        }
+                    });
+                }
+            });
+        }
+        
+    });
+
+    //Activate button
+    $(document).on('click', '.activate_btn', function(){
+        var id = $(this).attr('id');
+        $(this).text('PROCESSING....');
+        $(this).attr("disabled", "disabled");
+
+        $.ajax({
+            type: 'GET',
+            url: '/activate_inventory',
+            data: {
+                _token: '{!! csrf_token() !!}',
+               id: id
+           },
+            success: function(response) {
+                if(JSON.parse(response) == "success"){
+                    fetchInventoryList();
+                    $(this).removeAttr('disabled');
+                    $(this).text('Deactivate');
+                    $(this).removeClass("activate_btn");
+                    $(this).addClass("deactivate_btn");
+
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').text('Activated successfully');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }else if(JSON.parse(response) == "failed"){
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Unable to activate inventory');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }    
+            }
+        });
+    });
+
+    $(document).on('click', '.deactivate_btn', function(){
+        var id = $(this).attr('id');
+        $(this).text('PROCESSING....');
+        $(this).attr("disabled", "disabled");
+
+        $.ajax({
+            type: 'GET',
+            url: '/deactivate_inventory',
+            data: {
+                _token: '{!! csrf_token() !!}',
+               id: id
+           },
+            success: function(response) {
+                if(JSON.parse(response) == "success"){
+                    fetchInventoryList();
+                    $(this).removeAttr('disabled');
+                    $(this).text('Deactivate');
+                    $(this).removeClass("deactivate_btn");
+                    $(this).addClass("activate_btn");
+
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').text('Deactivated successfully');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }else if(JSON.parse(response) == "failed"){
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Unable to deactivate inventory');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }    
+            }
+        });
+    });
+
+    //Add Quantity
+    $(document).on('click', '.add_quantity', function(){
+        var id = $(this).attr('id');
+        var sku = $(this).parent().parent().find('td:eq(1) #sku_quantity').text();
+        var quantity = $(this).parent().parent().find('td:eq(3) #new_quantity').val();
+        //alert(quantity);
+        if(!quantity == ""){
+            $(this).text('PROCESSING....');
+            $(this).attr("disabled", "disabled");
+            $.ajax({
+                type: 'GET',
+                url: '/Add_quantity_stock_managment',
+                data: {
+                    _token: '{!! csrf_token() !!}',
+                    id: id,
+                    sku: sku,
+                    quantity: quantity
+                },
+                success: function(response) {
+                    if(JSON.parse(response) == "success"){
+                        fetchStockList();
+                        $('.add_quantiyt').text('Add Quantity');
+                        $('.add_quantiyt').removeAttr('disabled');
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'green');
+                        $('#notifDiv').text('Quantity added successfully');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                    }else if(JSON.parse(response) == "failed"){
+                        $('.add_quantiyt').text('Add Quantity');
+                        $('.add_quantiyt').removeAttr('disabled');
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'red');
+                        $('#notifDiv').text('Unable to add quantity');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                    }     
+                }
+            });
+        }else{
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text('Please enter quantity');
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 3000);
+        }
+        
+    });
+
+    //Remove Quantity
+    $(document).on('click', '.remove_quantity', function(){
+        var id = $(this).attr('id');
+        var sku = $(this).parent().parent().find('td:eq(1) #sku_quantity').text();
+        var quantity = $(this).parent().parent().find('td:eq(3) #new_quantity').val();
+        if(!quantity == ""){
+            $(this).text('PROCESSING....');
+            $(this).attr("disabled", "disabled");
+            $.ajax({
+                type: 'GET',
+                url: '/Remove_quantity_stock_managment',
+                data: {
+                    _token: '{!! csrf_token() !!}',
+                    id: id,
+                    sku: sku,
+                    quantity: quantity
+                },
+                success: function(response) {
+                    if(JSON.parse(response) == "success"){
+                        fetchStockList();
+                        $('.remove_quantity').text('Remove Quantity');
+                        $('.remove_quantity').removeAttr('disabled');
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'green');
+                        $('#notifDiv').text('Quantity subtracted successfully');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                    }else if(JSON.parse(response) == "failed"){
+                        $('.remove_quantity').text('Remove Quantity');
+                        $('.remove_quantity').removeAttr('disabled');
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'red');
+                        $('#notifDiv').text('Unable to subtract quantity');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                    }     
+                }
+            });
+        }else{
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text('Please enter quantity');
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 3000);
         }
         
     });
@@ -537,11 +927,11 @@ function fetchInventoryList() {
         success: function(response) {
             //console.log(response);
             $('.body').empty();
-            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="InventoryListTable" style="width:100%;"><thead><tr><th>ID</th><th>Name</th><th>Capacity</th><th>Price</th><th>Quantity</th><th>Action</th></tr></thead><tbody></tbody></table>');
+            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="InventoryListTable" style="width:100%;"><thead><tr><th>ID</th><th>Name</th><th>Capacity</th><th>Price</th><th>Action</th></tr></thead><tbody></tbody></table>');
             $('#InventoryListTable tbody').empty();
             var response = JSON.parse(response);
             response.forEach(element => {
-                $('#InventoryListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['name'] + '</td><td>' + element['liter_capacity'] + '</td><td>' + element['purchase_price'] + '</td><td>' + element['quantity'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate">Edit</button><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deletebtn" title="Delete">Delete</button></form></td></tr>');
+                $('#InventoryListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['name'] + '</td><td>' + element['liter_capacity'] + '</td><td>' + element['purchase_price'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate">Edit</button>' + (element["is_active"] ? '<button id="' + element['id'] + '" class="btn btn-default red-bg  deactivate_btn" title="View Detail">Deactivate</button>' : '<button id="' + element['id'] + '" class="btn btn-default activate_btn">Activate</button>') + '</td></tr>');
             });
             $('#tblLoader').hide();
             $('.body').fadeIn();
@@ -562,6 +952,48 @@ function fetchAddOnsList() {
             var response = JSON.parse(response);
             response.forEach(element => {
                 $('#AddOnsListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['name'] + '</td><td>' + element['purchase_price'] + '</td><td>' + element['quantity'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate">Edit</button><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deletebtn" title="Delete">Delete</button></form></td></tr>');
+            });
+            $('#tblLoader').hide();
+            $('.body').fadeIn();
+            $('#AddOnsListTable').DataTable();
+        }
+    });
+}
+
+function fetchStockList() {
+    $.ajax({
+        type: 'GET',
+        url: '/GetStocQuantitykList',
+        success: function(response) {
+            console.log(response);
+            //return;
+            $('.body').empty();
+            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="StockListTable" style="width:100%;"><thead><tr><th>ID</th><th>SKU</th><th>Quantity</th><th>Add Quantity</th><th>Action</th></tr></thead><tbody></tbody></table>');
+            $('#StockListTable tbody').empty();
+            var response = JSON.parse(response);
+            response.forEach(element => {
+                $('#StockListTable tbody').append('<tr><td>' + element['id'] + '</td><td><span id = "sku_quantity">' + element['sku'] + '</span></td><td>' + element['quantity'] + '</td><td><input type="text" value="" id="new_quantity"/></td><td><button id="' + element['id'] + '" class="btn btn-default btn-line add_quantity">Add Quantity</button><button id="' + element['id'] + '" class="btn btn-default btn-line red-bg remove_quantity">Remove Quantity</button></td></tr>');
+            });
+            $('#tblLoader').hide();
+            $('.body').fadeIn();
+            $('#StockListTable').DataTable();
+        }
+    });
+}
+
+function fetchAssestsList() {
+    $.ajax({
+        type: 'GET',
+        url: '/GetAssestsList',
+        success: function(response) {
+            //console.log(response);
+            
+            $('.body').empty();
+            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="AddOnsListTable" style="width:100%;"><thead><tr><th>ID</th><th>Purchase Price</th><th>Warrenty Start</th><th>Warrenty End</th><th>Seller</th><th>Action</th></tr></thead><tbody></tbody></table>');
+            $('#AddOnsListTable tbody').empty();
+            var response = JSON.parse(response);
+            response.forEach(element => {
+                $('#AddOnsListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['purchase_price'] + '</td><td>' + element['warrenty_start'] + '</td><td>' + element['warrenty_end'] + '</td><td>' + element['seller'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate">Edit</button><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deletebtn" title="Delete">Delete</button></form></td></tr>');
             });
             $('#tblLoader').hide();
             $('.body').fadeIn();

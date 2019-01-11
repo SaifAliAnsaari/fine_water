@@ -43,6 +43,8 @@
         <div class="dropdown-menu" aria-labelledby="navi-l1">
             <a class="dropdown-item" href="/inventory_list">Inventory List</a>
             <a class="dropdown-item" href="/add-ons">Add-Ons</a>
+            <a class="dropdown-item" href="/stock_managment">Stock Management</a>
+            <a class="dropdown-item" href="/assests_management">Assests Management</a>
         </div>
     </li>
 </ul>

@@ -54,12 +54,6 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class = "col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="control-label mb-10">Quantity*</label>
-                                                        <input type="number" name="quantity" class="form-control" placeholder="" required>
-                                                    </div>
-                                                </div>
                                                 <div class="col-md-6">
                                                     <div class="form-s2">
                                                         <select class="form-control formselect" name="returnable" placeholder="Select Returnable">
