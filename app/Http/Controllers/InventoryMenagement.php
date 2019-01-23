@@ -20,9 +20,9 @@ class InventoryMenagement extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function inventory (){
+    public function inventory (){
          return view('inventory_managment.inventory_list');
-     }
+    }
 
      public function add_inventory(Request $request){
         if(DB::table('inventory_core')->select('id')->where('sku', $request->sku)->first()){
@@ -273,15 +273,33 @@ class InventoryMenagement extends Controller
         return view('inventory_managment.assests_management'); 
     }
 
+    public function add_assests_core(Request $request){
+        if(DB::table('assest_core')->select('id')->whereRaw('name = "'.$request->name_core.'" AND type = "'.$request->asset_type.'"')->first()){
+            echo json_encode('already exist');
+        }else{
+            $insert_core = DB::table('assest_core')->insert(
+                ['name' => $request->name_core, 
+                'type' => $request->asset_type
+                ]);
+            if($insert_core){
+                echo json_encode('success');
+            }else{
+                echo json_encode('failed');
+            }
+        }
+    }
+
     public function add_assests(Request $request){
          $data_added = [];
         $insert_assest_data = DB::table('assests')->insertGetId(
-            ['serial_no' => $request->serial_no, 
+            ['model_no' => $request->model,
+            'serial_no' => $request->serial_no, 
             'purchase_price' => $request->purchase_price,
             'seller' => $request->seller, 
             'warrenty_start' => $request->warrenty_start,
             'warrenty_end' => $request->warrenty_end,
-            'manufacture' => $request->manufactures
+            'manufacture' => $request->manufactures,
+            'asset_core_id' => $request->assests_id_for_detail
             ]);
         if($insert_assest_data){
             if($request->hasFile('documents') ){
@@ -353,19 +371,25 @@ class InventoryMenagement extends Controller
     }
 
     public function assests_list(){
-        echo json_encode( DB::table('assests') ->get()); 
+        echo json_encode( DB::table('assest_core as core')->selectRaw('id, name, type, (Select COUNT(*) from assests where asset_core_id = core.id) as total_qty')->get()); 
+    }
+
+    public function get_asset_detail($id){
+        echo json_encode(array('info' => DB::table('assest_core')->where("id", $id)->first()));
     }
 
     public function get_assests_data($id){
-        echo json_encode(array('info' => DB::table('assests')->where("id", $id)->first()));
+        //echo json_encode(array('info' => DB::table('assests')->where('id', $id)->first()));
+        echo json_encode(array('info' => DB::table('assests as asset')->selectRaw('id, serial_no, model_no, purchase_price, seller, warrenty_start, warrenty_end, manufacture, asset_core_id, (Select name from assest_core where id = asset.asset_core_id) as name')->where("id", $id)->first()));
     }
 
     public function update_assests(Request $request){
         try{
             $update_assest = DB::table('assests')
-            ->where('id', $request->assests_id)->update(
+            ->where('id', $request->asset_id_to_updateAsset)->update(
                 ['purchase_price' => $request->purchase_price,
                 'serial_no' => $request->serial_no,
+                'model_no' => $request->model,
                 'seller' => $request->seller,
                 'warrenty_start' => $request->warrenty_start,
                 'warrenty_end' => $request->warrenty_end,
@@ -421,6 +445,18 @@ class InventoryMenagement extends Controller
         }
         echo json_encode($data);
         
+    }
+
+
+
+
+    public function update_asset_page($id){
+        //$asset_data = DB::table('assests')->where('asset_core_id', $id)->get();
+        return view('inventory_managment.update_asset', ['id' => $id]);
+    }
+
+    public function assests_list_to_update(Request $request){
+        echo json_encode(DB::table('assests')->where('asset_core_id', $request->id)->get());
     }
 
 }

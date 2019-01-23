@@ -54,10 +54,14 @@
                                                 </div>
                                             </div>
                                             <div class="row">
+                                                <p style ="margin-top:10px;">Returnable*</p>
+                                            </div>
+                                            <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-s2">
-                                                        <select class="form-control formselect" name="returnable" placeholder="Select Returnable">
-                                                            <option value="-1" disabled selected>Returnable*</option>
+                                                        
+                                                        <select id="returnable" class="form-control formselect" name="returnable" placeholder="Select Returnable">
+                                                            <option value="-1" disabled selected>Returnable</option>
                                                             <option value="1" >Yes</option>
                                                             <option value="0" >No</option>
                                                         </select>

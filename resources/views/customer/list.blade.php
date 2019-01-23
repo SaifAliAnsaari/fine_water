@@ -21,7 +21,8 @@
                             <div class = "row">
                                 <div class="form-s2 col-md-6">
                                     <select class="form-control formselect" name="type" placeholder="Select Customer Type">
-                                        <option value="1" selected>Residential</option>
+                                        <option value="0" selected disabled>Select Customer Type</option>
+                                        <option value="1">Residential</option>
                                         <option value="2">Corporate</option>
                                         <option value="3">Commercial</option>
                                     </select>
@@ -42,7 +43,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div id="floating-label" class="card p-20 top_border mb-3">
-                                        <h2 class="_head03">Company <span>Details</span></h2>
+                                        <h2 class="_head03">Customer <span>Details</span></h2>
                                         <div class="form-wrap p-0">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -119,7 +120,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">Cnic</label>
-                                                        <input type="number" name="cnic" class="form-control" placeholder="">
+                                                        <input type="number" name="cnic" maxlength="13" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -131,38 +132,35 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">Postal Code</label>
-                                                        <input type="text" name="postal" class="form-control" placeholder="">
+                                                        <input type="number" name="postal" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">City*</label>
-                                                        <input type="text" name="city" class="form-control" placeholder="">
+                                                        <input type="text" name="city" class="form-control" value="Karachi" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">State/Province</label>
-                                                        <input type="text" name="state" class="form-control" placeholder="">
+                                                        <input type="text" name="state" value="Sindh" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-s2 pt-19">
                                                         <select class="form-control formselect" name="country" placeholder="select Country*">
-                                                            <option value="0" disabled selected>Select Country</option>
-                                                            <option value="usa">USA</option>
-                                                            <option value="uk">UK</option> 
-                                                            <option value="china">Chaina</option>
-                                                            <option value="india">India</option>  
+                                                            <option value="0" disabled>Select Country</option>
+                                                            <option value="1" selected>Pakistan</option>
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                {{-- <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">Region</label>
                                                         <input type="text" name="region" class="form-control" placeholder="">
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">Email address</label>
@@ -190,16 +188,16 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">Latitude</label>
-                                                        <input type="text" name="latitude" class="form-control" placeholder="">
+                                                        <input type="number" name="latitude" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">Longitude</label>
-                                                        <input type="text" name="longitude" class="form-control" placeholder="">
+                                                        <input type="number" name="longitude" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                {{-- <div class="col-md-6">
                                                     <div class="form-s2 pt-19">
                                                         <select class="form-control formselect" name="delivery" placeholder="Delivery Weeks*">
                                                             <option value="0" disabled selected>Delivery Weeks</option>
@@ -220,8 +218,8 @@
                                                         <label class="control-label mb-10">Bottles Per Week</label>
                                                         <input type="number" name="bottles_per_week" class="form-control" placeholder="">
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
+                                                </div> --}}
+                                                {{-- <div class="col-md-6">
                                                     <div class="form-s2 pt-19">
                                                         <select class="form-control formselect" name="customer_acquisition_source" placeholder="Customer Source*">
                                                             <option value="0" disabled selected>Customer Source</option>
@@ -230,7 +228,7 @@
                                                             <option value="source 3">Source 3</option>
                                                         </select>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                         <h2 class="_head03 PT-20">Additional <span>Details</span></h2>

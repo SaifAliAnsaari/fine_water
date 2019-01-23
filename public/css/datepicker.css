@@ -133,7 +133,7 @@
 .datepicker table tr td.today:hover[disabled],
 .datepicker table tr td.today.disabled[disabled],
 .datepicker table tr td.today.disabled:hover[disabled] {
-  background-color: #001e35;
+  background-color: #0038ba;
 }
 .datepicker table tr td.today:active,
 .datepicker table tr td.today:hover:active,
@@ -143,13 +143,13 @@
 .datepicker table tr td.today:hover.active,
 .datepicker table tr td.today.disabled.active,
 .datepicker table tr td.today.disabled:hover.active {
-  background-color: #001e35 \9;
+  background-color: #0038ba \9;
 }
 .datepicker table tr td.active,
 .datepicker table tr td.active:hover,
 .datepicker table tr td.active.disabled,
 .datepicker table tr td.active.disabled:hover {
-  background-color: #001e35;
+  background-color: #0038ba;
   
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
@@ -174,7 +174,7 @@
 .datepicker table tr td.active:hover[disabled],
 .datepicker table tr td.active.disabled[disabled],
 .datepicker table tr td.active.disabled:hover[disabled] {
-  background-color: #001e35;
+  background-color: #0038ba;
 }
 .datepicker table tr td.active:active,
 .datepicker table tr td.active:hover:active,
@@ -184,7 +184,7 @@
 .datepicker table tr td.active:hover.active,
 .datepicker table tr td.active.disabled.active,
 .datepicker table tr td.active.disabled:hover.active {
-  background-color: #001e35 \9;
+  background-color: #0038ba \9;
 }
 .datepicker table tr td span {
   display: block;
@@ -211,7 +211,7 @@
 .datepicker table tr td span.active:hover,
 .datepicker table tr td span.active.disabled,
 .datepicker table tr td span.active.disabled:hover {
-  background-color: #001e35;
+  background-color: #0038ba;
   color: #fff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
@@ -235,7 +235,7 @@
 .datepicker table tr td span.active:hover[disabled],
 .datepicker table tr td span.active.disabled[disabled],
 .datepicker table tr td span.active.disabled:hover[disabled] {
-  background-color: #001e35;
+  background-color: #0038ba;
 }
 .datepicker table tr td span.active:active,
 .datepicker table tr td span.active:hover:active,
@@ -245,7 +245,7 @@
 .datepicker table tr td span.active:hover.active,
 .datepicker table tr td span.active.disabled.active,
 .datepicker table tr td span.active.disabled:hover.active {
-  background-color: #001e35 \9;
+  background-color: #0038ba \9;
 }
 .datepicker table tr td span.old {
   color: #999999;
@@ -268,7 +268,7 @@
   width: 16px;
   height: 16px;
 }
-.datepicker {background-color: #fff;padding: 15px!important;box-shadow: 0 2px 15px rgba(0,0,0,.175);}
+.datepicker {background-color: #fff;padding: 15px!important;box-shadow: 0 2px 15px rgba(0,0,0,.175); border-bottom: solid 2px #0038ba;}
 th.prev:before  {
   content: "<" !important;
 }

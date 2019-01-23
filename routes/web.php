@@ -35,6 +35,9 @@ Route::get('/inventory_list', 'InventoryMenagement@inventory');
 Route::get('/add-ons', 'InventoryMenagement@add_ons');
 Route::get('/stock_managment', 'InventoryMenagement@stock');
 Route::get('/assests_management', 'InventoryMenagement@assests');
+Route::get('/select_customer', 'ManageBilling@select_customer');
+Route::get('/update_asset/{id}', 'InventoryMenagement@update_asset_page');
+Route::get('/create_account/{id}', 'ManageBilling@create_account');
 
 //Get save data
 Route::get('/GetCitiesList', 'Regions@cities_list');
@@ -45,6 +48,10 @@ Route::get('/GetInventoryList', 'InventoryMenagement@inventory_list');
 Route::get('/GetAddOnsList', 'InventoryMenagement@addOns_list');
 Route::get('/GetStocQuantitykList', 'InventoryMenagement@stock_quantity_list');
 Route::get('/GetAssestsList', 'InventoryMenagement@assests_list');
+Route::get('/GetAssestsToUpdateList', 'InventoryMenagement@assests_list_to_update');
+Route::get('/GetAssestsListToAddRate', 'ManageBilling@asset_list_to_add_rate');
+Route::get('/GetAssestsListToIssue', 'ManageBilling@asset_list_to_issue');
+Route::get('/GetCustomersListForBilling', 'ManageBilling@CustomersListBilling');
 
 Route::get('/get_all_user', 'Delivery@Get_all_users');
 Route::get('/GetCityData', 'Regions@GetCityData');
@@ -57,9 +64,14 @@ Route::post('/DeliveryTeam_save', 'Delivery@add_team');
 Route::post('/add_inventory', 'InventoryMenagement@add_inventory');
 Route::post('/add_addOns', 'InventoryMenagement@add_addOns');
 Route::post('/add_assests', 'InventoryMenagement@add_assests');
+Route::post('/add_assests_core', 'InventoryMenagement@add_assests_core');
+Route::post('/addDocumentBilling', 'ManageBilling@add_document');
 
+Route::get('/IssueBillingToCustomer', 'ManageBilling@addBilling');
 Route::get('/Add_quantity_stock_managment', 'InventoryMenagement@add_quantity_stock_managment');
 Route::get('/Remove_quantity_stock_managment', 'InventoryMenagement@remove_quantity_stock_managment');
+Route::get('/AddRateAgainstCustomer', 'ManageBilling@add_rate_against_customer');
+Route::get('/IssueAssetToCustomer', 'ManageBilling@issue_asset_to_customer');
 
 //update
 Route::post('/team_update', 'Delivery@update_team');
@@ -79,6 +91,7 @@ Route::get('/zone_data/{id}', 'Regions@get_zone_data');
 Route::get('/inventory_data/{id}', 'InventoryMenagement@get_inventory_data');
 Route::get('/add_ons_data/{id}', 'InventoryMenagement@get_add_ons_data');
 Route::get('/assests_data/{id}', 'InventoryMenagement@get_assests_data');
+Route::get('/asset_detail/{id}', 'InventoryMenagement@get_asset_detail');
 
 //Delete
 Route::get('/DeleteTeam', 'Delivery@delete_team_entry');
@@ -87,6 +100,8 @@ Route::get('/DeleteArea', 'Regions@delete_area_entry');
 Route::get('/DeleteZone', 'Regions@delete_zone_entry');
 Route::get('/DeleteAddOns', 'InventoryMenagement@delete_addOns_entry');
 Route::get('/DeleteAssests', 'InventoryMenagement@delete_assest_entry');
+Route::get('/DeleteAssests', 'InventoryMenagement@delete_assest_entry');
+
 
 //Deactive or Active Employee
 Route::get('/activate_employee', 'Employee@activate_employee');

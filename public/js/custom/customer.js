@@ -104,12 +104,10 @@ $(document).ready(function() {
             $('input[name="faxPh"]').blur();
             $('input[name="address"]').val("");
             $('input[name="address"]').blur();
-            $('input[name="city"]').val("");
-            $('input[name="city"]').blur();
-            $('input[name="state"]').val("");
-            $('input[name="state"]').blur();
-            $('input[name="region"]').val("");
-            $('input[name="region"]').blur();
+            $('input[name="city"]').val("Karachi");
+            $('input[name="state"]').val("Sindh");
+            // $('input[name="region"]').val("");
+            // $('input[name="region"]').blur();
             $('input[name="email"]').val("");
             $('input[name="email"]').blur();
             $('input[name="webpage"]').val("");
@@ -128,18 +126,18 @@ $(document).ready(function() {
             $('input[name="latitude"]').blur();
             $('input[name="longitude"]').val("");
             $('input[name="longitude"]').blur();
-            $('input[name="day_of_delivery"]').val("");
-            $('input[name="day_of_delivery"]').blur();
-            $('input[name="bottles_per_week"]').val("");
-            $('input[name="bottles_per_week"]').blur();
+            // $('input[name="day_of_delivery"]').val("");
+            // $('input[name="day_of_delivery"]').blur();
+            // $('input[name="bottles_per_week"]').val("");
+            // $('input[name="bottles_per_week"]').blur();
             $('textarea[name="description"]').val("");
 
             $('select[name="type"]').val(1).trigger('change');
             $('select[name="zone"]').val(1).trigger('change');
             $('select[name="merchant_type"]').val(0).trigger('change');
-            $('select[name="country"]').val(0).trigger('change');
-            $('select[name="delivery"]').val(0).trigger('change');
-            $('select[name="customer_acquisition_source"]').val(0).trigger('change');
+            $('select[name="country"]').val('pakistan').trigger('change');
+            //$('select[name="delivery"]').val(0).trigger('change');
+            //$('select[name="customer_acquisition_source"]').val(0).trigger('change');
             //$('#saveCustomerForm').find("select").val("0").trigger('change');
             //$('select[name="deliveryPorts"], select[name="documentTypes"]').val("").trigger('change');
         }
@@ -179,7 +177,7 @@ $(document).ready(function() {
             url: '/Customer/' + id,
             success: function(response) {
                 var response = JSON.parse(response);
-                console.log(response);
+               // console.log(response);
                 $('#dataSidebarLoader').hide();
                 $('._cl-bottom').show();
                 $('.pc-cartlist').show();
@@ -285,9 +283,9 @@ $(document).ready(function() {
                 $('input[name="state"]').val(response.info.state);
                 $('input[name="state"]').blur();
 
-                $('input[name="region"]').focus();
-                $('input[name="region"]').val(response.info.region);
-                $('input[name="region"]').blur();
+                // $('input[name="region"]').focus();
+                // $('input[name="region"]').val(response.info.region);
+                // $('input[name="region"]').blur();
 
                 $('input[name="email"]').focus();
                 $('input[name="email"]').val(response.info.email);
@@ -297,17 +295,17 @@ $(document).ready(function() {
                 $('input[name="webpage"]').val(response.info.webpage);
                 $('input[name="webpage"]').blur();
 
-                $('input[name="bottles_per_week"]').focus();
-                $('input[name="bottles_per_week"]').val(response.info.bottles_per_week);
-                $('input[name="bottles_per_week"]').blur();
+                // $('input[name="bottles_per_week"]').focus();
+                // $('input[name="bottles_per_week"]').val(response.info.bottles_per_week);
+                // $('input[name="bottles_per_week"]').blur();
 
                 $('input[name="cnic"]').focus();
                 $('input[name="cnic"]').val(response.info.cnic);
                 $('input[name="cnic"]').blur();
 
-                $('input[name="day_of_delivery"]').focus();
-                $('input[name="day_of_delivery"]').val(response.info.day_of_delivery);
-                $('input[name="day_of_delivery"]').blur();
+                // $('input[name="day_of_delivery"]').focus();
+                // $('input[name="day_of_delivery"]').val(response.info.day_of_delivery);
+                // $('input[name="day_of_delivery"]').blur();
 
                 $('input[name="latitude"]').focus();
                 $('input[name="latitude"]').val(response.info.latitude);
@@ -337,8 +335,8 @@ $(document).ready(function() {
                 $('select[name="merchant_type"]').val(response.info.merchant_type).trigger('change');
                 $('select[name="parentCompnay"]').val(response.info.parent_company).trigger('change');
                 $('select[name="country"]').val(response.info.country).trigger('change');
-                $('select[name="customer_acquisition_source"]').val(response.info.customer_acquisition_source).trigger('change');
-                $('select[name="delivery"]').val(response.info.delivery).trigger('change');
+                //$('select[name="customer_acquisition_source"]').val(response.info.customer_acquisition_source).trigger('change');
+                //$('select[name="delivery"]').val(response.info.delivery).trigger('change');
                 $('select[name="zone"]').val(response.info.zone_id).trigger('change');
 
                 var imgUrl = response.base_url + '/storage/company/' + response.info.picture;
@@ -377,7 +375,7 @@ $(document).ready(function() {
 
         $('.validationErrors').remove();
 
-        if($('select[name="type"]').val() == 0 || !$('select[name="type"]').val()){
+        if($('select[name="type"]').val() == 0 || !$('select[name="type"]').val() && $('select[name="zone"]').val() == 0 || !$('select[name="zone"]').val()){
             $('#notifDiv').fadeIn();
             $('#notifDiv').css('background', 'red');
             $('#notifDiv').text('Please provide all the required information (*)');
@@ -396,6 +394,29 @@ $(document).ready(function() {
                     }, 3000);
                     return;
                 }
+                if(!$('input[name="email"]').val() == ""){
+                    if (!validateEmail($('input[name="email"]').val())) {
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'red');
+                        $('#notifDiv').text('Invalid email format');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                        return;
+                    } 
+                }
+                if(!$('input[name="cnic"]').val() == ""){
+                    var thisRef = $('input[name="cnic"]').val();
+                    if (thisRef.length != 13) {
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'red');
+                        $('#notifDiv').text('Invalid CNIC');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                        return;
+                    }
+                }
             }else if($('select[name="type"]').val() == 2){
                 if (!$('input[name="orgName"]').val() || $('select[name="zone"]').val() == 0 || !$('input[name="address"]').val() || !$('input[name="city"]').val() ) {
                     $('#notifDiv').fadeIn();
@@ -406,6 +427,18 @@ $(document).ready(function() {
                     }, 3000);
                     return;
                 }
+                if(!$('input[name="email"]').val() == ""){
+                    if (!validateEmail($('input[name="email"]').val())) {
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'red');
+                        $('#notifDiv').text('Invalid email format');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                        return;
+                    } 
+                }
+                
             }else{
                 if (!$('input[name="merchantName"]').val() || $('select[name="zone"]').val() == 0 || $('select[name="merchant_type"]').val() == 0 || !$('input[name="address"]').val() || !$('input[name="city"]').val() ) {
                     $('#notifDiv').fadeIn();
@@ -415,6 +448,17 @@ $(document).ready(function() {
                         $('#notifDiv').fadeOut();
                     }, 3000);
                     return;
+                }
+                if(!$('input[name="email"]').val() == ""){
+                    if (!validateEmail($('input[name="email"]').val())) {
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'red');
+                        $('#notifDiv').text('Invalid email format');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                        return;
+                    } 
                 }
             }
         }
@@ -453,6 +497,10 @@ $(document).ready(function() {
                         $('#saveCustomerForm').find("select").val("0").trigger('change');
                         $('select[name="deliveryPorts"], select[name="documentTypes"]').val("").trigger('change');
                         $('.dropify-clear').click();
+                        //
+                        $('#saveCustomerForm').find("input[name=state]").val("Sindh");
+                        $('#saveCustomerForm').find("input[name=city]").val("Karachi");
+                        $('select[name="country"]').val(1).trigger('change');
                     }
 
                     $('#notifDiv').fadeIn();
@@ -490,30 +538,48 @@ $(document).ready(function() {
     $(document).on('click', '.deleteCustomer', function() {
         var customerId = $(this).attr('id');
         var thisRef = $(this);
-        thisRef.attr('disabled', 'disabled');
-        thisRef.parent().ajaxSubmit({
-            type: "POST",
-            url: '/Customer/' + customerId,
-            data: thisRef.parent().serialize(),
-            cache: false,
-            success: function(response) {
-                if (JSON.parse(response) == "success") {
-                    $('#notifDiv').fadeIn();
-                    $('#notifDiv').css('background', '#0038ba');
-                    $('#notifDiv').text('Customer have been deleted');
-                    setTimeout(() => {
-                        $('#notifDiv').fadeOut();
-                    }, 3000);
-                    thisRef.parent().parent().parent().remove();
-                } else {
-                    $('#notifDiv').fadeIn();
-                    $('#notifDiv').css('background', 'red');
-                    $('#notifDiv').text('Unable to delete the customer at this moment');
-                    setTimeout(() => {
-                        thisRef.removeAttr('disabled');
-                        $('#notifDiv').fadeOut();
-                    }, 3000);
-                }
+        $.confirm({
+            title: 'Alert!',
+            content: 'Once you click DELETE button this customer will DELETE from your list. Are you sure you want proceed?',
+            type: 'red',
+            typeAnimated: true,
+            buttons: {
+                Delete: {
+                    text: 'DELETE',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        
+                        thisRef.attr('disabled', 'disabled');
+                        thisRef.text('PROCESSING....');
+                        thisRef.parent().ajaxSubmit({
+                            type: "POST",
+                            url: '/Customer/' + customerId,
+                            data: thisRef.parent().serialize(),
+                            cache: false,
+                            success: function(response) {
+                                if (JSON.parse(response) == "success") {
+                                    $('#notifDiv').fadeIn();
+                                    $('#notifDiv').css('background', '#0038ba');
+                                    $('#notifDiv').text('Customer have been deleted');
+                                    setTimeout(() => {
+                                        $('#notifDiv').fadeOut();
+                                    }, 3000);
+                                    thisRef.parent().parent().parent().remove();
+                                } else {
+                                    $('#notifDiv').fadeIn();
+                                    $('#notifDiv').css('background', 'red');
+                                    $('#notifDiv').text('Unable to delete the customer at this moment');
+                                    setTimeout(() => {
+                                        thisRef.removeAttr('disabled');
+                                        $('#notifDiv').fadeOut();
+                                    }, 3000);
+                                }
+                            }
+                        });
+
+                    }
+                },
+                close: function () {}
             }
         });
     });
@@ -546,12 +612,14 @@ function fetchCompaniesList() {
         type: 'GET',
         url: '/GetCustomersList',
         success: function(response) {
+            console.log(response);
             $('.body').empty();
-            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="companiesListTable" style="width:100%;"><thead><tr><th>ID</th><th>Customer Name</th><th>POC</th><th>Country</th><th>Region</th><th>Customer Type</th><th>Action</th></tr></thead><tbody></tbody></table>');
+            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="companiesListTable" style="width:100%;"><thead><tr><th>ID</th><th>Customer Name</th><th>POC</th><th>Phone#</th><th>Zone</th><th>Customer Type</th><th>Action</th></tr></thead><tbody></tbody></table>');
             $('#companiesListTable tbody').empty();
             var response = JSON.parse(response);
             response.forEach(element => {
-                $('#companiesListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['company_name'] + '</td><td>' + element['company_poc'] + '</td><td>' + element['country'] + '</td><td>' + element['region'] + '</td><td>' + (element['customer_type'] == "1" ? "Residential" : (element['customer_type'] == "2" ? "Corporate" : "Commercial")) + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdateCustomer">Edit</button><a href="/CustomerProfile/' + element['id'] + '" id="' + element['id'] + '" class="btn btn-default">Profile</a><a href="#" class="btn btn-default viewOnMap" id="' + element['latitude'] + ',' + element['longitude'] + '" data-toggle="modal" data-target=".customerLocationModal">View on Map</a><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deleteCustomer" title="Delete">Delete</button></form></td></tr>');
+                // <td>' + (element['home_phone'] != null ?  element['home_phone']  : element['business_phone'] ) + '</td>
+                $('#companiesListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + (element['company_name'] != null ?  element['company_name']  : (element['organization_name'] != null ? element['organization_name'] : element['merchant_name'])) + '</td><td>' + element['company_poc'] + '</td><td>' + (element['home_phone'] != null ?  element['home_phone']  : element['business_phone'] ) + '</td><td>' + element['zone'] + '</td><td>' + (element['customer_type'] == "1" ? "Residential" : (element['customer_type'] == "2" ? "Corporate" : "Commercial")) + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdateCustomer">Edit</button><a href="/CustomerProfile/' + element['id'] + '" id="' + element['id'] + '" class="btn btn-default">Profile</a><a href="#" class="btn btn-default viewOnMap" id="' + element['latitude'] + ',' + element['longitude'] + '" data-toggle="modal" data-target=".customerLocationModal">View on Map</a><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deleteCustomer" title="Delete">Delete</button></form></td></tr>');
             });
             $('#tblLoader').hide();
             $('.body').fadeIn();
@@ -582,4 +650,9 @@ function initMap(latitude, longitude) {
         infowindow.open(map, this);
     }.bind(marker));
 
+}
+
+function validateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
 }

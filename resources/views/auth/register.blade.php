@@ -30,7 +30,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">Phone No</label>
-                                                        <input type="text" name="phone" class="form-control" placeholder="">
+                                                        <input type="number" name="phone" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -38,13 +38,13 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">Email ID*</label>
-                                                        <input type="text" name="email" class="form-control" placeholder="">
+                                                        <input type="email" name="email" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">CNIC No</label>
-                                                        <input type="text" name="cnic" class="form-control" placeholder="">
+                                                        <input type="number" name="cnic" maxlength="13" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -52,23 +52,22 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">City*</label>
-                                                        <input type="text" name="city" class="form-control" placeholder="">
+                                                        <input type="text" name="city" value ="Karachi" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">State</label>
-                                                        <input type="text" name="state" class="form-control" placeholder="">
+                                                        <input type="text" name="state" value ="Sindh" class="form-control" placeholder="">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-s2 pt-19">
-                                                        <select name="country" class="form-control formselect" placeholder="select Country">
-                                                            <option value="0" disabled selected>Select Country*</option>
-                                                            <option value="usa">USA</option>
-                                                            <option value="uk">UK</option> 
+                                                        <select name="country" id="country" class="form-control formselect" placeholder="select Country">
+                                                            <option value="0" diabled >Select Country</option>
+                                                            <option value="1" selected>Pakistan</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -110,7 +109,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label mb-10">Salary</label>
-                                                        <input type="text" name="salary" class="form-control" placeholder="">
+                                                        <input type="number" name="salary" class="form-control" placeholder="">
                                                     </div>
                                                     <div class="form-s2 pt-10">
                                                         <select name="designation" class="form-control formselect" placeholder="select Designation">

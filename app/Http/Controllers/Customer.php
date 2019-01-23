@@ -31,7 +31,8 @@ class Customer extends Controller
     //Ajax Call from list-customers.js
     public function CustomersList(){
         // GetCustomersList
-        echo json_encode( DB::table('customers as cust')->select('id', 'company_name', 'company_poc', 'latitude', 'longitude', 'customer_type', 'country', DB::raw('IFNULL(region, "NA") as region'), DB::raw('IFNULL((SELECT company_name from customers where id = cust.parent_company), "NA") as parent_company'))->get());
+        //DB::raw('IFNULL(region, "NA") as region')
+        echo json_encode( DB::table('customers as cust')->select('id', 'company_name', 'organization_name', 'merchant_name', 'company_poc', 'home_phone', 'business_phone', 'latitude', 'longitude', 'customer_type', 'country', DB::raw('IFNULL((SELECT company_name from customers where id = cust.id), "NA") as parent_company'), DB::raw('(SELECT zone_name from zone_info where id = cust.zone_id) as zone'))->get());
     }
 
     /**
@@ -109,9 +110,9 @@ class Customer extends Controller
             'businessPh' => 'max:30',
             'mobPh' => 'max:30',
             'poc' => 'max:100',
-            'delivery' => 'max:100',
-            'day_of_delivery' => 'max:50',
-            'customer_acquisition_source' => 'max:200'
+            //'delivery' => 'max:100',
+            //'day_of_delivery' => 'max:50',
+            //'customer_acquisition_source' => 'max:200'
         ]);
 
         $customer->latitude = $request->latitude;
@@ -119,7 +120,7 @@ class Customer extends Controller
         $customer->mobile_phone = $request->mobPh;
         $customer->address = $request->address;
         $customer->city = $request->city;
-        $customer->region = $request->region;
+        //$customer->region = $request->region;
         $customer->country = $request->country;
         $customer->cnic = $request->cnic;
         $customer->state = $request->state;
@@ -128,10 +129,10 @@ class Customer extends Controller
         $customer->business_phone = $request->businessPh;
         $customer->email = $request->email;
         $customer->company_poc = $request->poc;
-        $customer->delivery = $request->delivery;
-        $customer->day_of_delivery = $request->day_of_delivery;
-        $customer->bottles_per_week = $request->bottles_per_week;
-        $customer->customer_acquisition_source = $request->customer_acquisition_source;
+        //$customer->delivery = $request->delivery;
+        //$customer->day_of_delivery = $request->day_of_delivery;
+        //$customer->bottles_per_week = $request->bottles_per_week;
+        //$customer->customer_acquisition_source = $request->customer_acquisition_source;
         $customer->ntn = $request->ntn;
         $customer->strn = $request->strn;
         if($request->hasFile('compPicture')){
@@ -156,7 +157,7 @@ class Customer extends Controller
      */
     public function show($id)
     {
-        echo json_encode(array('info' => DB::table('customers as cust')->selectRaw('`id`, `company_name`, `organization_name`, `merchant_name`, `company_poc`, `strn`, `cnic`, `ntn`, `job_title`, `business_phone`, `home_phone`, `mobile_phone`, `whatsapp_phone`, `fax_number`, `latitude`, `longitude`, `delivery`, `day_of_delivery`, `bottles_per_week`, `address`, `city`, `state`, `postal_code`, `country`, `region`, `email`, `webpage`, `remarks`, `customer_type`, `merchant_type`, `customer_acquisition_source`, `parent_company`, `zone_id`, `picture`')->where('id', $id)->first(), 'base_url' => URL::to('/')));
+        echo json_encode(array('info' => DB::table('customers as cust')->selectRaw('`id`, `company_name`, `organization_name`, `merchant_name`, `company_poc`, `strn`, `cnic`, `ntn`, `job_title`, `business_phone`, `home_phone`, `mobile_phone`, `whatsapp_phone`, `fax_number`, `latitude`, `longitude`, `delivery`, `day_of_delivery`, `bottles_per_week`, `address`, `city`, `state`, `postal_code`, `country`, `region`, `email`, `webpage`, `remarks`, `customer_type`, `merchant_type`, `parent_company`, `zone_id`, `picture`')->where('id', $id)->first(), 'base_url' => URL::to('/')));
     }
 
     /**
@@ -196,15 +197,15 @@ class Customer extends Controller
             $customer->latitude = $request->latitude;
             $customer->longitude = $request->longitude;
             $customer->postal_code = $request->postal;
-            $customer->region = $request->region;
+           // $customer->region = $request->region;
             $customer->email = $request->email;
-            $customer->delivery = $request->delivery;
-            $customer->day_of_delivery = $request->day_of_delivery;
+            //$customer->delivery = $request->delivery;
+            //$customer->day_of_delivery = $request->day_of_delivery;
             $customer->webpage = $request->webpage;
-            $customer->customer_acquisition_source = $request->customer_acquisition_source;
+            //$customer->customer_acquisition_source = $request->customer_acquisition_source;
             $customer->remarks = $request->description;
             $customer->customer_type = $request->type;
-            $customer->bottles_per_week = $request->bottles_per_week;
+            //$customer->bottles_per_week = $request->bottles_per_week;
             $customer->parent_company = $request->parentCompnay;
             $customer->cnic = $request->cnic;
             $customer->job_title = null;
@@ -228,15 +229,15 @@ class Customer extends Controller
             $customer->latitude = $request->latitude;
             $customer->longitude = $request->longitude;
             $customer->postal_code = $request->postal;
-            $customer->region = $request->region;
+            //$customer->region = $request->region;
             $customer->email = $request->email;
-            $customer->delivery = $request->delivery;
-            $customer->day_of_delivery = $request->day_of_delivery;
+            //$customer->delivery = $request->delivery;
+            //$customer->day_of_delivery = $request->day_of_delivery;
             $customer->webpage = $request->webpage;
-            $customer->customer_acquisition_source = $request->customer_acquisition_source;
+            //$customer->customer_acquisition_source = $request->customer_acquisition_source;
             $customer->remarks = $request->description;
             $customer->customer_type = $request->type;
-            $customer->bottles_per_week = $request->bottles_per_week;
+            //$customer->bottles_per_week = $request->bottles_per_week;
             $customer->parent_company = $request->parentCompnay;
             $customer->organization_name = $request->orgName;
             $customer->fax_number = $request->faxPh;
@@ -262,15 +263,15 @@ class Customer extends Controller
             $customer->latitude = $request->latitude;
             $customer->longitude = $request->longitude;
             $customer->postal_code = $request->postal;
-            $customer->region = $request->region;
+            //$customer->region = $request->region;
             $customer->email = $request->email;
-            $customer->delivery = $request->delivery;
-            $customer->day_of_delivery = $request->day_of_delivery;
+            //$customer->delivery = $request->delivery;
+            //$customer->day_of_delivery = $request->day_of_delivery;
             $customer->webpage = $request->webpage;
-            $customer->customer_acquisition_source = $request->customer_acquisition_source;
+            //$customer->customer_acquisition_source = $request->customer_acquisition_source;
             $customer->remarks = $request->description;
             $customer->customer_type = $request->type;
-            $customer->bottles_per_week = $request->bottles_per_week;
+            //$customer->bottles_per_week = $request->bottles_per_week;
             $customer->parent_company = $request->parentCompnay;
             $customer->ntn = $request->ntn;
             $customer->strn = $request->strn;
@@ -323,8 +324,8 @@ class Customer extends Controller
      */
     public function destroy($customerId)
     {
-        DB::table('customer_documents')->where('customer_id', $customerId)->delete();
-        DB::table('customer_delivery_ports')->where('customer_id', $customerId)->delete();
+        //DB::table('customer_documents')->where('customer_id', $customerId)->delete();
+        //DB::table('customer_delivery_ports')->where('customer_id', $customerId)->delete();
         
         if(Storage::exists('public/company/'.Cust::find($customerId)->picture)){
             Storage::delete('public/company/'.Cust::find($customerId)->picture);
@@ -462,9 +463,9 @@ class Customer extends Controller
             'mobile_phone' => 'max:30',
             'email' => 'email|max:30',
             'company_poc' => 'max:100',
-            'delivery' => 'max:100',
-            'day_of_delivery' => 'max:50',
-            'customer_acquisition_source' => 'max:200'
+            //'delivery' => 'max:100',
+            //'day_of_delivery' => 'max:50',
+            //'customer_acquisition_source' => 'max:200'
         ];
 
         if ($validator->fails()) {
@@ -491,11 +492,11 @@ class Customer extends Controller
         $customer->mobile_phone = $request->mobile_phone;
         $customer->email = $request->email;
         $customer->company_poc = $request->company_poc;
-        $customer->delivery = $request->delivery;
-        $customer->day_of_delivery = $request->day_of_delivery;
-        $customer->bottles_per_week = $request->bottles_per_week;
+       // $customer->delivery = $request->delivery;
+        //$customer->day_of_delivery = $request->day_of_delivery;
+        //$customer->bottles_per_week = $request->bottles_per_week;
         $customer->parent_company = $request->parent_company;
-        $customer->customer_acquisition_source = $request->customer_acquisition_source;
+        //$customer->customer_acquisition_source = $request->customer_acquisition_source;
         if($request->picture){
             $pic = $this->upload_file($request->picture);
             if($pic["status"] == "success"){

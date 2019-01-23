@@ -39,7 +39,7 @@ $(document).ready(function() {
             $('input[name="salary"]').val("");
             $('input[name="salary"]').blur();
 
-            $('select[name="country"]').val(0).trigger('change');
+            $('select[name="country"]').val(1).trigger('change');
             $('select[name="designation"]').val(0).trigger('change');
             $('select[name="reporting"]').val(0).trigger('change');
             $('select[name="department"]').val(0).trigger('change');
@@ -160,6 +160,29 @@ $(document).ready(function() {
             }, 3000);
             return;
         }
+
+        if (!validateEmail($('input[name="email"]').val())) {
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text('Invalid email format');
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 3000);
+            return;
+        } 
+
+        if(!$('input[name="cnic"]').val() == ""){
+            var thisRef = $('input[name="cnic"]').val();
+            if (thisRef.length != 13) {
+                $('#notifDiv').fadeIn();
+                $('#notifDiv').css('background', 'red');
+                $('#notifDiv').text('Invalid CNIC');
+                setTimeout(() => {
+                    $('#notifDiv').fadeOut();
+                }, 3000);
+                return;
+            }
+        }
         
 
         $('#saveEmployee').attr('disabled', 'disabled');
@@ -185,8 +208,12 @@ $(document).ready(function() {
                     $('#saveEmployee').text('Save');
                     if ($('#operation').val() !== "update") {
                         $('#saveEmployeeForm').find("input[type=text], textarea").val("");
+                        $('#saveEmployeeForm').find("input[type=email], textarea").val("");
                         $('#saveEmployeeForm').find("select").val("0").trigger('change');
                         $('.dropify-clear').click();
+                        $('#saveEmployeeForm').find("input[name=city]").val("Karachi");
+                        $('#saveEmployeeForm').find("input[name=state]").val("Sindh");
+                        $('select[name="country"]').val(1).trigger('change');
                     }
                     $('#notifDiv').fadeIn();
                     $('#notifDiv').css('background', 'green');
@@ -227,6 +254,16 @@ $(document).ready(function() {
                     $('#notifDiv').fadeIn();
                     $('#notifDiv').css('background', 'red');
                     $('#notifDiv').text('Failed to add Employee at the moment......');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }else if(JSON.parse(response) == "already_exist"){
+                    $('#saveEmployee').removeAttr('disabled');
+                    $('#cancelEmployee').removeAttr('disabled');
+                    $('#saveEmployee').text('Save');
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Username already exist....');
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();
                     }, 3000);
@@ -348,4 +385,9 @@ function fetchEmployeesList() {
             $('#employeesListTable').DataTable();
         }
     });
+}
+
+function validateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
 }

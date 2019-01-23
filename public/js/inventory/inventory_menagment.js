@@ -1,3 +1,4 @@
+//Dropzone.autoDiscover = false;
 $(document).ready(function(){
 
     $('.datepicker').datepicker({
@@ -13,6 +14,8 @@ $(document).ready(function(){
         fetchStockList();
     }else if(action == "assests_management"){
         fetchAssestsList();
+    }else if (action == "update_asset"){
+        fetchAssestsToUpdateList();
     }
 
     var lastOp = "add";
@@ -56,38 +59,31 @@ $(document).ready(function(){
                 $('#saveAddOns').show();
                 $('#updateAddOns').hide();
             }else if(action == "assests_management"){
-                $('#updateAssestsForm').prop('id','saveAssestsForm');
 
-                $('input[name="sku"]').val("");
-                $('input[name="sku"]').blur();
+                $('.asset_core').show();
+                $('.asset_detail').hide();
 
-                $('input[name="serial_no"]').val("");
-                $('input[name="serial_no"]').blur();
+                $('input[name="name"]').val("");
+                $('input[name="name"]').blur();
 
-                $('input[name="purchase_price"]').val("");
-                $('input[name="purchase_price"]').blur();
+                $('select[name="asset_type"]').val(0).trigger('change');
 
-                $('input[name="seller"]').val("");
-                $('input[name="seller"]').blur();
-
-                $('input[name="warrenty_start"]').val("");
-                $('input[name="warrenty_start"]').blur();
-
-                $('input[name="warrenty_end"]').val("");
-                $('input[name="warrenty_end"]').blur();
-
-                $('input[name="manufactures"]').val("");
-                $('input[name="manufactures"]').blur();
-
-                $('input[name="invoices"]').val(null);
-                $('input[name="documents"]').val(null);
-
-                $('#saveAssests').show();
-                $('#saveAssests').text('Save');
+                $('#saveAssests_core').show();
+                $('#saveAssests_core').text('Save');
                 $('#updateAssests').hide();
+                $('#saveAssests').hide();
+                $('#saveAssests_core').removeAttr('disabled');
             }   
            
         }
+        $('#saveAssests_core').removeAttr('disabled');
+        $('#saveAssests_core').show();
+        $('#saveAssests_core').text('Save');
+        $('#updateAssests').hide();
+        $('#saveAssests').hide();
+
+        $('.asset_core').show();
+        $('.asset_detail').hide();
         lastOp = 'add';
         // if ($('#saveInventoryForm input[name="_method"]').length) {
         //     $('#saveInventoryForm input[name="_method"]').remove();
@@ -102,6 +98,94 @@ $(document).ready(function(){
         $('#dropifyImgDiv').empty();
         $('#dropifyImgDiv').append('<input type="file" name="compPicture" id="compPicture" class="dropify" />');
         $('#compPicture').dropify();
+    });
+
+    $(document).on('click', '.openDataSidebarForAddingAssestDetail', function() {
+        $('input[id="operation"]').val('add');
+
+        $('.overlay').addClass('active');
+        $('input[id="operation"]').val('add');
+        //lastOp = 'add';
+        $('#dataSidebarLoader').show();
+        $('._cl-bottom').hide();
+        $('.pc-cartlist').hide();
+        $('#product-cl-sec').addClass('active');
+
+        var id = $(this).attr('id');
+        $("input[name='assests_id_for_detail']").val(id);
+       
+        $.ajax({
+            type: 'GET',
+            url: '/asset_detail/' + id,
+            data: {
+                _token: '{!! csrf_token() !!}',
+               id: id
+           },
+            success: function(response) {
+                var response = JSON.parse(response);
+                $('.asset_core').hide();
+                $('.asset_detail').show();
+        
+                $('#dataSidebarLoader').hide();
+                $('._cl-bottom').show();
+                $('.pc-cartlist').show();
+
+                $('input[name="name"]').focus();
+                $('input[name="name"]').val(response.info.name);
+                $('input[name="name"]').blur();
+
+                  if (lastOp == "update") {
+                    $('#updateAssestsForm').prop('id','saveAssestsForm');
+
+                    $('input[name="sku"]').val("");
+                    $('input[name="sku"]').blur();
+
+                    $('input[name="model"]').val("");
+                    $('input[name="model"]').blur();
+
+                    $('input[name="serial_no"]').val("");
+                    $('input[name="serial_no"]').blur();
+
+                    $('input[name="purchase_price"]').val("");
+                    $('input[name="purchase_price"]').blur();
+
+                    $('input[name="seller"]').val("");
+                    $('input[name="seller"]').blur();
+
+                    $('input[name="warrenty_start"]').val("");
+                    $('input[name="warrenty_start"]').blur();
+
+                    $('input[name="warrenty_end"]').val("");
+                    $('input[name="warrenty_end"]').blur();
+
+                    $('input[name="manufactures"]').val("");
+                    $('input[name="manufactures"]').blur();
+
+                    $('input[name="invoices"]').val(null);
+                    $('input[name="documents"]').val(null);
+
+                    $('#saveAssests').show();
+                    $('#saveAssests').text('Save');
+                    $('#updateAssests').hide();
+                    $('#saveAssests').removeAttr('disabled');
+                
+                }
+                
+                $('#saveAssests').removeAttr('disabled');
+                $('#saveAssests_core').hide();
+                $('#updateAssests').hide();
+                $('#saveAssests').show();
+                $('#saveAssests').text('Save');
+                lastOp = 'add';
+                
+                // $('input[id="operation"]').val('add');
+                // $('#product-cl-sec').addClass('active');
+                // $('.overlay').addClass('active');
+                // $('.collapse.in').toggleClass('in');
+                // $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                // $('body').toggleClass('no-scroll');
+            }
+        });
     });
 
 
@@ -259,11 +343,82 @@ $(document).ready(function(){
 
     });
 
+    $(document).on('click', '#saveAssests_core', function(){
+        if (!$('input[name="name_core"]').val() || !$('select[name="asset_type"]').val() || $('select[name="asset_type"]').val() == 0) {
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text('Please provide all the required information (*)');
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 3000);
+            return;
+        }
+
+        $('#saveAssests_core').attr('disabled', 'disabled');
+        $('#updateAssests').attr('disabled', 'disabled');
+        $('#saveAssests_core').text('Processing..');
+
+        var ajaxUrl = "/add_assests_core";
+
+        $('#saveAssestsForm').ajaxSubmit({
+            type: "POST",
+            url: ajaxUrl,
+            data: $('#saveAssestsForm').serialize(),
+            cache: false,
+            success: function(response) {
+                var response = JSON.parse(response);
+                //console.log(response);
+                if(response == 'success'){
+                    fetchAssestsList();
+                    $('#saveAssests_core').removeAttr('disabled');
+                    $('#updateAssests').removeAttr('disabled');
+                    $('#saveAssests_core').text('Save');
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').text('Assest have been added successfully');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                    $('input[name = "name_core"]').val('');
+                    $('input[name = "asset_type"]').val(0).trigger('change');
+                }else if(response == 'already exist'){
+                    $('#saveAssests_core').removeAttr('disabled');
+                    $('#updateAssests').removeAttr('disabled');
+                    $('#saveAssests_core').text('Save');
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Asset already exist');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }else{
+                     $('#saveAssests_core').removeAttr('disabled');
+                    $('#updateAssests').removeAttr('disabled');
+                    $('#saveAssests_core').text('Save');
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Failed to add Information at the moment');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }
+            },
+            error: function(err) {
+                if (err.status == 422) {
+                    $.each(err.responseJSON.errors, function(i, error) {
+                        var el = $(document).find('[name="' + i + '"]');
+                        el.after($('<small style="color: red; position: absolute; width:100%; text-align: right; margin-left: -30px">' + error[0] + '</small>'));
+                    });
+                }
+            }
+        });
+    });
+
     $(document).on('click', '#saveAssests', function() {
 
-        if (!$('input[name="purchase_price"]').val() || !$('input[name="serial_no"]').val() ||
-            !$('input[name="seller"]').val() || !$('input[name="warrenty_start"]').val() || !$('input[name="warrenty_end"]').val()
-            || !$('input[name="manufactures"]').val()) {
+        if (!$('input[name="name"]').val() || !$('input[name="purchase_price"]').val() || !$('input[name="serial_no"]').val() ||
+            !$('input[name="seller"]').val() || !$('input[name="model"]').val() || !$('input[name="warrenty_start"]').val() || 
+            !$('input[name="warrenty_end"]').val() || !$('input[name="manufactures"]').val()) {
             $('#notifDiv').fadeIn();
             $('#notifDiv').css('background', 'red');
             $('#notifDiv').text('Please provide all the required information (*)');
@@ -299,7 +454,17 @@ $(document).ready(function(){
                         setTimeout(() => {
                             $('#notifDiv').fadeOut();
                         }, 3000);
-                   // $('#saveAssestsForm').find("input").val('');
+                        $('input[name = "name"]').val('');
+                        $('input[name = "serial_no"]').val('');
+                        $('input[name = "model"]').val('');
+                        $('input[name = "manufactures"]').val('');
+                        $('input[name = "purchase_price"]').val('');
+                        $('input[name = "seller"]').val('');
+                        $('input[name = "warrenty_start"]').val('');
+                        $('input[name = "warrenty_end"]').val('');
+                        $('input[name = "documents"]').val(null);
+                        $('input[name = "invoices"]').val(null);
+                        $('input[name = "pictures"]').val(null);
                     }else{
                         $('#saveAssests').removeAttr('disabled');
                         $('#updateAssests').removeAttr('disabled');
@@ -354,7 +519,7 @@ $(document).ready(function(){
                 type: 'GET',
                 url: '/inventory_data/' + id,
                 success: function(response) {
-                    console.log(response);
+                    //console.log(response);
                     var response = JSON.parse(response);
                     $('#dataSidebarLoader').hide();
                     $('._cl-bottom').show();
@@ -443,50 +608,74 @@ $(document).ready(function(){
             $('.collapse.in').toggleClass('in');
             $('a[aria-expanded=true]').attr('aria-expanded', 'false');
             $('body').toggleClass('no-scroll');
-        }else if(action == "assests_management"){
+        }else if(action == "update_asset"){
             //Form ki id change kr de hai
-            $('#saveAssestsForm').prop('id','updateAssestsForm');
+            //$('#saveAssestsForm').prop('id','updateAssestsForm');
 
             var id = $(this).attr('id');
             $.ajax({
                 type: 'GET',
                 url: '/assests_data/' + id,
                 success: function(response) {
-                   // console.log(response);
+                    console.log(response);
                     var response = JSON.parse(response);
-                    $('#dataSidebarLoader').hide();
-                    $('._cl-bottom').show();
-                    $('.pc-cartlist').show();
-                    $('#uploadedImg').remove();
+                    $('.asset_core').hide();
+                    $('.asset_detail').show();
 
-                    $('input[name="purchase_price"]').focus();
-                    $('input[name="purchase_price"]').val(response.info.purchase_price);
-                    $('input[name="purchase_price"]').blur();
+                    $('#updateAssestsForm').find('name').removeAttr('disabled');
+                    
+                    if(response.info == null){
+                        $('#pl-close').click();
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'red');
+                        $('#notifDiv').text('This asset is empty.');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                    }else{
+                        $('#saveAssests_core').hide();
+                        $('#saveAssests').hide();
 
-                    $('input[name="serial_no"]').focus();
-                    $('input[name="serial_no"]').val(response.info.serial_no);
-                    $('input[name="serial_no"]').blur();
+                        $('#dataSidebarLoader').hide();
+                        $('._cl-bottom').show();
+                        $('.pc-cartlist').show();
+                        $('#uploadedImg').remove();
+    
+                        $('input[name="purchase_price"]').focus();
+                        $('input[name="purchase_price"]').val(response.info.purchase_price);
+                        $('input[name="purchase_price"]').blur();
+    
+                        $('input[name="name"]').focus();
+                        $('input[name="name"]').val(response.info.name);
+                        $('input[name="name"]').blur();
+    
+                        $('input[name="model"]').focus();
+                        $('input[name="model"]').val(response.info.model_no);
+                        $('input[name="model"]').blur();
+    
+                        $('input[name="serial_no"]').focus();
+                        $('input[name="serial_no"]').val(response.info.serial_no);
+                        $('input[name="serial_no"]').blur();
+    
+                        $('input[name="seller"]').focus();
+                        $('input[name="seller"]').val(response.info.seller);
+                        $('input[name="seller"]').blur();
+    
+                        $('input[name="manufactures"]').focus();
+                        $('input[name="manufactures"]').val(response.info.manufacture);
+                        $('input[name="manufactures"]').blur();
+    
+                        $('input[name="asset_id_to_updateAsset"]').val(response.info.id);
+                        
+                        $('#date_picker_start').datepicker({dateFormat: 'yy-mm-dd'});
+                        $('#date_picker_start').datepicker('setDate', new Date(response.info.warrenty_start));
 
-                    $('input[name="seller"]').focus();
-                    $('input[name="seller"]').val(response.info.seller);
-                    $('input[name="seller"]').blur();
-
-                    $('input[name="warrenty_start"]').focus();
-                    $('input[name="warrenty_start"]').val(response.info.warrenty_start);
-                    $('input[name="warrenty_start"]').blur();
-
-                    $('input[name="warrenty_end"]').focus();
-                    $('input[name="warrenty_end"]').val(response.info.warrenty_end);
-                    $('input[name="warrenty_end"]').blur();
-
-                    $('input[name="manufactures"]').focus();
-                    $('input[name="manufactures"]').val(response.info.manufacture);
-                    $('input[name="manufactures"]').blur();
-
-                    $('input[name="assests_id"]').val(response.info.id);
-
-                    $('#saveAssests').hide();
-                    $('#updateAssests').show();
+                        $('#date_picker_end').datepicker({dateFormat: 'yy-mm-dd'});
+                        $('#date_picker_end').datepicker('setDate', new Date(response.info.warrenty_end));
+    
+                        $('#saveAssests').hide();
+                        $('#updateAssests').show();
+                    }
 
                 }
             });
@@ -611,24 +800,26 @@ $(document).ready(function(){
 
     });
 
-    $(document).on('click', '#updateAssests', function() {
+    $(document).on('click', '#updateasset', function() {
 
-        $('#updateAssests').attr('disabled', 'disabled');
-        $('#cancelAssests').attr('disabled', 'disabled');
-        $('#updateAssests').text('Processing..');
+        $('#updateasset').attr('disabled', 'disabled');
+        $('#cancelasset').attr('disabled', 'disabled');
+        $('#updateasset').text('Processing..');
+        // alert('here');
+        // return;
         var ajaxUrl = "/assests_update";
-        $('#updateAssestsForm').ajaxSubmit({
+        $('#updateAssetForm').ajaxSubmit({
             type: "POST",
             url: ajaxUrl,
-            data: $('#updateAssestsForm').serialize(),
+            data: $('#updateAssetForm').serialize(),
             cache: false,
             success: function(response) {
                // console.log(response);
                 if (JSON.parse(response) == "success") {
-                    fetchAssestsList();
-                    $('#updateAssests').removeAttr('disabled');
-                    $('#cancelAssests').removeAttr('disabled');
-                    $('#updateAssests').text('Update');
+                    fetchAssestsToUpdateList();
+                    $('#updateasset').removeAttr('disabled');
+                    $('#cancelasset').removeAttr('disabled');
+                    $('#updateasset').text('Update');
 
                     $('#notifDiv').fadeIn();
                     $('#notifDiv').css('background', 'green');
@@ -637,9 +828,9 @@ $(document).ready(function(){
                         $('#notifDiv').fadeOut();
                     }, 3000);
                 } else if(JSON.parse(response) == "failed"){
-                    $('#updateAssests').removeAttr('disabled');
-                    $('#cancelAssests').removeAttr('disabled');
-                    $('#updateAssests').text('Update');
+                    $('#updateasset').removeAttr('disabled');
+                    $('#cancelasset').removeAttr('disabled');
+                    $('#updateasset').text('Update');
                     $('#notifDiv').fadeIn();
                     $('#notifDiv').css('background', 'red');
                     $('#notifDiv').text('Failed to update information at the moment');
@@ -694,7 +885,7 @@ $(document).ready(function(){
                     }     
                 }
             });
-        }else if(action == "assests_management"){
+        }else if(action == "update_asset"){
             $(this).text('PROCESSING....');
             $(this).attr("disabled", "disabled");
             var id = $(this).attr('id');
@@ -709,7 +900,7 @@ $(document).ready(function(){
                     var response = JSON.parse(response);
                     response.forEach(element => { 
                         if(element.pic || element.invoice || element.doc || element.asset){
-                            fetchAssestsList();
+                            fetchAssestsToUpdateList();
                             $('#saveAssests').removeAttr('disabled');
                             $('#updateAssests').removeAttr('disabled');
                             $('#saveAssests').text('Delete');
@@ -989,11 +1180,37 @@ function fetchAssestsList() {
             //console.log(response);
             
             $('.body').empty();
-            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="AddOnsListTable" style="width:100%;"><thead><tr><th>ID</th><th>Purchase Price</th><th>Warrenty Start</th><th>Warrenty End</th><th>Seller</th><th>Action</th></tr></thead><tbody></tbody></table>');
+            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="AddOnsListTable" style="width:100%;"><thead><tr><th>ID</th><th>Assests Name</th><th>Issue Qty.</th><th>Current Qty.</th><th>Action</th></tr></thead><tbody></tbody></table>');
             $('#AddOnsListTable tbody').empty();
             var response = JSON.parse(response);
             response.forEach(element => {
-                $('#AddOnsListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['purchase_price'] + '</td><td>' + element['warrenty_start'] + '</td><td>' + element['warrenty_end'] + '</td><td>' + element['seller'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate">Edit</button><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deletebtn" title="Delete">Delete</button></form></td></tr>');
+                $('#AddOnsListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['name'] + '</td><td>' + element['quantity'] + '</td><td>' + element['total_qty'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForAddingAssestDetail">Add New</button><a href="/update_asset/'+ element['id'] +'"><button id="' + element['id'] + '" class="btn btn-default btn-line ">Update</button></a></td></tr>');
+            });
+            $('#tblLoader').hide();
+            $('.body').fadeIn();
+            $('#AddOnsListTable').DataTable();
+        }
+    });
+}
+
+function fetchAssestsToUpdateList() {
+    var id = $('#asset_id').val();
+    $.ajax({
+        type: 'GET',
+        url: '/GetAssestsToUpdateList',
+        data: {
+            _token: '{!! csrf_token() !!}',
+            id: id
+        },
+        success: function(response) {
+            //console.log(response);
+            
+            $('.body').empty();
+            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="AddOnsListTable" style="width:100%;"><thead><tr><th>ID</th><th>Serial NO.</th><th>Manufacturer</th><th>Warrent Start</th><th>Warrent End</th><th>Action</th></tr></thead><tbody></tbody></table>');
+            $('#AddOnsListTable tbody').empty();
+            var response = JSON.parse(response);
+            response.forEach(element => {
+                $('#AddOnsListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['serial_no'] + '</td><td>' + element['manufacture'] + '</td><td>' + element['warrenty_start'] + '</td><td>' + element['warrenty_end'] + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdate">Update</button><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deletebtn" title="Delete">Delete</button></form></td></tr>');
             });
             $('#tblLoader').hide();
             $('.body').fadeIn();
