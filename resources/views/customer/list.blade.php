@@ -1,8 +1,62 @@
 @extends('layouts.master')
 
 @section('data-sidebar')
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content top-borderRed">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete <span></span></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+                <div class="col-md-12">
+                    <p>Are you sure you want to delete?</p>
+                </div>
+
+        </div>
+        <div class="modal-footer border-0">
+            <a id="link_delete_customer"><button type="button" data-dismiss="modal" class="btn btn-primary">Yes</button></a>
+            <button type="submit" class="btn btn-cancel" data-dismiss="modal" aria-label="Close">No</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content top_border">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Customer <span>has been successfully added</span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body p-30">
+        <div class="form-wrap p-0">	
+
+        <h1 class="_head05">Add <span>Billing Account?</span></h1>		 
+
+        <a id="add_billing_to_customer" href=""><button type="submit" class="btn btn-primary mr-2 mb-2">Yes</button></a>
+        <button type="submit" class="btn btn-primary mr-2 mb-2" data-dismiss="modal">No</button>
+
+                            
+
+    <div class="modal-footer p-0 border-0">
+    <button type="submit" class="btn btn-cancel" data-dismiss="modal" aria-label="Close">Close</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal">Add Another</button>
+    </div>
+
+
+        </div>
+        </div>
+    </div>
+    </div>
+</div> 
+    
 <div id="product-cl-sec">
-    <a href="#" id="pl-close" class="close-btn-pl"></a>
+    <a href="" id="pl-close" class="close-btn-pl close_customer_form"></a>
     <div class="pro-header-text">New <span>Customer</span></div>
     <div style="min-height: 400px" id="dataSidebarLoader" style="display: none">
         <img src="/images/loader.gif" width="30px" height="auto" style="position: absolute; left: 50%; top: 45%;">
@@ -250,6 +304,9 @@
         </form>
     </div>
     <div class="_cl-bottom">
+        {{-- data-toggle="modal" data-target=".bd-example-modal-lg" --}}
+        <button  class="btn btn-default red-bg" data-toggle="modal" data-target="#exampleModal" id="delete_customer_modal" hidden>Delete</button>
+        <button type="submit" class="btn btn-primary mr-2" id="open_modal" data-toggle="modal" data-target=".bd-example-modal-lg" style="display:none">Save</button>
         <button type="submit" class="btn btn-primary mr-2" id="saveCustomer">Save</button>
         <button id="pl-close" type="submit" class="btn btn-cancel mr-2" id="cancelCustomer">Cancel</button>
     </div>

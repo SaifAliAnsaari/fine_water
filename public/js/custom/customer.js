@@ -475,14 +475,24 @@ $(document).ready(function() {
         if ($('#operation').val() !== "add") {
             ajaxUrl = "/Customer/" + $('input[name="product_updating_id"]').val();
         }
-
         $('#saveCustomerForm').ajaxSubmit({
             type: "POST",
             url: ajaxUrl,
             data: $('#saveCustomerForm').serialize(),
             cache: false,
             success: function(response) {
-                if (JSON.parse(response) == "success") {
+                if (JSON.parse(response) == "failed") {
+                    $('#saveCustomer').removeAttr('disabled');
+                    $('#cancelCustomer').removeAttr('disabled');
+                    $('#saveCustomer').text('Save');
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Failed to add customer at the moment');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                    
+                } else {
                     if (action == 'CustomerProfile') {
                         fetchCompanyInfoForUpdate($('input[name="product_updating_id"]').val());
                     } else {
@@ -498,28 +508,64 @@ $(document).ready(function() {
                         $('select[name="deliveryPorts"], select[name="documentTypes"]').val("").trigger('change');
                         $('.dropify-clear').click();
                         //
+                        $('#saveCustomerForm').find("input[name=homePh]").val("");
                         $('#saveCustomerForm').find("input[name=state]").val("Sindh");
                         $('#saveCustomerForm').find("input[name=city]").val("Karachi");
                         $('select[name="country"]').val(1).trigger('change');
                     }
-
                     $('#notifDiv').fadeIn();
                     $('#notifDiv').css('background', '#0038ba');
                     $('#notifDiv').text('Customer have been added successfully');
                     setTimeout(() => {
                         $('#notifDiv').fadeOut();
                     }, 3000);
-                } else {
-                    $('#saveCustomer').removeAttr('disabled');
-                    $('#cancelCustomer').removeAttr('disabled');
-                    $('#saveCustomer').text('Save');
-                    $('#notifDiv').fadeIn();
-                    $('#notifDiv').css('background', 'red');
-                    $('#notifDiv').text('Failed to add customer at the moment');
-                    setTimeout(() => {
-                        $('#notifDiv').fadeOut();
-                    }, 3000);
+                    $('.close_customer_form').click();
+                    $('#open_modal').click();
+                    $("#add_billing_to_customer").attr("href", "/create_account/"+JSON.parse(response));
                 }
+                // if (JSON.parse(response) == "success") {
+                //     if (action == 'CustomerProfile') {
+                //         fetchCompanyInfoForUpdate($('input[name="product_updating_id"]').val());
+                //     } else {
+                //         fetchCompaniesList();
+                //     }
+                //     $('#saveCustomer').removeAttr('disabled');
+                //     $('#cancelCustomer').removeAttr('disabled');
+                //     $('#saveCustomer').text('Save');
+
+                //     if ($('#operation').val() !== "update") {
+                //         $('#saveCustomerForm').find("input[type=text], textarea").val("");
+                //         $('#saveCustomerForm').find("select").val("0").trigger('change');
+                //         $('select[name="deliveryPorts"], select[name="documentTypes"]').val("").trigger('change');
+                //         $('.dropify-clear').click();
+                //         //
+                //         $('#saveCustomerForm').find("input[name=homePh]").val("");
+                //         $('#saveCustomerForm').find("input[name=state]").val("Sindh");
+                //         $('#saveCustomerForm').find("input[name=city]").val("Karachi");
+                //         $('select[name="country"]').val(1).trigger('change');
+                //     }
+                //     $('#notifDiv').fadeIn();
+                //     $('#notifDiv').css('background', '#0038ba');
+                //     $('#notifDiv').text('Customer have been added successfully');
+                //     setTimeout(() => {
+                //         $('#notifDiv').fadeOut();
+                //     }, 3000);
+                //     $('.close_customer_form').click();
+                //     $('#open_modal').click();
+                //     $("#add_billing_to_customer").attr("href", "/create_account/"+JSON.parse(response));
+                    
+                    
+                // } else {
+                //     $('#saveCustomer').removeAttr('disabled');
+                //     $('#cancelCustomer').removeAttr('disabled');
+                //     $('#saveCustomer').text('Save');
+                //     $('#notifDiv').fadeIn();
+                //     $('#notifDiv').css('background', 'red');
+                //     $('#notifDiv').text('Failed to add customer at the moment');
+                //     setTimeout(() => {
+                //         $('#notifDiv').fadeOut();
+                //     }, 3000);
+                // }
             },
             error: function(err) {
                 $('#saveCustomer').removeAttr('disabled');
@@ -535,54 +581,45 @@ $(document).ready(function() {
         });
     });
 
-    $(document).on('click', '.deleteCustomer', function() {
-        var customerId = $(this).attr('id');
-        var thisRef = $(this);
-        $.confirm({
-            title: 'Alert!',
-            content: 'Once you click DELETE button this customer will DELETE from your list. Are you sure you want proceed?',
-            type: 'red',
-            typeAnimated: true,
-            buttons: {
-                Delete: {
-                    text: 'DELETE',
-                    btnClass: 'btn-red',
-                    action: function () {
-                        
-                        thisRef.attr('disabled', 'disabled');
-                        thisRef.text('PROCESSING....');
-                        thisRef.parent().ajaxSubmit({
-                            type: "POST",
-                            url: '/Customer/' + customerId,
-                            data: thisRef.parent().serialize(),
-                            cache: false,
-                            success: function(response) {
-                                if (JSON.parse(response) == "success") {
-                                    $('#notifDiv').fadeIn();
-                                    $('#notifDiv').css('background', '#0038ba');
-                                    $('#notifDiv').text('Customer have been deleted');
-                                    setTimeout(() => {
-                                        $('#notifDiv').fadeOut();
-                                    }, 3000);
-                                    thisRef.parent().parent().parent().remove();
-                                } else {
-                                    $('#notifDiv').fadeIn();
-                                    $('#notifDiv').css('background', 'red');
-                                    $('#notifDiv').text('Unable to delete the customer at this moment');
-                                    setTimeout(() => {
-                                        thisRef.removeAttr('disabled');
-                                        $('#notifDiv').fadeOut();
-                                    }, 3000);
-                                }
-                            }
-                        });
+    var customerId = "";
+    var thisRef = "";
 
+    $(document).on('click', '.deleteCustomer', function() {
+        
+        customerId = $(this).attr('id');
+        thisRef = $(this);
+        $('#delete_customer_modal').click();
+        $(document).on('click', '#link_delete_customer', function(){
+            thisRef.attr('disabled', 'disabled');
+            thisRef.text('PROCESSING....');
+            thisRef.parent().ajaxSubmit({
+                type: "POST",
+                url: '/Customer/' + customerId,
+                data: thisRef.parent().serialize(),
+                cache: false,
+                success: function(response) {
+                    if (JSON.parse(response) == "success") {
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', '#0038ba');
+                        $('#notifDiv').text('Customer have been deleted');
+                        setTimeout(() => {
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
+                        thisRef.parent().parent().parent().remove();
+                    } else {
+                        $('#notifDiv').fadeIn();
+                        $('#notifDiv').css('background', 'red');
+                        $('#notifDiv').text('Unable to delete the customer at this moment');
+                        setTimeout(() => {
+                            thisRef.removeAttr('disabled');
+                            $('#notifDiv').fadeOut();
+                        }, 3000);
                     }
-                },
-                close: function () {}
-            }
+                }
+            });
         });
     });
+    
 });
 
 function fetchCompanyInfoForUpdate(id) {
@@ -612,7 +649,7 @@ function fetchCompaniesList() {
         type: 'GET',
         url: '/GetCustomersList',
         success: function(response) {
-            console.log(response);
+           // console.log(response);
             $('.body').empty();
             $('.body').append('<table class="table table-hover dt-responsive nowrap" id="companiesListTable" style="width:100%;"><thead><tr><th>ID</th><th>Customer Name</th><th>POC</th><th>Phone#</th><th>Zone</th><th>Customer Type</th><th>Action</th></tr></thead><tbody></tbody></table>');
             $('#companiesListTable tbody').empty();

@@ -145,7 +145,10 @@ class Customer extends Controller
         }
         $status = $customer->save();
         if($status){
-            echo json_encode('success');
+            echo json_encode($customer->id);
+            //echo json_encode('success');
+        }else{
+            echo json_encode("failed");
         }
     }
 
@@ -298,8 +301,9 @@ class Customer extends Controller
             $customer->picture = $compPic;
         }
 
-        $customer->save();
-        if($customer->save()){
+        $status = $customer->save();
+        if($status){
+            
             // DB::table('customer_delivery_ports')->where('customer_id', $id)->delete();
             // $delivPorts = explode(",", $request->delivery_ports);
             // foreach($delivPorts as $port){
@@ -339,8 +343,11 @@ class Customer extends Controller
     }
 
     //Api Call
-    public function getCustomers(){
-        $jar = new JsonApiResponse('success', '200', Cust::all());
+    public function getCustomers(Request $req){
+        $jar = new JsonApiResponse('success', '200', Cust::whereRaw('zone_id IN (SELECT id FROM `zone_info`
+        where area_id = (SELECT area_id FROM `delivery_team`
+        where id = (SELECT delivery_team_id FROM `delivery_team_members`
+        where user_id = '.$req->user()->id.')))')->get());
         return $jar->apiResponse();
     }
 
@@ -581,6 +588,188 @@ class Customer extends Controller
             if(array_search($mime,$value) !== false) return $key;
         }
         return false;
+    }
+
+    //Api Call
+    public function updateCustomer(Request $request){
+
+        $rules = [
+            'customer_id' => 'required|numeric|min:1',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $errors = array();
+            $counter = 0;
+            foreach ($validator->messages()->getMessages() as $field_name => $messages)
+            {
+                $errors[$counter]["field"] = $field_name;
+                $errors[$counter]["errors"] = $messages;
+                $counter++;
+            }
+            $jar = new JsonApiResponse('failed', '102', $errors);
+            return $jar->apiResponse();
+        }
+        
+        $customer = Cust::find($request->customer_id);
+        
+        $rules = [
+            'customer_type' => 'required|numeric',
+            'zone_id' => 'required|numeric|min:1'
+        ];
+        $customer->customer_type = $request->customer_type;
+        $customer->zone_id = $request->zone_id;
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $errors = array();
+            $counter = 0;
+            foreach ($validator->messages()->getMessages() as $field_name => $messages)
+            {
+                $errors[$counter]["field"] = $field_name;
+                $errors[$counter]["errors"] = $messages;
+                $counter++;
+            }
+            $jar = new JsonApiResponse('failed', '102', $errors);
+            return $jar->apiResponse();
+        }
+
+        if($request->customer_type == 1){
+            $rules = [
+                'company_name' => 'required|max:200',
+                'home_phone' => 'max:30',
+                'cnic' => 'max:20'
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                $errors = array();
+                $counter = 0;
+                foreach ($validator->messages()->getMessages() as $field_name => $messages)
+                {
+                    $errors[$counter]["field"] = $field_name;
+                    $errors[$counter]["errors"] = $messages;
+                    $counter++;
+                }
+                $jar = new JsonApiResponse('failed', '102', $errors);
+                return $jar->apiResponse();
+            }
+            $customer->company_name = $request->company_name;
+            $customer->home_phone = $request->home_phone;
+            $customer->cnic = $request->cnic;
+        }else if($request->customer_type == 2){
+            $rules = [
+                'organization_name' => 'required|max:200',
+                'fax_number' => 'max:50',
+                'job_title' => 'max:150',
+                'strn' => 'max:100',
+                'ntn' => 'max:100'
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                $errors = array();
+                $counter = 0;
+                foreach ($validator->messages()->getMessages() as $field_name => $messages)
+                {
+                    $errors[$counter]["field"] = $field_name;
+                    $errors[$counter]["errors"] = $messages;
+                    $counter++;
+                }
+                $jar = new JsonApiResponse('failed', '102', $errors);
+                return $jar->apiResponse();
+            }
+            $customer->organization_name = $request->organization_name;
+            $customer->fax_number = $request->fax_number;
+            $customer->job_title = $request->job_title;
+            $customer->strn = $request->strn;
+            $customer->ntn = $request->ntn;
+        }else if($request->customer_type == 3){
+            $rules = [
+                'merchant_name' => 'required|max:200',
+                'merchant_type' => 'required|max:100',
+                'fax_number' => 'max:50',
+                'job_title' => 'max:150',
+                'strn' => 'max:100',
+                'ntn' => 'max:100'
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                $errors = array();
+                $counter = 0;
+                foreach ($validator->messages()->getMessages() as $field_name => $messages)
+                {
+                    $errors[$counter]["field"] = $field_name;
+                    $errors[$counter]["errors"] = $messages;
+                    $counter++;
+                }
+                $jar = new JsonApiResponse('failed', '102', $errors);
+                return $jar->apiResponse();
+            }
+            $customer->merchant_name = $request->merchant_name;
+            $customer->merchant_type = $request->merchant_type;
+            $customer->fax_number = $request->fax_number;
+            $customer->job_title = $request->job_title;
+            $customer->strn = $request->strn;
+            $customer->ntn = $request->ntn;
+        }
+
+        $rules = [
+            'address' => 'max:500',
+            'city' => 'max:150',
+            'postal_code' => 'max:50',
+            'business_phone' => 'max:30',
+            'mobile_phone' => 'max:30',
+            'email' => 'email|max:30',
+            'company_poc' => 'max:100',
+            'delivery' => 'max:100',
+            'day_of_delivery' => 'max:50',
+            'customer_acquisition_source' => 'max:200'
+        ];
+
+        if ($validator->fails()) {
+            $errors = array();
+            $counter = 0;
+            foreach ($validator->messages()->getMessages() as $field_name => $messages)
+            {
+                $errors[$counter]["field"] = $field_name;
+                $errors[$counter]["errors"] = $messages;
+                $counter++;
+            }
+            $jar = new JsonApiResponse('failed', '102', $errors);
+            return $jar->apiResponse();
+        }
+
+        $customer->customer_type = $request->customer_type;
+        $customer->latitude = $request->latitude;
+        $customer->longitude = $request->longitude;
+        $customer->mobile_phone = $request->mobile_phone;
+        $customer->address = $request->address;
+        $customer->city = $request->city;
+        $customer->postal_code = $request->postal_code;
+        $customer->business_phone = $request->business_phone;
+        $customer->mobile_phone = $request->mobile_phone;
+        $customer->email = $request->email;
+        $customer->company_poc = $request->company_poc;
+        $customer->delivery = $request->delivery;
+        $customer->day_of_delivery = $request->day_of_delivery;
+        $customer->bottles_per_week = $request->bottles_per_week;
+        $customer->parent_company = $request->parent_company;
+        $customer->customer_acquisition_source = $request->customer_acquisition_source;
+        if($request->picture){
+            $existingImg = $customer->picture;
+            if(Storage::exists('public/company/'.$existingImg)){
+                Storage::delete('public/company/'.$existingImg);
+            }
+            $pic = $this->upload_file($request->picture);
+            if($pic["status"] == "success"){
+                $customer->picture = $pic["name"];
+            }
+        }
+        $status = $customer->save();
+        $jar = new JsonApiResponse('failed', '103', $status);
+        if($status){
+            $status = "Customer has been saved";
+            $jar = new JsonApiResponse('success', '200', $status);
+        }
+        return $jar->apiResponse();
     }
 
 }

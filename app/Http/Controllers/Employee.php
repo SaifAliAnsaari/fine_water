@@ -93,4 +93,37 @@ class Employee extends Controller
         }
     }
 
+    public function update_user_profile(Request $request){
+        $employee = User::find($request->user_id);
+        
+        $hashedPassword = User::find($request->user_id)->password;
+
+        if (Hash::check($request->current_password, $hashedPassword)) {
+            //$employee->password = $request->confirm_password;
+            if($request->password){
+                $password = bcrypt($request->password);
+                $employee->password = $password;
+            }
+            if($request->hasFile('employeePicture')){
+                $completeFileName = $request->file('employeePicture')->getClientOriginalName();
+                $fileNameOnly = pathinfo($completeFileName, PATHINFO_FILENAME);
+                $extension = $request->file('employeePicture')->getClientOriginalExtension();
+                $empPicture = str_replace(' ', '_', $fileNameOnly).'_'.time().'.'.$extension;
+                $path = $request->file('employeePicture')->storeAs('public/employees', $empPicture);
+                if(Storage::exists('public/employees/'.str_replace('./storage/employees/', '', $employee->picture))){
+                    Storage::delete('public/employees/'.str_replace('./storage/employees/', '', $employee->picture));
+                }
+                $employee->picture = './storage/employees/'.$empPicture;
+            }
+
+            if($employee->save()){
+                echo json_encode("success");
+            }else{
+                echo json_encode("failed");
+            }
+        }else{
+            echo json_encode('not_match');
+        }
+    }
+
 }

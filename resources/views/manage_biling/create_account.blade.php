@@ -109,22 +109,28 @@
                                                                     Rate</label>
                                                             </div>
                                                         </div>
-                                                        <div id = "custom_rate" style = "display:none;"> 
+                                                        <div id = "predefined_rate" class="col-md-12"> 
                                                             <div class="col-md-12">
                                                                 <hr>
                                                             </div>
-                                                            <div class="col-md-6" style="min-width:250px;">
+                                                            <div class="col-md-12" >
                                                                 <div class="form-s2">
-                                                                    <select class="form-control formselect" id="predefined_rate" placeholder="select Predefined Rate">
+                                                                    <select class="form-control sd-type" id="predefined_products" style="width: 250px" placeholder="select Predefined Rate">
                                                                         <option value="0" disabled selected>Select Predefined Rate</option>
-                                                                        <option value="1">Type 1</option>
-                                                                        <option value="2">Type 2</option>
-                                                                        <option value="3">Type 3</option>
+                                                                        <?php 
+                                                                            if(!$products->isEmpty()){
+                                                                                foreach($products as $product){ ?>
+                                                                                    <option value="<?= $product->id ?>"><?= $product->rate_title ?></option>
+                                                                                <?php }
+                                                                            }
+                                                                        ?>
                                                                     </select>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div id="custom_rate" style="display:none;">
                                                             <div class="col-md-12 productRate-table body_asset">
-                                                                 {{-- Table --}}
+                                                                {{-- Table --}}
                                                             </div>
                                                             <div style="min-height: 400px" id="dataSidebarLoader_rate" style="display:none;">
                                                                 <img src="/images/loader.gif" width="30px" height="auto" style="position: absolute; left: 50%; top: 45%;">
@@ -263,33 +269,55 @@
                                                                 <div class="col-md-12">
                                                                     <hr>
                                                                 </div>
+                                                                <div id="security_deposite_data" class="col-md-12">
+                                                                    {{-- <div class="row m-0 mt-10 pl-0 alert alert-color" role="alert">									
+                                                                        <div class="col-md-5"><strong>Product:</strong> Bottle Large </div>
+                                                                        <div class="col-md-3"><strong>Qty:</strong> 25 </div>
+                                                                        <div class="col-md-4"><strong>Deposit:</strong> 254 </div>
+                                                                        <button type="button" class="close alert_close" data-dismiss="alert" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                        </button>						          
+                                                                    </div> --}}
+                                                                </div>
                                                                 <div class="col-md-12">
-                                                                    <div class="form-s2">
-                                                                        <label class="PT-10 font12">Select Products</label>
-                                                                        <select class="form-control sd-type" id="select_products" multiple="multiple">
-                                                                            <option value = "0" disabled>Select Products</option>
-                                                                            <?php
-                                                                                if(!$products->isEmpty()){
-                                                                                    foreach($products as $product){ ?>
-                                                                                        <option value="<?= $product->id ?>"><?= $product->name ?></option>
-                                                                                    <?php }
-                                                                                }
-                                                                            ?>
-                                                                        </select>
-                                                                    </div>
+                                                                    <hr>
                                                                 </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label class="control-label mb-10">Product Quantity</label>
-                                                                        <input type="number" class="form-control" id="product_quantity">
+                                                                <div class="row m-0">
+								  
+                                                                    <div class="col-md-12">
+                                                                        <div class="form-s2">
+                                                                            <select class="form-control formselect" id="select_products" placeholder="select Product">
+                                                                                    <?php
+                                                                                        if(!$inventory->isEmpty()){
+                                                                                            foreach($inventory as $inventory){ ?>
+                                                                                                <option value = "<?= $inventory->purchase_price ?>" class="<?= $inventory->id ?>" name="<?= $inventory->name ?>"><?= $inventory->name ?></option>
+                                                                                            <?php }
+                                                                                        }
+                                                                                    ?>
+                                                                            </select>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group">
-                                                                        <label class="control-label mb-10">Product Price</label>
-                                                                        <input type="number" id="product_price" class="form-control">
+                                                                        
+                                                                    <div class="col-md-4">
+                                                                        <label class="PT-10 font12 mb-0">Product Quantity*</label>
+                                                                        <div class="form-group">							 
+                                                                            <input type="text" class="val-placeholder" id="product_quantity" placeholder="">
+                                                                        </div>
                                                                     </div>
+                                                                    <div class="col-md-4">
+                                                                        <label class="PT-10 font12 mb-0">Deposit*</label>
+                                                                        <div class="form-group">							 
+                                                                            <input type="text" class="val-placeholder" id="deposite" disabled placeholder="">
+                                                                        </div>
+                                                                    </div>
+                                                                        
+                                                                    <div class="col-md-4 _add-padd-btn">
+                                                                        <button type="button" id="save_security_data_against_pro" class="btn btn-primary mr-2">Add</button>						 	  
+                                                                    </div>
+                                                                            
                                                                 </div>
+
+
                                                             </div>
                                                         </div>
                                                         
@@ -388,18 +416,18 @@
                                                                 <label class="custom-control-label" for="monthly">Monthly</label>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-12 mt-10">
+                                                        
+                                                        <div class="col-md-12 mt-10">	
                                                             <div class="form-s2">
                                                                 <label class="PT-10 font12">Week days</label>
-                                                                <select class="form-control sd-type" id="select_days" multiple="multiple">
-                                                                    <option value="0" disabled>Select week days</option>
-                                                                    <option value="Monday">Monday</option>
-                                                                    <option value="Tuesday">Tuesday</option>
-                                                                    <option value="Wednesday">Wednesday</option>
-                                                                    <option value="Thursday">Thursday</option>
-                                                                    <option value="Friday">Friday</option>
-                                                                    <option value="Saturday">Saturday</option>
-                                                                    <option value="Sunday">Sunday</option>
+                                                                <select class="form-control sd-type" multiple="multiple" id="select_days" style="width: 350px;">
+                                                                    <option>Monday</option>
+                                                                    <option>Tuesday</option> 
+                                                                    <option>Wednesday</option>
+                                                                    <option>Thursday</option>
+                                                                    <option>Friday</option>
+                                                                    <option>Saturday</option> 
+                                                                    <option>Sunday</option>
                                                                 </select>
                                                             </div>
                                                         </div>

@@ -1,10 +1,18 @@
 $(document).ready(function() {
 
+    var segments = location.href.split('/');
+    var action = segments[3];
+    if (action == 'edit_profile'){
+
+    }else {
+        fetchEmployeesList();
+    }
+
     $('#datepicker').datepicker({
         format: 'yyyy-mm-dd'
     });
 
-    fetchEmployeesList();
+    
     var lastOp = "add";
 
     $(document).on('click', '.openDataSidebarForAddingEmployee', function() {
@@ -362,6 +370,77 @@ $(document).ready(function() {
                         $('#notifDiv').fadeOut();
                     }, 3000);
                 }    
+            }
+        });
+    });
+
+    $(document).on('click', '#save_changes_userProfile', function(){
+        if($('#current_password').val() == "" || $('#new_password').val() == "" || $('#confirm_password').val() == ""){
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text('Please provide all the required information (*)');
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 3000);
+            return;
+        }
+        if($('#new_password').val() != $('#confirm_password').val()){
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text('New Password and Confirm Password does not match!');
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 3000);
+            return;
+        }
+        if($('#new_password').val().length < 6 || $('#confirm_password').val().length < 6){
+            //debugger;
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text('New Password and Confirm Password should have atleast 8 characters');
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 3000);
+            return;
+        }
+
+        $(this).text('PROCESSING....');
+        $(this).attr("disabled", "disabled");
+        $('#saveEditProfileForm').ajaxSubmit({
+            type: "POST",
+            url: "/update_user_profile",
+            data: $('#saveEditProfileForm').serialize(),
+            cache: false,
+            success: function(response) {
+                if(JSON.parse(response) == "success"){
+                    $("#save_changes_userProfile").removeAttr('disabled');
+                    $("#save_changes_userProfile").text('Save Changes');
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').text('Updated successfully');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                    location.reload();
+                }else if(JSON.parse(response) == "failed"){
+                    $("#save_changes_userProfile").removeAttr('disabled');
+                    $("#save_changes_userProfile").text('Save Changes');
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Unable to update');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }else{
+                    $("#save_changes_userProfile").removeAttr('disabled');
+                    $("#save_changes_userProfile").text('Save Changes');
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Password does not match.');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }
             }
         });
     });

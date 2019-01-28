@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Input;
 use URL;
+use Auth;
 
 class RegisterController extends Controller
 {
@@ -118,5 +119,12 @@ class RegisterController extends Controller
             echo json_encode('email_exist'); 
             die;
         }
+    }
+
+    public function edit_profile($id){
+        if($id != Auth::id()){
+            return redirect('/');
+        }
+        return view('includes.edit_profile');
     }
 }

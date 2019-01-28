@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="/css/datatables.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="/css/select2-bootstrap4.css">
-    <link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+    <link rel="stylesheet" type="text/css" href="/css/style.css?v=2.2.2">
     <link rel="stylesheet" type="text/css" href="/css/dropify.min.css" />
     <link href="/css/datepicker.css" rel="stylesheet">
     {{-- <link rel="stylesheet" type="text/css" href="/css/dropzone.css" /> --}}
@@ -54,7 +54,7 @@
     <script src="/js/dropify.min.js"></script>
     <script src="/js/form-file-upload-data.js"></script>
     <script src="/js/custom.js" ></script>
-    <script src="/js/master.js?v=1.0" ></script>
+    <script src="/js/master.js?v=2.2.0" ></script>
     <script src="/js/jquery.form.min.js" ></script>
     <script src="/js/bootstrap-datepicker.js"></script>
     <script type = "text/javascript" src"https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.js"></script>
@@ -63,21 +63,25 @@
     {{-- <script src="/js/dropzone.js"></script>
     <script src="/js/dropzone-data.js"></script> --}}
     @if($controller == "Customer")
-        <script src="/js/custom/customer.js?v=2.01" ></script>
+        <script src="/js/custom/customer.js?v=2.2.3" ></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBuhmMCJmm69FrsFzQdhjq5B86AIDor9Q0">
         </script>
     @elseif($controller == "RegisterController")
-        <script src="/js/custom/employee.js?v=3.0" ></script>
+        <script src="/js/custom/employee.js?v=2.2.0" ></script>
     @elseif($controller == "Clients")
-        <script src="/js/client/clients.js?v=1.0" ></script>
+        <script src="/js/client/clients.js?v=2.2.0" ></script>
     @elseif($controller == "Regions")
-        <script src="/js/region/city.js?v=1.0" ></script>
+        <script src="/js/region/city.js?v=2.2.0" ></script>
     @elseif($controller == "Delivery")
-        <script src="/js/delivery/delivery_team.js?v=1.0" ></script>
+        <script src="/js/delivery/delivery_team.js?v=2.2.0" ></script>
     @elseif($controller == "InventoryMenagement")
-        <script src="/js/inventory/inventory_menagment.js?v=2.0" ></script>
+        <script src="/js/inventory/inventory_menagment.js?v=2.2.0" ></script>
     @elseif($controller == "ManageBilling")
-        <script src="/js/billing/manage_billing.js?v=1.0" ></script>
+        <script src="/js/billing/manage_billing.js?v=2.2.0" ></script>
+    @elseif($controller == "ProductManegment")
+        <script src="/js/product_manegment/product_manegment.js?v=2.2.0" ></script>
+    @elseif($controller == "OrderManagement")
+        <script src="/js/order_manegment/order.js?v=2.2.0" ></script>
     @endif
 
 </body>

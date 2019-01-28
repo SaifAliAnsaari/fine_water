@@ -26,7 +26,7 @@
                                         <div class="logo-company"> <img src="images/sell-360.svg" alt="" /> </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6" style="background-color: #efefef">
+                                <div class="col-md-6" style="background-color: #f5f5f5">
                                     <div class="login-right">
                                         <h3>Login</h3>
                                         <form method="POST" action="{{ route('login') }}">

@@ -3,6 +3,9 @@ $(document).ready(function(){
     var delivery_detail = "";
     var custom_rate_array = [];
     var asset_issaunce_array = [];
+    var selected_predefined_array = [];
+    var deposit_against_pro_array = [];
+    var security_deposite_against_pro = false;
 
     var currentLayout = 'start_date';
 
@@ -31,12 +34,6 @@ $(document).ready(function(){
         ancCounter++;
     });
 
-    // if($('#customrate').attr('checked')){
-
-    // }else{
-
-    // }
-
     $(document).on('click', '.saveCurrentData', function(){
         if(currentLayout == 'start_date'){
             if($('#start_date').val() == ""){
@@ -55,23 +52,49 @@ $(document).ready(function(){
             $('#v-pills-01').removeClass('active show');
             $('#v-pills-02').addClass('active show');
         }else if(currentLayout == 'sell_rate'){
-            if($('#predefined').attr('checked')){
-                //$('#custom_rate').hide();
-                //Yaha Predefined ki value get krni hai
-                currentLayout = 'apply_tax';
-                $('#v-pills-tab a:eq(2)').css("pointer-events", "");
-                $('#v-pills-tab a').removeClass("active");
-                $('#v-pills-tab a:eq(2)').addClass("active");
-                $('#v-pills-02').removeClass('active show');
-                $('#v-pills-03').addClass('active show');
-                //alert(custom_rate_array);
+            //debugger;
+            if($('#predefined').prop('checked')){
+                if($('#predefined_products').val() == 0 || !$('#predefined_products').val()){
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Please Select predefined rate.');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                    return;
+                }
+                    currentLayout = 'apply_tax';
+                    $('#v-pills-tab a:eq(2)').css("pointer-events", "");
+                    $('#v-pills-tab a').removeClass("active");
+                    $('#v-pills-tab a:eq(2)').addClass("active");
+                    $('#v-pills-02').removeClass('active show');
+                    $('#v-pills-03').addClass('active show');
+
+            }else{
+                var reqlength = $('.new_rate').length;
+                console.log(reqlength);
+                var value = $('.new_rate').filter(function () {
+                    return this.value != '';
+                });
+            
+                if (value.length>=0 && (value.length !== reqlength)) {
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Please add rate for all products.');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                    return;
+                } else {
+                    currentLayout = 'apply_tax';
+                    $('#v-pills-tab a:eq(2)').css("pointer-events", "");
+                    $('#v-pills-tab a').removeClass("active");
+                    $('#v-pills-tab a:eq(2)').addClass("active");
+                    $('#v-pills-02').removeClass('active show');
+                    $('#v-pills-03').addClass('active show');
+                }
+               
             }
-            currentLayout = 'apply_tax';
-            $('#v-pills-tab a:eq(2)').css("pointer-events", "");
-            $('#v-pills-tab a').removeClass("active");
-            $('#v-pills-tab a:eq(2)').addClass("active");
-            $('#v-pills-02').removeClass('active show');
-            $('#v-pills-03').addClass('active show');
            
         }else if(currentLayout == 'apply_tax'){
            // debugger;
@@ -161,14 +184,24 @@ $(document).ready(function(){
                     $('#v-pills-05').removeClass('active show');
                     $('#v-pills-06').addClass('active show');
                 }else{
-                    if($('#select_products').val() == 0 || $('#product_quantity').val() == "" || $('#product_price').val() == ""){
-                        $('#notifDiv').fadeIn();
-                        $('#notifDiv').css('background', 'red');
-                        $('#notifDiv').text('Please fill all fields');
-                        setTimeout(() => {
-                            $('#notifDiv').fadeOut();
-                        }, 3000);
-                        return;
+                    if(!security_deposite_against_pro){
+                        if($('#select_products').val() == 0 || $('#product_quantity').val() == "" || $('#deposite').val() == ""){
+                            $('#notifDiv').fadeIn();
+                            $('#notifDiv').css('background', 'red');
+                            $('#notifDiv').text('Please fill all fields');
+                            setTimeout(() => {
+                                $('#notifDiv').fadeOut();
+                            }, 3000);
+                            return;
+                        }else if(!security_deposite_against_pro){
+                            $('#notifDiv').fadeIn();
+                            $('#notifDiv').css('background', 'red');
+                            $('#notifDiv').text('First add any item');
+                            setTimeout(() => {
+                                $('#notifDiv').fadeOut();
+                            }, 3000);
+                            return;
+                        }
                     }
                     currentLayout = 'credit_limit';
                     $('#v-pills-tab a:eq(5)').css("pointer-events", "");
@@ -258,22 +291,15 @@ $(document).ready(function(){
 
     $(document).on('click', '#customrate', function(){
         $('#custom_rate').show();
-    });
-    $(document).on('click', '#predefined', function(){
-        $('#custom_rate').hide();
-    });
-
-    //Show assets list to add custom rates
-    $(document).on('change', '#predefined_rate', function(){
+        $('#predefined_rate').hide();
         var type = $(this).val();
         //fetchassetdata();
         $('#dataSidebarLoader_rate').show();
         $.ajax({
             type: 'GET',
-            url: '/GetAssestsListToAddRate',
+            url: '/GetInventoryListToAddCustomRate',
             data: {
-                _token: '{!! csrf_token() !!}',
-                type: type
+                _token: '{!! csrf_token() !!}'
             },
             success: function(response) {
                 //console.log(response);
@@ -283,7 +309,7 @@ $(document).ready(function(){
                 $('#AssetListTable tbody').empty();
                 var response = JSON.parse(response);
                 response.forEach(element => {
-                    $('#AssetListTable tbody').append('<tr><td>' + element['name'] + '</td><td><input type="number" value="" id="new_rate" style="max-width:50px;"/></td><td><button id="' + element['id'] + '" class="btn btn-default btn-line add_rate_to_asset">Add</button></td></tr>');
+                    $('#AssetListTable tbody').append('<tr><td>' + element['name'] + '</td><td><input type="number" value="" class="new_rate" style="max-width:50px;"/></td><td><button id="' + element['id'] + '" class="btn btn-default btn-line add_rate_to_asset">Add</button></td></tr>');
                 });
                 $('#tblLoader').hide();
                 $('.body_asset').fadeIn();
@@ -291,11 +317,15 @@ $(document).ready(function(){
             }
         });
     });
+    $(document).on('click', '#predefined', function(){
+        $('#custom_rate').hide();
+        $('#predefined_rate').show();
+    });
 
     //this will apply custom rate to product against this user(Customer)
     $(document).on('click', '.add_rate_to_asset', function(){
         
-        var rate = $(this).parent().parent().find('td:eq(1) #new_rate').val();
+        var rate = $(this).parent().parent().find('td:eq(1) .new_rate').val();
         if(rate == ""){
             $('#notifDiv').fadeIn();
             $('#notifDiv').css('background', 'red');
@@ -332,44 +362,8 @@ $(document).ready(function(){
         }
         
          
-          //console.log(custom_rate_array);
+        console.log(custom_rate_array);
         //  return;
-        
-
-        // $('.add_rate_to_asset').attr('disabled', 'disabled');
-        // $(this).text('Processing..');
-
-        // $.ajax({
-        //     type: 'GET',
-        //     url: '/AddRateAgainstCustomer',
-        //     data: {
-        //         _token: '{!! csrf_token() !!}',
-        //         rate: rate,
-        //         id: id,
-        //         customer_id: customer_id
-        //     },
-        //     success: function(response) {
-        //         if(JSON.parse(response) == "success"){
-        //             $('.add_rate_to_asset').removeAttr('disabled');
-        //             $('.add_rate_to_asset').text('Add');
-        //             $('#notifDiv').fadeIn();
-        //             $('#notifDiv').css('background', 'green');
-        //             $('#notifDiv').text('Rate applied successfully');
-        //             setTimeout(() => {
-        //                 $('#notifDiv').fadeOut();
-        //             }, 3000);
-        //         }else{
-        //             $('.add_rate_to_asset').removeAttr('disabled');
-        //             $('.add_rate_to_asset').text('Add');
-        //             $('#notifDiv').fadeIn();
-        //             $('#notifDiv').css('background', 'red');
-        //             $('#notifDiv').text('Failed to apply rate');
-        //             setTimeout(() => {
-        //                 $('#notifDiv').fadeOut();
-        //             }, 3000);
-        //         }
-        //     }
-        // });
     });
 
     $(document).on('click', '.apply_tax_yes', function(){
@@ -386,6 +380,85 @@ $(document).ready(function(){
     $(document).on('click', '.deposit_against_products', function(){
         $('#deposit_against_products_div').show();
         $('#flat_deposit_div').hide();
+        $('#dataSidebarLoader_rate').show();
+        //var products = $('#predefined_products').val();
+        // $.ajax({
+        //     type: 'GET',
+        //     url: '/GetProductsForSecurityDeposite',
+        //     data: {
+        //         _token: '{!! csrf_token() !!}',
+        //         products: products
+        //     },
+        //     success: function(response) {
+        //         //console.log(response);
+        //         $('#dataSidebarLoader_rate').hide();
+        //         $('#select_products').empty();
+        //         $('#select_products').append('<option value="0">Select</option>');
+        //         var response = JSON.parse(response);
+                
+        //     }
+        // });
+    });
+    $(document).on('change', '#product_quantity', function(){
+        var purchase_price = $('#select_products').val();
+        var current_quantity = $(this).val();
+        var total = parseInt(purchase_price) * parseInt(current_quantity);
+        $('#deposite').val(total);
+    });
+    $(document).on('click', '#save_security_data_against_pro', function(){
+        if($('#select_products').val()==0 || $('#product_quantity').val()=="" || $('#deposite').val()==""){
+            $('#notifDiv').fadeIn();
+            $('#notifDiv').css('background', 'red');
+            $('#notifDiv').text('Please fill all fields (*).');
+            setTimeout(() => {
+                $('#notifDiv').fadeOut();
+            }, 3000);
+            return;
+        }
+        var product = $('#select_products').find('option:selected').attr("name");
+        var quantity = $('#product_quantity').val();
+        var deposite = $('#deposite').val();
+        var product_id = $('#select_products').find('option:selected').attr("class");
+        
+        var prod_id_found = false;
+        deposit_against_pro_array.find(x => {
+            //debugger;
+            if(x.product_id == product_id){
+                x.quantity = quantity;
+                x.deposite = deposite;
+                prod_id_found = true;
+                security_deposite_against_pro = true;
+                $(this).text('Added');
+                $('#product_quantity').val('');
+                $('#deposite').val('');
+                setTimeout(() => {
+                    $(this).text('Add');
+                }, 1000);
+                return;
+            }
+        });
+
+        if(!prod_id_found){
+            deposit_against_pro_array.push({"product_id": product_id, "product": product, "quantity": quantity, "deposite": deposite});
+            $(this).text('Added');
+            $('#product_quantity').val('');
+            $('#deposite').val('');
+            setTimeout(() => {
+                $(this).text('Add');
+            }, 1000);
+            security_deposite_against_pro = true;
+        }
+        console.log(deposit_against_pro_array);
+
+        if(deposit_against_pro_array != ""){
+            $('#security_deposite_data').empty();
+            deposit_against_pro_array.forEach(element => {
+                $('#security_deposite_data').append('<div class="row m-0 mt-10 pl-0 alert alert-color" role="alert"><div class="col-md-5"><strong>Product:</strong> '+ element.product +' </div> <div class="col-md-3"><strong>Qty:</strong> '+ element.quantity +' </div><div class="col-md-4"><strong>Deposit:</strong> '+element.deposite +' </div><button type="button" class="close alert_close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span> </button></div>');
+            });
+        }
+        
+        // $('#security_deposite_data').append('<div class="row m-0 mt-10 pl-0 alert alert-color" role="alert"><div class="col-md-5"><strong>Product:</strong> '+ product +' </div> <div class="col-md-3"><strong>Qty:</strong> '+ quantity +' </div><div class="col-md-4"><strong>Deposit:</strong> '+ deposite +' </div><button type="button" class="close alert_close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span> </button></div>');
+
     });
 
     $(document).on('click', '#assetsY', function(){
@@ -443,7 +516,6 @@ $(document).ready(function(){
             }
         });
         
-
         if(!prod_id_found){
             asset_issaunce_array.push({"customer_id": customer_id, "asset_id": asset_id});
             $(this).text('Issued');
@@ -496,12 +568,14 @@ $(document).ready(function(){
         $(this).text('Processing..');
 
         var start_date = $('#start_date').val();
+        var predefined_rates = $('#predefined_products').val();
         var gst_tax = $('#gst_tax').val();
         var membership_fee = $('#membership_fee').val();
         var flat_deposit_field = $('#flat_deposit_field').val();
-        var select_products = $('#select_products').val()+"";
+        //var select_products = $('#select_products').val()+"";
+        var select_products = deposit_against_pro_array;
         var product_quantity = $('#product_quantity').val();
-        var product_price = $('#product_price').val();
+        var product_price = $('#deposite').val();
         var total_amount = $('#total_amount').val();
         var no_of_days = $('#no_of_days').val();
         var comsmuption = $('#comsmuption').val();
@@ -518,6 +592,7 @@ $(document).ready(function(){
             data: {
                 _token: '{!! csrf_token() !!}',
                 start_date: start_date,
+                predefined_rates: predefined_rates,
                 gst_tax: gst_tax,
                 membership_fee: membership_fee,
                 flat_deposit_field: flat_deposit_field,
@@ -536,6 +611,7 @@ $(document).ready(function(){
             },
             success: function(response) {
                 console.log(response);
+                //return;
                 if(JSON.parse(response) == "success"){
                     if(documents != ""){
                         $('#my-awesome-dropzone').ajaxSubmit({

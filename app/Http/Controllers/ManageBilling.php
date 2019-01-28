@@ -26,17 +26,17 @@ class ManageBilling extends Controller
 
     public function create_account($id){
         $asset_type = DB::table('assest_core')->select('type')->get();
-        //inventory
-        $select_product = DB::table('inventory_core')->select('id', 'name')->get();
+        $inventory = DB::table('inventory_core')->select()->get();
+        $select_product = DB::table('rate_list')->select('id', 'rate_title')->groupBy('rate_title')->get();
         if(DB::table('customers')->whereRaw('id = "'.$id.'" AND is_active = 1')->first()){
             return redirect('/select_customer');
         }else{
-            return view('manage_biling.create_account', ['customer_id'=>$id, 'asset_types'=>$asset_type, 'products'=>$select_product]);
+            return view('manage_biling.create_account', ['customer_id'=>$id, 'asset_types'=>$asset_type, 'products'=>$select_product, 'inventory' => $inventory]);
         }
     }
 
-    public function asset_list_to_add_rate(Request $request){
-        echo json_encode( DB::table('assest_core as core')->select('id', 'name')->where('type', $request->type)->get()); 
+    public function GetInventoryListToAddCustomRate(Request $request){
+        echo json_encode( DB::table('inventory_core')->select('id', 'name')->get()); 
     }
 
     public function add_rate_against_customer(Request $request){
@@ -81,8 +81,19 @@ class ManageBilling extends Controller
 
     public function addBilling(Request $request){
         //echo json_encode(count($issuence)); die;
-        $issue_asset = DB::table('billing')->insert(
+
+        $security_deposite_type = "";
+        if($request->flat_deposit_field != ""){
+            $security_deposite_type = 1;
+        }else{
+            $security_deposite_type = 2;
+        } 
+        //echo json_encode($security_deposite_type); die;
+        $billing = DB::table('billing')->insert(
             ['start_date' => $request->start_date,
+            'customer_id' => $request->customer_id,
+            'rate_list' => $request->predefined_rates,
+            'security_deposite_type' => $security_deposite_type,
             'gst' => $request->gst_tax,
             'membership_fee' => $request->membership_fee,
             'flat_security_deposite' => $request->flat_deposit_field,
@@ -92,22 +103,30 @@ class ManageBilling extends Controller
             'delivery_details' => $request->delivery_detail_radio,
             'week_days' => $request->select_days
             ]);
-        if($issue_asset){
+        if($billing){
             if($request->select_products != ""){
-                $products =  explode(',', $request->select_products);
-                foreach ($products as $product) {
-                    $add_products = DB::table('security_deposit_against_products')->insert(
-                        ['product_id' => $product,
-                        'customer_id' => $request->customer_id,
-                        'quantity' => $request->product_quantity,
-                        'price' => $request->product_price
-                        ]);
+                // $products =  explode(',', $request->select_products);
+                // foreach ($products as $product) {
+                //     $add_products = DB::table('security_deposit_against_products')->insert(
+                //         ['product_id' => $product,
+                //         'customer_id' => $request->customer_id,
+                //         'quantity' => $request->product_quantity,
+                //         'price' => $request->product_price
+                //         ]);
+                // }
+                foreach($request->select_products as $products){
+                    $insert_deposite_products = DB::table('deposite_against_products')->insert([
+                        'product_id' => $products['product_id'],
+                        'quantity' => $products['quantity'],
+                        'deposite' => $products['deposite'],
+                        'customer_id' => $request->customer_id
+                    ]);
                 }
             }
             try{
                 $update_customer = DB::table('customers')->where('id', $request->customer_id)->update(
                     ['is_active' => 1]);
-                if(count($request->asset_issaunce_array) > 0){
+                if($request->asset_issaunce_array != ""){
                     foreach($request->asset_issaunce_array as $_assets){
                         //echo json_encode('here');die;
                         $insert_assets = DB::table('assets_issuance')->insert([
@@ -116,7 +135,7 @@ class ManageBilling extends Controller
                         ]);
                     }
                 }
-                if(count($request->custom_rate_array) > 0){
+                if($request->custom_rate_array != ""){
                     foreach($request->custom_rate_array as $rates){
                         $insert_rates = DB::table('custom_rates')->insert([
                             'product_id' => $rates['product_id'],
@@ -160,5 +179,10 @@ class ManageBilling extends Controller
 
     public function CustomersListBilling(){
         echo json_encode( DB::table('customers as cust')->select('id', 'company_name', 'company_poc', 'latitude', 'longitude', 'customer_type', 'country', DB::raw('IFNULL((SELECT company_name from customers where id = cust.parent_company), "NA") as parent_company'))->where('is_active', 0)->get());
+    }
+
+    public function ProductsListSecurityDeposite(Request $request){
+        // Yaha foreach lagay ga jo array ma say vaalues nikalay ga.
+        //Aur un values k against db say data niklay ga.
     }
 }

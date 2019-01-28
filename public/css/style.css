@@ -2,6 +2,10 @@ html {
 	position: relative;
 	min-height: 100%;
 }
+.btn:focus,.btn:active {
+   outline: none !important;
+   box-shadow: none!important;
+}
 body {
 	height: 100%;
 		font-family: 'Source Sans Pro', sans-serif; 
@@ -327,13 +331,13 @@ footer.sticky-footer .copyright {
 	-khtml-border-radius: 0;
 	box-shadow: 2px 2px 10px 0 rgba(79,79,79,.2);
 	padding: 6px 20px;
-	background: linear-gradient(90deg, #003db6 0%, #003db6 100%);
-	border: solid 1px #003db6; font-weight: 600
+	border: solid 1px #003db6; font-weight: 600;
+	background:#003db6;
 }
 .btn-primary:HOVER, .btn-primary:focus, .lgray-btn:HOVER {
 	color: #fff;
-	background: linear-gradient(0deg, #003db6 0%, #003db6 100%);
-	border: solid 1px #003db6
+ 
+	border: solid 1px #003db6; background:#003db6;
 }
 .btn-cancel {
 	color: #0038ba;
@@ -841,7 +845,7 @@ table.dataTable {
 	width: 100px;
 	font-size: 13px!important;
 	font-weight: 600;
-	background-color: #282828!important;
+	background-color: #0038ba!important;
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
 	border-radius: 0;
@@ -1531,6 +1535,10 @@ table.dataTable.nowrap td {
 .cp-mh {
 	min-height: 374px
 }
+.cp_user-l {
+	min-height: 402px
+}
+.lineHeight30{line-height: 30px;}
 .overlay {
 	display: none;
 	position: fixed;
@@ -1687,6 +1695,11 @@ table.dataTable.nowrap td {
 .top_border {
 	border: solid 1px #f0f0f0;
 	border-top: solid 3px #0038ba;
+	box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.08);
+}
+.top-borderRed {
+	border: solid 1px #f0f0f0;
+	border-top: solid 3px #e20000;
 	box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.08);
 }
 #floating-label {
@@ -1999,13 +2012,54 @@ table.dataTable.cell-border tbody tr:first-child th, table.dataTable.cell-border
 	border-width: 17px;
 	margin-top: -17px;
 }
-.select2-container{width: 100% !important}
+.pt-pos{padding-top: 31px}
 
-  
-
-
+._order-bottom{
+	width:100%; z-index: 1500; padding-left:60px
+}
+._order-bg{
+	 font-size: 13px; 
+}
+._order-bg .order_value{
+	background-color:#fff; position: relative; padding: 12px 15px; letter-spacing: 0.5px; margin-bottom: 5px;
+	-webkit-box-shadow: 0 2px 8px 0 rgba(79,79,79,.1);
+    -moz-box-shadow: 0 2px 8px 0 rgba(79,79,79,.1);
+    box-shadow: 0 2px 8px 0 rgba(79,79,79,.1);
+}
+.table_head {
+    background-color: #f4f4f4;
+ 
+    line-height: 30px;
+}
+.table .table_head .input {
+    height: 28px;
+}
+._graybg{
+	background-color: #f7f7f7; margin-top: 10px
+}
+._ch-pass{padding-top: 32px}
+._ch-pass-p{padding-top: 25px}
+._user-profile-info .form-group{
+	background-color: #f9f9f9; padding: 5px
+}
+._user-profile-info .form-group p{
+	margin-bottom:0;
+}
+._user-profile-info .p-col-L{
+	padding-right: 4px
+}
+._user-profile-info .p-col-R{
+	padding-left: 4px
+}
+	
 .aligncenter{text-align: center}
 .weight600 {font-weight: 600}
+.bottom-btns {
+    padding-top:30px;
+    text-align: right;
+}
+._add-padd-btn{padding-top: 38px}
+
 
 .mb-10 {
 	margin-bottom:10px!important
@@ -2057,6 +2111,9 @@ table.dataTable.cell-border tbody tr:first-child th, table.dataTable.cell-border
 .pt-19 {
 	padding-top: 19px!important
 }
+.pt-30 {
+	padding-top: 30px!important
+}
 .pb-15 {
 	padding-bottom: 15px!important
 }
@@ -2085,6 +2142,9 @@ table.dataTable.cell-border tbody tr:first-child th, table.dataTable.cell-border
 }
 .cp-stats-value {
 	font-size: 24px
+}
+.cell-border td, .cell-border th {
+    padding: .75rem;
 }
 }
 
@@ -2153,7 +2213,8 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 	background-color: #0038ba;
 	border-bottom: solid 1px #0030aa;
 	padding: 12px 1.5rem;
-	color: #fff
+	color: #fff;
+	letter-spacing: 1px
 }
 .sidebar .dropdown-item:HOVER {
 	background-color: #0030aa;
@@ -2250,9 +2311,10 @@ body.sidebar-toggled footer.sticky-footer {
     padding-left: 20px;
 }
 .ml-800{margin-left: -15px}
-}
 
+}
 @media (max-width: 767px) {
+._add-padd-btn{padding-top:0px; text-align: right}
 .auth-form .form-group input {
 	max-width: 100%;
 }
@@ -2367,6 +2429,18 @@ body.sidebar-toggled footer.sticky-footer {
 .CB-account-tab {padding:15px}
 .CB_info {margin-top: 0}
 .ml-800{margin-left:0}
+._graybg{margin-top: 20px; padding-bottom:15px}
+.cp_user-l {min-height: auto}
+._ch-pass {padding-top: 10px}
+._ch-pass-p {padding-top: 5px;padding-bottom: 10px}
+.tab-style .tab-pane {padding: 20px}
+.dropify-wrapper.touch-fallback .dropify-clear {color: #fff}
+._user-profile-info .p-col-L{
+	padding-right:15px
+}
+._user-profile-info .p-col-R{
+	padding-left: 15px
+}
 }
 @media (max-width: 480px) {
 .card .header h2, .card ._head03, .modal-title {
