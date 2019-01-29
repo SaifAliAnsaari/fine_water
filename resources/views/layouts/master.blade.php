@@ -46,6 +46,22 @@
             </div>
         </div>
     </div>
+    
+<script src="https://www.gstatic.com/firebasejs/5.8.1/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBuZmby-7-Q7UXubpJoeuL78Himbj4ZCRg",
+    authDomain: "finewater-937ea.firebaseapp.com",
+    databaseURL: "https://finewater-937ea.firebaseio.com",
+    projectId: "finewater-937ea",
+    storageBucket: "finewater-937ea.appspot.com",
+    messagingSenderId: "528529030015"
+  };
+  firebase.initializeApp(config);
+</script>
+
+
     <script src="/js/jquery-3.3.1.slim.min.js"></script>
     <script src="/js/popper.min.js" ></script>
     <script src="/js/bootstrap.min.js" ></script>

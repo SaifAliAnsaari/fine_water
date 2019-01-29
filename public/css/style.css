@@ -2051,7 +2051,6 @@ table.dataTable.cell-border tbody tr:first-child th, table.dataTable.cell-border
 ._user-profile-info .p-col-R{
 	padding-left: 4px
 }
-	
 .aligncenter{text-align: center}
 .weight600 {font-weight: 600}
 .bottom-btns {
@@ -2059,6 +2058,17 @@ table.dataTable.cell-border tbody tr:first-child th, table.dataTable.cell-border
     text-align: right;
 }
 ._add-padd-btn{padding-top: 38px}
+._addOrderSec{background-color: #f6f6f6; border: solid 1px #f7f8f9; padding: 15px; margin-bottom: 30px }
+.h-35{height: 35px}
+._add-list{padding:8px; background-color: #ffffff; border-color: #f0f0f1; margin-bottom:5px; font-size: 12px}
+._add-list .alert_close {top: 7px;}
+._addOrderSec .form-group .form-control, ._addOrderSec .form-s2 .select2-container .select2-selection--single {background-color: #fff!important}
+.OR-ListView table td, .OR-ListView table th {
+    padding: 10px;
+}
+
+
+
 
 
 .mb-10 {
@@ -2146,6 +2156,8 @@ table.dataTable.cell-border tbody tr:first-child th, table.dataTable.cell-border
 .cell-border td, .cell-border th {
     padding: .75rem;
 }
+._addOrderSec{padding: 15px}
+._addOrderSec .btn-primary{padding: 6px 10px}
 }
 
 @media (min-width: 992px) {
@@ -2441,6 +2453,10 @@ body.sidebar-toggled footer.sticky-footer {
 ._user-profile-info .p-col-R{
 	padding-left: 15px
 }
+._addOrderSec .btn-primary{padding: 6px 20px; margin-bottom: 15px}
+._addOrderSec .form-s2{ margin-bottom: 20px
+		
+	}
 }
 @media (max-width: 480px) {
 .card .header h2, .card ._head03, .modal-title {

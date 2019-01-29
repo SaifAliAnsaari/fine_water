@@ -362,7 +362,7 @@ $(document).ready(function(){
         }
         
          
-        console.log(custom_rate_array);
+        //console.log(custom_rate_array);
         //  return;
     });
 
@@ -448,17 +448,39 @@ $(document).ready(function(){
             }, 1000);
             security_deposite_against_pro = true;
         }
-        console.log(deposit_against_pro_array);
+        //console.log(deposit_against_pro_array);
 
         if(deposit_against_pro_array != ""){
             $('#security_deposite_data').empty();
             deposit_against_pro_array.forEach(element => {
-                $('#security_deposite_data').append('<div class="row m-0 mt-10 pl-0 alert alert-color" role="alert"><div class="col-md-5"><strong>Product:</strong> '+ element.product +' </div> <div class="col-md-3"><strong>Qty:</strong> '+ element.quantity +' </div><div class="col-md-4"><strong>Deposit:</strong> '+element.deposite +' </div><button type="button" class="close alert_close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span> </button></div>');
+                $('#security_deposite_data').append('<div class="row m-0 mt-10 pl-0 alert alert-color" role="alert"><div class="col-md-5"><strong>Product:</strong> '+ element.product +' </div> <div class="col-md-3"><strong>Qty:</strong> '+ element.quantity +' </div><div class="col-md-4"><strong>Deposit:</strong> '+element.deposite +' </div><button id="'+ element.product_id +'" type="button" class="close alert_close delete_one_row" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span> </button></div>');
             });
         }
         
         // $('#security_deposite_data').append('<div class="row m-0 mt-10 pl-0 alert alert-color" role="alert"><div class="col-md-5"><strong>Product:</strong> '+ product +' </div> <div class="col-md-3"><strong>Qty:</strong> '+ quantity +' </div><div class="col-md-4"><strong>Deposit:</strong> '+ deposite +' </div><button type="button" class="close alert_close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span> </button></div>');
 
+    });
+    $(document).on('click', '.delete_one_row', function(){
+        var id = $(this).attr('id');
+       // alert(id);
+        //return;
+        deposit_against_pro_array.find(x => {
+            //debugger;
+            if(x.product_id == id){
+                x.quantity = "";
+                x.deposite = "";
+                x.product = "";
+                x.product_id = "";
+                //$(this).text('Added');
+                // $('#product_quantity').val('');
+                // $('#deposite').val('');
+                // setTimeout(() => {
+                //     $(this).text('Add');
+                // }, 1000);
+                return;
+            }
+        });
+        //console.log();
     });
 
     $(document).on('click', '#assetsY', function(){

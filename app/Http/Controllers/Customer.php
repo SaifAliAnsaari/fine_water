@@ -32,7 +32,30 @@ class Customer extends Controller
     public function CustomersList(){
         // GetCustomersList
         //DB::raw('IFNULL(region, "NA") as region')
-        echo json_encode( DB::table('customers as cust')->select('id', 'company_name', 'organization_name', 'merchant_name', 'company_poc', 'home_phone', 'business_phone', 'latitude', 'longitude', 'customer_type', 'country', DB::raw('IFNULL((SELECT company_name from customers where id = cust.id), "NA") as parent_company'), DB::raw('(SELECT zone_name from zone_info where id = cust.zone_id) as zone'))->get());
+        echo json_encode( DB::table('customers as cust')->select('id', 'company_name', 'organization_name', 'customer_activation', 'merchant_name', 'company_poc', 'home_phone', 'business_phone', 'latitude', 'longitude', 'customer_type', 'country', DB::raw('IFNULL((SELECT company_name from customers where id = cust.id), "NA") as parent_company'), DB::raw('(SELECT zone_name from zone_info where id = cust.zone_id) as zone'))->get());
+    }
+
+    public function activate_customer(Request $request){
+        try{
+            $add = DB::table('customers')
+            ->where('id', $request->id)->update(
+                ['customer_activation' => 1
+                ]);
+            echo json_encode('success');
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            echo json_encode('failed'); 
+        }
+    }
+    public function deactivate_customer(Request $request){
+        try{
+            $add = DB::table('customers')
+            ->where('id', $request->id)->update(
+                ['customer_activation' => 0
+                ]);
+            echo json_encode('success');
+        }catch(\Illuminate\Database\QueryException $ex){ 
+            echo json_encode('failed'); 
+        }
     }
 
     /**
@@ -344,12 +367,33 @@ class Customer extends Controller
 
     //Api Call
     public function getCustomers(Request $req){
-        $jar = new JsonApiResponse('success', '200', Cust::whereRaw('zone_id IN (SELECT id FROM `zone_info`
-        where area_id = (SELECT area_id FROM `delivery_team`
+
+    	$zones = json_decode(json_encode(DB::table('zone_info')->whereRaw('area_id = (SELECT area_id FROM `delivery_team`
         where id = (SELECT delivery_team_id FROM `delivery_team_members`
-        where user_id = '.$req->user()->id.')))')->get());
+        where user_id = '.$req->user()->id.'))')->get()), true);
+
+    	$customers = json_decode(json_encode(Cust::all()), true);
+
+  		$counter = 0;
+  		foreach ($zones as $z) {
+  			$zones[$counter]["customers"] = $this->searchForId($z["id"], $customers);
+  			$counter++; 
+  		}
+
+  		$jar = new JsonApiResponse('success', '200', $zones);
+  		
         return $jar->apiResponse();
     }
+
+    public function searchForId($id, $array) {
+    	$custsList = array();
+	   foreach ($array as $key => $val) {
+	       if ($val['zone_id'] === $id) {
+	           $custsList[] = $val;
+	       }
+	   }
+	   return $custsList;
+	}
 
     //Api Call
     public function customerMeta(){

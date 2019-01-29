@@ -85,6 +85,7 @@ Route::get('/IssueAssetToCustomer', 'ManageBilling@issue_asset_to_customer');
 Route::get('/Add_sell_price_inventory', 'ProductManegment@Add_sell_price_inventory');
 Route::get('/Remove_price_Inventory', 'ProductManegment@Remove_price_Inventory');
 Route::get('/add_filled_bottle_quantity', 'ProductManegment@add_filled_bottle_quantity');
+Route::get('/place_order', 'OrderManagement@place_order');
 
 //update
 Route::post('/team_update', 'Delivery@update_team');
@@ -124,3 +125,12 @@ Route::get('/deactivate_employee', 'Employee@deactivate_employee');
 //Deactive or Active Inventory
 Route::get('/activate_inventory', 'InventoryMenagement@activate_inventory');
 Route::get('/deactivate_inventory', 'InventoryMenagement@deactivate_inventory');
+
+//Deactive or Active Customer
+Route::get('/activate_customer', 'Customer@activate_customer');
+Route::get('/deactivate_customer', 'Customer@deactivate_customer');
+
+
+
+//API test
+Route::get('/fcm_test', 'Customer@fcm_test');

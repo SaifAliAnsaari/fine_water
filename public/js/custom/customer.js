@@ -584,39 +584,116 @@ $(document).ready(function() {
     var customerId = "";
     var thisRef = "";
 
-    $(document).on('click', '.deleteCustomer', function() {
+    // $(document).on('click', '.deleteCustomer', function() {
         
-        customerId = $(this).attr('id');
-        thisRef = $(this);
-        $('#delete_customer_modal').click();
-        $(document).on('click', '#link_delete_customer', function(){
-            thisRef.attr('disabled', 'disabled');
-            thisRef.text('PROCESSING....');
-            thisRef.parent().ajaxSubmit({
-                type: "POST",
-                url: '/Customer/' + customerId,
-                data: thisRef.parent().serialize(),
-                cache: false,
-                success: function(response) {
-                    if (JSON.parse(response) == "success") {
-                        $('#notifDiv').fadeIn();
-                        $('#notifDiv').css('background', '#0038ba');
-                        $('#notifDiv').text('Customer have been deleted');
-                        setTimeout(() => {
-                            $('#notifDiv').fadeOut();
-                        }, 3000);
-                        thisRef.parent().parent().parent().remove();
-                    } else {
-                        $('#notifDiv').fadeIn();
-                        $('#notifDiv').css('background', 'red');
-                        $('#notifDiv').text('Unable to delete the customer at this moment');
-                        setTimeout(() => {
-                            thisRef.removeAttr('disabled');
-                            $('#notifDiv').fadeOut();
-                        }, 3000);
-                    }
-                }
-            });
+    //     customerId = $(this).attr('id');
+    //     thisRef = $(this);
+    //     $('#delete_customer_modal').click();
+    //     $(document).on('click', '#link_delete_customer', function(){
+    //         thisRef.attr('disabled', 'disabled');
+    //         thisRef.text('PROCESSING....');
+    //         thisRef.parent().ajaxSubmit({
+    //             type: "POST",
+    //             url: '/Customer/' + customerId,
+    //             data: thisRef.parent().serialize(),
+    //             cache: false,
+    //             success: function(response) {
+    //                 if (JSON.parse(response) == "success") {
+    //                     $('#notifDiv').fadeIn();
+    //                     $('#notifDiv').css('background', '#0038ba');
+    //                     $('#notifDiv').text('Customer have been deleted');
+    //                     setTimeout(() => {
+    //                         $('#notifDiv').fadeOut();
+    //                     }, 3000);
+    //                     thisRef.parent().parent().parent().remove();
+    //                 } else {
+    //                     $('#notifDiv').fadeIn();
+    //                     $('#notifDiv').css('background', 'red');
+    //                     $('#notifDiv').text('Unable to delete the customer at this moment');
+    //                     setTimeout(() => {
+    //                         thisRef.removeAttr('disabled');
+    //                         $('#notifDiv').fadeOut();
+    //                     }, 3000);
+    //                 }
+    //             }
+    //         });
+    //     });
+    // });
+
+    $(document).on('click', '.activate_btn', function(){
+        var id = $(this).attr('id');
+        $(this).text('PROCESSING....');
+        $(this).attr("disabled", "disabled");
+
+        $.ajax({
+            type: 'GET',
+            url: '/activate_customer',
+            data: {
+                _token: '{!! csrf_token() !!}',
+               id: id
+           },
+            success: function(response) {
+                if(JSON.parse(response) == "success"){
+                    fetchCompaniesList();
+                    $(this).removeAttr('disabled');
+                    $(this).text('Deactivate');
+                    $(this).removeClass("activate_btn");
+                    $(this).addClass("deactivate_btn");
+
+
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').text('Activated successfully');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }else if(JSON.parse(response) == "failed"){
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Unable to activate employee');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }    
+            }
+        });
+    });
+
+    $(document).on('click', '.deactivate_btn', function(){
+        var id = $(this).attr('id');
+        $(this).text('PROCESSING....');
+        $(this).attr("disabled", "disabled");
+
+        $.ajax({
+            type: 'GET',
+            url: '/deactivate_customer',
+            data: {
+                _token: '{!! csrf_token() !!}',
+               id: id
+           },
+            success: function(response) {
+                if(JSON.parse(response) == "success"){
+                    fetchCompaniesList();
+                    $(this).removeAttr('disabled');
+                    $(this).text('Deactivate');
+                    $(this).removeClass("deactivate_btn");
+                    $(this).addClass("activate_btn");
+
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'green');
+                    $('#notifDiv').text('Deactivated successfully');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }else if(JSON.parse(response) == "failed"){
+                    $('#notifDiv').fadeIn();
+                    $('#notifDiv').css('background', 'red');
+                    $('#notifDiv').text('Unable to deactivate employee');
+                    setTimeout(() => {
+                        $('#notifDiv').fadeOut();
+                    }, 3000);
+                }    
+            }
         });
     });
     
@@ -649,14 +726,14 @@ function fetchCompaniesList() {
         type: 'GET',
         url: '/GetCustomersList',
         success: function(response) {
-           // console.log(response);
+           console.log(response);
             $('.body').empty();
             $('.body').append('<table class="table table-hover dt-responsive nowrap" id="companiesListTable" style="width:100%;"><thead><tr><th>ID</th><th>Customer Name</th><th>POC</th><th>Phone#</th><th>Zone</th><th>Customer Type</th><th>Action</th></tr></thead><tbody></tbody></table>');
             $('#companiesListTable tbody').empty();
             var response = JSON.parse(response);
             response.forEach(element => {
                 // <td>' + (element['home_phone'] != null ?  element['home_phone']  : element['business_phone'] ) + '</td>
-                $('#companiesListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + (element['company_name'] != null ?  element['company_name']  : (element['organization_name'] != null ? element['organization_name'] : element['merchant_name'])) + '</td><td>' + element['company_poc'] + '</td><td>' + (element['home_phone'] != null ?  element['home_phone']  : element['business_phone'] ) + '</td><td>' + element['zone'] + '</td><td>' + (element['customer_type'] == "1" ? "Residential" : (element['customer_type'] == "2" ? "Corporate" : "Commercial")) + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdateCustomer">Edit</button><a href="/CustomerProfile/' + element['id'] + '" id="' + element['id'] + '" class="btn btn-default">Profile</a><a href="#" class="btn btn-default viewOnMap" id="' + element['latitude'] + ',' + element['longitude'] + '" data-toggle="modal" data-target=".customerLocationModal">View on Map</a><form id="deleteCustomerForm" style="display: inline-block"><input type="text" name="_method" value="DELETE" hidden /><input type="text" name="_token" value="' + $('input[name="tokenForAjaxReq"]').val() + '" hidden /><button type="button" id="' + element['id'] + '" class="btn btn-default red-bg deleteCustomer" title="Delete">Delete</button></form></td></tr>');
+                $('#companiesListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + (element['company_name'] != null ?  element['company_name']  : (element['organization_name'] != null ? element['organization_name'] : element['merchant_name'])) + '</td><td>' + element['company_poc'] + '</td><td>' + (element['home_phone'] != null ?  element['home_phone']  : element['business_phone'] ) + '</td><td>' + element['zone'] + '</td><td>' + (element['customer_type'] == "1" ? "Residential" : (element['customer_type'] == "2" ? "Corporate" : "Commercial")) + '</td><td><button id="' + element['id'] + '" class="btn btn-default btn-line openDataSidebarForUpdateCustomer">Edit</button><a href="/CustomerProfile/' + element['id'] + '" id="' + element['id'] + '" class="btn btn-default">Profile</a><a href="#" class="btn btn-default viewOnMap" id="' + element['latitude'] + ',' + element['longitude'] + '" data-toggle="modal" data-target=".customerLocationModal">View on Map</a>'+ (element["customer_activation"] == 1 ? '<button id="' + element['id'] + '" class="btn btn-default red-bg  deactivate_btn" title="View Detail">Deactivate</button>' : '<button id="' + element['id'] + '" class="btn btn-default activate_btn">Activate</button>') +'</td></tr>');
             });
             $('#tblLoader').hide();
             $('.body').fadeIn();
