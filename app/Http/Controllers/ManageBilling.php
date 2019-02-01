@@ -28,10 +28,12 @@ class ManageBilling extends Controller
         $asset_type = DB::table('assest_core')->select('type')->get();
         $inventory = DB::table('inventory_core')->select()->get();
         $select_product = DB::table('rate_list')->select('id', 'rate_title')->groupBy('rate_title')->get();
+        $customers = DB::table('customers')->get();
         if(DB::table('customers')->whereRaw('id = "'.$id.'" AND is_active = 1')->first()){
             return redirect('/select_customer');
         }else{
-            return view('manage_biling.create_account', ['customer_id'=>$id, 'asset_types'=>$asset_type, 'products'=>$select_product, 'inventory' => $inventory]);
+            return view('manage_biling.create_account', ['customer_id'=>$id, 'asset_types'=>$asset_type, 'products'=>$select_product, 
+                'inventory' => $inventory, 'customers' => $customers]);
         }
     }
 

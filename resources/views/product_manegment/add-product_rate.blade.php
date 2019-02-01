@@ -15,24 +15,34 @@
         </ol>
     </div>
 </div>
-<div class="row mt-2 mb-3">
-    <div class="col-lg-4 col-md-4 col-sm-4">
-        <div class="form-group">
-            <label class="control-label mb-10">Rate Title*</label>
-            <input type="text" name="rate_title" id="rate_title" class="form-control" placeholder="" required>
-        </div>
-    </div>
-</div>
+
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="header">
                 <h2>Rate <span>List</span></h2>
             </div>
+            <div id="floating-label" style="padding-top:10px; padding-left:10px;">
+                <div class="col-md-4"> 
+                    <div  class="form-group">
+                    <label class="control-label mb-10">Rate Title</label>
+                    <input type="text" class="form-control">
+                    </div> 
+                </div>
+            </div>
+            {{-- <div class="row mt-2 mb-3 " style="padding-left:20px;">
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label mb-10">Rate Title*</label>
+                        <input type="text" name="rate_title" id="rate_title" class="form-control" placeholder="" required>
+                    </div>
+                </div>
+            </div> --}}
             <div style="min-height: 400px" id="tblLoader">
                 <img src="/images/loader.gif" width="30px" height="auto" style="position: absolute; left: 50%; top: 45%;">
             </div>
             <div class="body" style="display: none">
+                    
             </div>
         </div>
     </div>

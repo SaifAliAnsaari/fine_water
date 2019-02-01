@@ -16,13 +16,13 @@
             <input type="text" id="operation" hidden>
             <div class="overflow-plist">
                 <div class="plist-content">
-                    <div class="_left-filter" style="padding-top:30px">
+                    <div class="_left-filter" style="padding-top:20px">
                         <div class="container">
                             <div class="row">
                                 <div class="col-12">
                                     <div id="floating-label" class="card p-20 top_border mb-3">
                                         <input type="text" value="" hidden name="zone_id">
-                                        <h2 class="_head03 PT-10">Add <span> Zone</span></h2>
+                                        <h2 class="_head03 ">Add <span> Zone</span></h2>
                                         <div class="form-wrap p-0">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -31,7 +31,7 @@
                                                         <input type="text" name="zone" class="form-control" placeholder="" required>
                                                     </div>
                                                 </div>
-                                                <div class="form-s2 col-md-12">
+                                                <div class="form-s2 col-md-12 pt-10">
                                                         <select class="form-control formselect" name="area_name" placeholder="Select Customer Type">
                                                             <option value="0" disabled selected>Select Area</option>
                                                             <?php

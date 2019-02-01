@@ -10,72 +10,46 @@
 				<span aria-hidden="true">&times;</span>
 			  </button>
 			</div>
-			<div class="modal-body OR-ListView" style="width:100%;">
-				   <table class="table table-hover dt-responsive nowra" id="example2">
-					<thead>
-					  <tr class="table_head">
-						<th>Product</th>
-						<th>Sold QTY.</th>
-						<th>Return QTY.</th>
-						<th>Amount</th>
-						<th>Action</th>
-					  </tr>
-					</thead>
-					<tbody>
-					  <tr>
-						<td>Product Name</td>
-						<td>8</td>
-						<td>6</td>
-						<td>350</td>
-						<td><button class="btn btn-default red-bg" title="Delete">Delete</button></td>
-					  </tr>
-					  
-					  <tr>
-						<td>Product Name</td>
-						<td>8</td>
-						<td>6</td>
-						<td>150</td>
-						<td><button class="btn btn-default red-bg" title="Delete">Delete</button></td>
-					  </tr>
-					  
-					  <tr>
-						<td>Product Name</td>
-						<td>8</td>
-						<td>6</td>
-						<td>120</td>
-						<td><button class="btn btn-default red-bg" title="Delete">Delete</button></td>
-					  </tr>
-					  
-					  <tr>
-						<td>Product Name</td>
-						<td>8</td>
-						<td>6</td>
-						<td>80</td>
-						<td><button class="btn btn-default red-bg" title="Delete">Delete</button></td>
-					  </tr>
-					  
-					  <tr>
-						<td>Product Name</td>
-						<td>8</td>
-						<td>6</td>
-						<td>250</td>
-						<td><button class="btn btn-default red-bg" title="Delete">Delete</button></td>
-					  </tr>
-					</tbody>
-				  </table>
-	  
-							
+			<div style="min-height: 400px" id="tb2Loader">
+					<img src="/images/loader.gif" width="30px" height="auto" style="position: absolute; left: 50%; top: 45%;">
+				</div>
+			<div class="modal-body OR-ListView modal_table_body" style="width:100%;">
+				  {{-- Table	 --}}
 			</div>
 			<div class="modal-footer border-0">
 	   
-			  <button type="submit" class="btn btn-cancel" data-dismiss="modal" aria-label="Close">Close</button>
+			  <button type="button" class="btn btn-cancel close_modal" data-dismiss="modal" aria-label="Close">Close</button>
 			</div>
 		  </div>
 		</div>
-	  </div>
+		</div>
+		
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content top-borderRed">
+			<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Delete <span></span></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+			</div>
+			<div class="modal-body">
+							<div class="col-md-12">
+									<p>Are you sure you want to delete?</p>
+							</div>
+
+			</div>
+			<div class="modal-footer border-0">
+					<a ><button type="button" id="link_delete_button" class="btn btn-primary">Yes</button></a>
+					<button type="button" class="btn btn-cancel close_delete_modal" data-dismiss="modal" aria-label="Close">No</button>
+			</div>
+			</div>
+	</div>
+</div>
 
 <div id="content-wrapper">
-
+		
         <div class="container">     
            
         <div class="row mt-2 mb-3">        
@@ -106,7 +80,7 @@
 					   <div class="form-wrap p-0">	
 						  <div class="row">
 						  <div class="col-md-4">
-					      		<div class="form-group" style="height: auto">
+					      		<div class="form-s2 mb-10" style="height: auto">
 								<input type="text" id="datepicker" class="form-control" placeholder="" value="Select Date">
 								</div>
 							</div>
@@ -170,7 +144,7 @@
 							</div>
 							</div>	
 							<div class="col-md-8">
-							   <button type="submit" class="btn btn-primary mr-2 font12 h-35 add_product_btn">Add Product</button>
+								 <button type="button" class="btn btn-primary mr-2 font12 h-35 add_product_btn">Add Product</button>
 							   {{-- <button type="submit" class="btn btn-primary mr-2 font12 h-35 add_payment">Add Payment</button> --}}
 							</div>
 					  
@@ -196,14 +170,14 @@
 							 <div class="col-md-3">
 								  <div class="form-group">
 									<label class="control-label mb-10">Sold QTY.</label>
-									<input type="text" id="sold_qty" class="form-control" placeholder="">
+									<input type="number" id="sold_qty" class="form-control" placeholder="">
 								  </div>
 								</div>
 								
 							 <div class="col-md-3">
 								  <div class="form-group">
 									<label class="control-label mb-10">Return QTY.</label>
-									<input type="text" id="return_qty" class="form-control" placeholder="">
+									<input type="number" id="return_qty" class="form-control" placeholder="">
 								  </div>
 								</div>
 								
@@ -268,151 +242,11 @@
 	   <div class="row"> 	 		
 	   <div class="col-lg-9 col-md-8 col-sm-12 body_table" >
 	   <h2 class="_head03 mt-15 mb-10">Order <span> List</span></h2>
-	   
-		{{-- <table class="table table-hover dt-responsive nowrap cell-border" id="example" style="width:100%">
-        <thead>
-            <tr class="table_head">
-                <th>Order Id</th>
-                <th>Customer</th>
-                <th>Receive Payment</th>
-                <th>Action</th> 
-            </tr>
- 
-        </thead>
-        <tbody> 
-             <tr>
-                <td>5455</td>      
-                <td>Rasheed Khan</td>                
-                <td>25000</td>
-                <td>
-                <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				<button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>5455</td>  
-                <td>Akram Khan</td>  
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>5456</td>  
-                <td>Sakandar Khan</td>      
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>5457</td>  
-                <td>Juli Khan</td>   
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>5458</td>  
-                <td>Rafi Khan</td>        
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            <tr>
-                <td>5459</td>  
-                <td>Akram Khan</td>   
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>5410</td>  
-                <td>Sakandar Khan</td>  
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>5411</td>  
-                <td>Juli Khan</td>     
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>5412</td>  
-                <td>Rafi Khan</td>    
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            <tr>
-                <td>5454</td>  
-                <td>Akram Khan</td> 
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>5455</td>  
-                <td>Sakandar Khan</td>   
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>5455</td>  
-                <td>Juli Khan</td>     
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>5455</td>  
-                <td>Rafi Khan</td>  
-                <td>25000</td>
-                <td>
-                 <button class="btn btn-default" title="View Detail" data-toggle="modal" data-target=".bd-example-modal-lg">View Detail</button>
-				 <button class="btn btn-default red-bg" title="Delete">Delete</button>
-                </td>
-            </tr>
-            
- 
-        </tbody>
-        
-        </table> --}}
-       </div>
+	   {{-- Table --}}
+	   </div>
+	   <div style="min-height: 400px" id="tblLoader">
+			<img src="/images/loader.gif" width="30px" height="auto" style="position: absolute; left: 50%; top: 45%;">
+		</div>
  	   
  	   <div class="col-lg-3 col-md-4 col-sm-12 _graybg">
  
@@ -448,8 +282,11 @@
       </div>
      
 
-    </div>
+	</div>
+	
  
-	  </div>
+		</div>
+		
+		<button  class="btn btn-default red-bg font12 h-35" data-toggle="modal" data-target="#exampleModal" id="delete_modal" hidden>Delete</button>
 
 @endsection

@@ -17,9 +17,10 @@ $(document).ready(function(){
         var sell_price = $(this).parent().parent().find('td:eq(2) #new_price').val();
         var rate_title = $('#rate_title').val();
         
-        // alert(sell_price);
+        //  alert(rate_title);
         // return;
-        if(!sell_price == "" || !rate_title==""){
+        debugger;
+        if(!sell_price == "" && !rate_title == ""){
             $(this).text('PROCESSING....');
             $(this).attr("disabled", "disabled");
             $.ajax({
@@ -57,7 +58,7 @@ $(document).ready(function(){
         }else{
             $('#notifDiv').fadeIn();
             $('#notifDiv').css('background', 'red');
-            $('#notifDiv').text('Please enter new price');
+            $('#notifDiv').text('Please enter new price and title');
             setTimeout(() => {
                 $('#notifDiv').fadeOut();
             }, 3000);
@@ -68,7 +69,7 @@ $(document).ready(function(){
         var id = $(this).attr('id');
         var rate_title = $('#rate_title').val();
         var sell_price = $(this).parent().parent().find('td:eq(2) #new_price').val();
-        if(!sell_price == "" || !rate_title == ""){
+        if(!sell_price == "" && !rate_title == ""){
             $(this).text('PROCESSING....');
             $(this).attr("disabled", "disabled");
             $.ajax({
@@ -106,7 +107,7 @@ $(document).ready(function(){
         }else{
             $('#notifDiv').fadeIn();
             $('#notifDiv').css('background', 'red');
-            $('#notifDiv').text('Please enter new price');
+            $('#notifDiv').text('Please enter new price and title');
             setTimeout(() => {
                 $('#notifDiv').fadeOut();
             }, 3000);

@@ -20,6 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/GetCustomersList', 'Customer@CustomersList');
 Route::Resource('/Customer', 'Customer');
+Route::get('/Customer_list/{id}', 'Customer@CustomerView');
 Route::get('/EmployeesList', 'Auth\RegisterController@EmployeesList');
 Route::post('/UploadUserImage', 'Auth\RegisterController@UploadUserImage');
 Route::get('/Employee/{id}', 'Employee@GetEmployeeInfo');
@@ -38,6 +39,7 @@ Route::get('/assests_management', 'InventoryMenagement@assests');
 Route::get('/select_customer', 'ManageBilling@select_customer');
 Route::get('/add_product', 'ProductManegment@add_product');
 Route::get('/add_rate', 'ProductManegment@add_rate');
+Route::get('/Customer_zone_list', 'Customer@Customer_zone_list');
 Route::get('/product_stock_management', 'ProductManegment@stock_managment');
 Route::get('/order', 'OrderManagement@order');
 Route::get('/update_asset/{id}', 'InventoryMenagement@update_asset_page');
@@ -62,6 +64,8 @@ Route::get('/GetInventoryListToAddRate', 'ProductManegment@GetInventoryListToAdd
 Route::get('/GetRateList', 'ProductManegment@GetRateList');
 Route::get('/GetInventoryListStockManagement', 'ProductManegment@GetInventoryListStockManagement');
 Route::get('/GetCustomersAndOrders', 'OrderManagement@GetCustomersAndOrders');
+Route::get('/GetOrderDetail', 'OrderManagement@GetOrderDetail');
+Route::get('/GetZoneListForCustomers', 'Customer@GetZoneListForCustomers');
 
 Route::get('/get_all_user', 'Delivery@Get_all_users');
 Route::get('/GetCityData', 'Regions@GetCityData');
@@ -115,7 +119,8 @@ Route::get('/DeleteArea', 'Regions@delete_area_entry');
 Route::get('/DeleteZone', 'Regions@delete_zone_entry');
 Route::get('/DeleteAddOns', 'InventoryMenagement@delete_addOns_entry');
 Route::get('/DeleteAssests', 'InventoryMenagement@delete_assest_entry');
-Route::get('/DeleteAssests', 'InventoryMenagement@delete_assest_entry');
+Route::get('/DeleteOrderCoreItem', 'OrderManagement@DeleteOrderCoreItem');
+Route::get('/DeleteOrderProItem', 'OrderManagement@DeleteOrderProItem');
 
 
 //Deactive or Active Employee

@@ -34,7 +34,7 @@
                                                             <input type="text" name="name_core" class="form-control" placeholder="" required>
                                                         </div>
                                                     </div>
-                                                    <div class = "col-md-6">
+                                                    <div class = "col-md-6 pt-19">
                                                         <div class="form-s2">
                                                             <select class="form-control formselect" name="asset_type" placeholder="Select Asset Type">
                                                                 <option value="0" disabled selected>Select Asset Type*</option>

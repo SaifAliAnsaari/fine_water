@@ -23,7 +23,8 @@
             <span>Customer Management</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="navi-l1">
-            <a class="dropdown-item" href="/Customer">Customer List</a>
+            {{-- <a class="dropdown-item" href="/Customer">Customer List</a> --}}
+            <a class="dropdown-item" href="/Customer_zone_list">Customer List</a>
         </div>
     </li>
     <li class="nav-item dropdown">
@@ -62,7 +63,7 @@
             <a class="dropdown-item" href="/product_stock_management">Stock Management</a>
         </div>
     </li>
-    {{-- <li class="nav-item dropdown">
+    <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navi-l1" role="button" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="false">
                 <img src="/images/icon-ecommerce.svg" alt="" />
@@ -71,7 +72,7 @@
             <div class="dropdown-menu" aria-labelledby="navi-l1">
                 <a class="dropdown-item" href="/order">Order</a>
             </div>
-        </li> --}}
+        </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navi-l1" role="button" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">

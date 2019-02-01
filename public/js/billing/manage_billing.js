@@ -419,7 +419,7 @@ $(document).ready(function(){
         var quantity = $('#product_quantity').val();
         var deposite = $('#deposite').val();
         var product_id = $('#select_products').find('option:selected').attr("class");
-        
+        //debugger;
         var prod_id_found = false;
         deposit_against_pro_array.find(x => {
             //debugger;
@@ -461,26 +461,9 @@ $(document).ready(function(){
 
     });
     $(document).on('click', '.delete_one_row', function(){
+        //debugger;
         var id = $(this).attr('id');
-       // alert(id);
-        //return;
-        deposit_against_pro_array.find(x => {
-            //debugger;
-            if(x.product_id == id){
-                x.quantity = "";
-                x.deposite = "";
-                x.product = "";
-                x.product_id = "";
-                //$(this).text('Added');
-                // $('#product_quantity').val('');
-                // $('#deposite').val('');
-                // setTimeout(() => {
-                //     $(this).text('Add');
-                // }, 1000);
-                return;
-            }
-        });
-        //console.log();
+        deposit_against_pro_array.splice(deposit_against_pro_array.findIndex( x => x.product_id == id), 1);  
     });
 
     $(document).on('click', '#assetsY', function(){

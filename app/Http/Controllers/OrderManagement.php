@@ -27,7 +27,7 @@ class OrderManagement extends Controller
     }
 
     public function GetCustomersAndOrders(){
-        echo json_encode(DB::table('order_core')->selectRaw('id, customer_id, price')->get());
+        echo json_encode(DB::table('order_core as oc')->selectRaw('id, customer_id, price, (Select company_name from customers where id = oc.customer_id) as company_name, (Select organization_name from customers where id = oc.customer_id) as organization_name, (Select merchant_name from customers where id = oc.customer_id) as merchant_name')->get());
     }
 
     public function place_order(Request $request){
@@ -53,6 +53,37 @@ class OrderManagement extends Controller
             }else{
                 echo json_encode('success');
             }
+        }else{
+            echo json_encode('failed');
+        }
+    }
+
+    public function GetOrderDetail(Request $request){
+        //echo json_encode($request->id); die;
+        //echo json_encode(DB::table('order_products as op')->get());
+        echo json_encode(DB::table('order_products as op')->selectRaw('id, product_id, sold_qty, return_qty, (Select name from inventory_core where id = op.product_id) as product_name, (Select price from order_core where id = "'.$request->id.'") as price')->where('order_id', $request->id)->get());
+    }
+
+    public function DeleteOrderCoreItem(Request $request){
+        $delete_record = DB::table('order_core')
+        ->where('id', $request->id)
+        ->delete();
+        if($delete_record){
+            $delete_products = DB::table('order_products')
+            ->where('order_id', $request->id)
+            ->delete();
+            echo json_encode('success');
+        }else{
+            echo json_encode('failed');
+        }
+    }
+
+    public function DeleteOrderProItem(Request $request){
+        $delete_record = DB::table('order_products')
+        ->where('id', $request->id)
+        ->delete();
+        if($delete_record){
+            echo json_encode('success');
         }else{
             echo json_encode('failed');
         }

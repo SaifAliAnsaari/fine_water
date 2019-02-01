@@ -16,7 +16,7 @@
             <input type="text" id="operation" hidden>
             <div class="overflow-plist">
                 <div class="plist-content">
-                    <div class="_left-filter" style="padding-top:30px">
+                    <div class="_left-filter" style="padding-top:20px">
                         <div class="container">
                             <div class="row">
                                 <div class="col-12">
@@ -54,10 +54,11 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <p style ="margin-top:10px;">Returnable*</p>
+                                                {{-- <p style ="margin-top:10px;">Returnable*</p> --}}
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6">
+                                                        <label class="font12">Returnable*</label>
                                                     <div class="form-s2">
                                                         
                                                         <select id="returnable" class="form-control formselect" name="returnable" placeholder="Select Returnable">

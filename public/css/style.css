@@ -2066,9 +2066,11 @@ table.dataTable.cell-border tbody tr:first-child th, table.dataTable.cell-border
 .OR-ListView table td, .OR-ListView table th {
     padding: 10px;
 }
+._add-secon-btn{padding-top: 40px}
 
-
-
+._add-secon{
+	display: inline-block; padding: 5px 25px 5px 7px; font-family: 'Source Sans Pro', sans-serif; margin-right: 5px; margin-bottom: 7px}
+._add-secon .close{position: absolute; top: 3px; right: 5px; border: none; outline: none; font-size: 22px}
 
 
 .mb-10 {
@@ -2454,9 +2456,8 @@ body.sidebar-toggled footer.sticky-footer {
 	padding-left: 15px
 }
 ._addOrderSec .btn-primary{padding: 6px 20px; margin-bottom: 15px}
-._addOrderSec .form-s2{ margin-bottom: 20px
-		
-	}
+._addOrderSec .form-s2{ margin-bottom: 20px}
+._add-secon-btn {padding-top: 15px}
 }
 @media (max-width: 480px) {
 .card .header h2, .card ._head03, .modal-title {
@@ -2494,6 +2495,7 @@ body.sidebar-toggled footer.sticky-footer {
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link, .nav-pills .nav-link {
     padding: 5px 10px; font-size: 12px
 }
+._add-secon {display: block}
 }
 @media (max-width: 320px) {
 .TM_icon{margin-right:10px}

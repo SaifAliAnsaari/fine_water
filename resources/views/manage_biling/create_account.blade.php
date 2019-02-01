@@ -69,10 +69,80 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label class="PT-10 font12">Start Date</label>
-                                                            <div class="form-group" style="height: auto">
+                                                            <div class="form-group" style="height: auto!important">
                                                                 <input type="text" name="start_date" id="start_date"
                                                                     class="form-control datepicker" placeholder="">
                                                             </div>
+                                                        </div>
+                                                        <div class="col-md-12 pt-10 mb-10">
+                                                            <h2 class="_head04">Select <span>Customer</span></h2>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="font12">Select Primary Customer</label>
+                                                            <div class="form-s2">
+                                                                <select class="form-control formselect" placeholder="Select Primary Customer">
+                                                                    <option>Select Primary Customer</option>
+                                                                    <option>Customer 1</option>
+                                                                    <option>Customer 2</option>
+                                                                    <option>Customer 3</option>
+                                                                    <option>Customer 4</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12"> <hr style="margin:0; margin-top: 10px"></div>
+                                                        <div class="col-md-6 pt-10">
+                                                            <label class="font12">Select Secondary Customer</label>
+                                                            <div class="form-s2">
+                                                            <select class="form-control formselect" placeholder="Select Secondary  Customer">
+                                                                <option>Select Secondary Customer</option>
+                                                                <option>Customer 1</option>
+                                                                <option>Customer 2</option>
+                                                                <option>Customer 3</option>
+                                                                <option>Customer 4</option>
+                                                            </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 _add-secon-btn">
+                                                            <button type="submit" class="btn btn-primary mr-2">Add</button>
+                                                        </div>
+                                                        <div class="col-md-12 mt-10">
+                                                                <hr class="m-0 mb-10">
+                                                                
+                                                            <div class="alert fade show alert-color _add-secon" role="alert">
+                                                                Secondary Customer 1
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            
+                                                            <div class="alert fade show alert-color _add-secon" role="alert">
+                                                                Secondary Customer 2
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            
+                                                            <div class="alert fade show alert-color _add-secon" role="alert">
+                                                                Secondary Customer 3
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            
+                                                            <div class="alert fade show alert-color _add-secon" role="alert">
+                                                                Secondary Customer 3
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            
+                                                            <div class="alert fade show alert-color _add-secon" role="alert">
+                                                                Secondary Customer 3
+                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            
                                                         </div>
                                                     </div>
                                                     <div class="row m-0 PT-15">
@@ -109,11 +179,9 @@
                                                                     Rate</label>
                                                             </div>
                                                         </div>
-                                                        <div id = "predefined_rate" class="col-md-12"> 
-                                                            <div class="col-md-12">
-                                                                <hr>
-                                                            </div>
-                                                            <div class="col-md-12" >
+                                                        <div id = "predefined_rate" class="col-md-6"> 
+                                                            
+                                                            <div class="pt-19" >
                                                                 <div class="form-s2">
                                                                     <select class="form-control sd-type" id="predefined_products" style="width: 250px" placeholder="select Predefined Rate">
                                                                         <option value="0" disabled selected>Select Predefined Rate</option>
@@ -128,7 +196,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div id="custom_rate" style="display:none;">
+                                                        <div id="custom_rate" style="display:none; width:100%">
                                                             <div class="col-md-12 productRate-table body_asset">
                                                                 {{-- Table --}}
                                                             </div>
@@ -137,7 +205,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="row m-0 PT-15">
+                                                    <div class="row m-0 PT-15 mt-10" >
                                                         <button type="submit" class="btn btn-primary mr-2 saveCurrentData">Save</button>
                                                         <button type="submit" class="btn btn-cancel mr-2 cancel_btn">Cancel</button>
                                                     </div>
@@ -174,10 +242,10 @@
                                                                     </div>
                                                                 </div>
                                                             
-                                                            <div class="col-md-12">
+                                                            {{-- <div class="col-md-12">
                                                                 <hr class="mb-0">
-                                                            </div>
-                                                            <div id ="apply_tax" style = "display:none;" class='col-md-12'>
+                                                            </div> --}}
+                                                            <div id ="apply_tax" style = "display:none;" class='col-md-12 mt-10'>
                                                                 <div class="row">
                                                                     <div class="col-md-6">
                                                                         <div class="form-group">
@@ -189,7 +257,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="row m-0 PT-15">
+                                                        <div class="row m-0 PT-15 ">
                                                             <button type="submit" class="btn btn-primary mr-2 saveCurrentData">Save</button>
                                                             <button type="submit" class="btn btn-cancel mr-2 cancel_btn">Cancel</button>
                                                         </div>
@@ -249,11 +317,11 @@
                                                             </div>
                                                         </div>
                                                         
-                                                        <div id="flat_deposit_div" style="display:none;" class="col-md-12">
+                                                        <div id="flat_deposit_div" style="display:none;" class="col-md-12 pt-10">
                                                             <div class="row">
-                                                                <div class="col-md-12">
+                                                                {{-- <div class="col-md-12">
                                                                     <hr>
-                                                                </div>
+                                                                </div> --}}
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label class="control-label mb-10">Flat Security
@@ -265,10 +333,10 @@
                                                         </div>
 
                                                         <div id="deposit_against_products_div" style="display:none;" class="col-md-12">
-                                                            <div class="row">
-                                                                <div class="col-md-12">
+                                                            <div class="row pt-10">
+                                                                {{-- <div class="col-md-12">
                                                                     <hr>
-                                                                </div>
+                                                                </div> --}}
                                                                 <div id="security_deposite_data" class="col-md-12">
                                                                     {{-- <div class="row m-0 mt-10 pl-0 alert alert-color" role="alert">									
                                                                         <div class="col-md-5"><strong>Product:</strong> Bottle Large </div>
@@ -420,7 +488,7 @@
                                                         <div class="col-md-12 mt-10">	
                                                             <div class="form-s2">
                                                                 <label class="PT-10 font12">Week days</label>
-                                                                <select class="form-control sd-type" multiple="multiple" id="select_days" style="width: 350px;">
+                                                                <select class="form-control sd-type" multiple="multiple" id="select_days">
                                                                     <option>Monday</option>
                                                                     <option>Tuesday</option> 
                                                                     <option>Wednesday</option>
@@ -479,7 +547,7 @@
                                                                         </select>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-12 productRate-table body_asset_variant">
+                                                                <div class="col-md-12 productRate-table body_asset_variant" style="font-size: 13px;">
                                                                     {{-- <table class="table table-hover dt-responsive nowrap" id="example2"
                                                                         style="width:100%">
                                                                         <thead>
@@ -598,6 +666,8 @@
             </div>
         </div>
 
+
+        <style>.form-s2 .select2-container{ width: 100%!important}</style>
         {{-- <div class="row">
                 <div class="col-md-12">
                     <div class="card">

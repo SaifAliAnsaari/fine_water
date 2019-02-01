@@ -18,3 +18,4 @@ Route::middleware('auth:api')->get('/customers', 'Customer@getCustomers');
 Route::middleware('auth:api')->post('/storeCustomer', 'Customer@storeCustomer');
 Route::middleware('auth:api')->get('/getCustomerMeta', 'Customer@customerMeta');
 Route::middleware('auth:api')->post('/updateCustomer', 'Customer@updateCustomer');
+Route::middleware('auth:api')->post('/storeCustomerBulk', 'Customer@storeCustomerBulk');

@@ -16,13 +16,13 @@
             <input type="text" id="operation" hidden>
             <div class="overflow-plist">
                 <div class="plist-content">
-                    <div class="_left-filter" style="padding-top:30px">
+                    <div class="_left-filter" style="padding-top:20px">
                         <div class="container">
                             <div class="row">
                                 <div class="col-12">
                                     <div id="floating-label" class="card p-20 top_border mb-3">
                                         <input hidden type="text" name="city_id" value = "">
-                                        <h2 class="_head03 PT-10">Add <span> City</span></h2>
+                                        <h2 class="_head03">Add <span> City</span></h2>
                                         <div class="form-wrap p-0">
                                             <div class="row">
                                                 <div class="col-md-12">

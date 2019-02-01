@@ -23,16 +23,28 @@ class Customer extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        return view('customer.list', [ 'customers' => Cust::selectRaw('id, company_name')->get(), 'zone' => DB::table('zone_info')->get() ]);
-    }
+
+     public function Customer_zone_list(){
+         return view('customer.zone_list');
+     }
+
+     public function GetZoneListForCustomers(){
+         echo json_encode(DB::table('zone_info as zi')->selectRaw('id, zone_name, area_id, (Select Count(*) from customers where zone_id = zi.id) as count, (Select area_name from area_info where id = zi.area_id) as area_name, (Select team_name from delivery_team where area_id = zi.area_id) as delivery_team')->get());
+     }
+
+
+     public function CustomerView($id){
+        return view('customer.list', [ 'zone_id' => $id, 'customers' => Cust::selectRaw('id, company_name')->get(), 'zone' => DB::table('zone_info')->get() ]);
+     }
+    // public function index($id)
+    // {
+    //     return view('customer.list', [ 'customers' => Cust::selectRaw('id, company_name')->get(), 'zone' => DB::table('zone_info')->get() ]);
+    // }
 
     //Ajax Call from list-customers.js
-    public function CustomersList(){
-        // GetCustomersList
+    public function CustomersList(Request $request){
         //DB::raw('IFNULL(region, "NA") as region')
-        echo json_encode( DB::table('customers as cust')->select('id', 'company_name', 'organization_name', 'customer_activation', 'merchant_name', 'company_poc', 'home_phone', 'business_phone', 'latitude', 'longitude', 'customer_type', 'country', DB::raw('IFNULL((SELECT company_name from customers where id = cust.id), "NA") as parent_company'), DB::raw('(SELECT zone_name from zone_info where id = cust.zone_id) as zone'))->get());
+        echo json_encode( DB::table('customers as cust')->select('id', 'company_name', 'organization_name', 'customer_activation', 'merchant_name', 'company_poc', 'home_phone', 'business_phone', 'latitude', 'longitude', 'customer_type', 'country', DB::raw('IFNULL((SELECT company_name from customers where id = cust.id), "NA") as parent_company'), DB::raw('(SELECT zone_name from zone_info where id = cust.zone_id) as zone'))->whereRaw('zone_id = "'.$request->zone_id.'"')->get());
     }
 
     public function activate_customer(Request $request){
@@ -559,6 +571,67 @@ class Customer extends Controller
         if($status){
             $status = "Customer has been saved";
             $jar = new JsonApiResponse('success', '200', $status);
+        }
+        return $jar->apiResponse();
+    }
+
+    //Api Call
+    public function storeCustomerBulk(Request $request){
+        
+        // First we fetch the Request instance
+        $request = $request->instance();
+
+        // Now we can get the content from it
+        $content = json_decode($request->getContent(), true);
+
+        foreach($content["data"] as $data){
+            $customer = new Cust;
+            if($data["customer_type"] == 1){
+                $customer->company_name = $data["company_name"];
+                $customer->home_phone = $data["home_phone"];
+                $customer->cnic = $data["cnic"];
+            }else if($data["customer_type"] == 2){
+                $customer->organization_name = $data["organization_name"];
+                $customer->fax_number = $data["fax_number"];
+                $customer->job_title = $data["job_title"];
+                $customer->strn = $data["strn"];
+                $customer->ntn = $data["ntn"];
+            }else{
+                $customer->merchant_name = $data["merchant_name"];
+                $customer->merchant_type = $data["merchant_type"];
+                $customer->fax_number = $data["fax_number"];
+                $customer->job_title = $data["job_title"];
+                $customer->strn = $data["strn"];
+                $customer->ntn = $data["ntn"];
+            }
+
+            $customer->customer_type = $data["customer_type"];
+            $customer->latitude = $data["latitude"];
+            $customer->longitude = $data["longitude"];
+            $customer->address = $data["address"];
+            $customer->city = $data["city"];
+            $customer->postal_code = $data["postal_code"];
+            $customer->business_phone = $data["business_phone"];
+            $customer->mobile_phone = $data["mobile_phone"];
+            $customer->email = $data["email"];
+            $customer->company_poc = $data["company_poc"];
+            $customer->parent_company = $data["parent_company"];
+            if($data["picture"]){
+                $pic = $this->upload_file($data["picture"]);
+                if($pic["status"] == "success"){
+                    $customer->picture = $pic["name"];
+                }
+            }
+            $status = $customer->save();
+        }
+        
+        
+        if($status){
+            $status = "All customers are saved successfully";
+            $jar = new JsonApiResponse('success', '200', $status);
+        }else{
+            $status = "Unable to save customers";
+            $jar = new JsonApiResponse('failed', '103', $status);
         }
         return $jar->apiResponse();
     }

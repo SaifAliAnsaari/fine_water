@@ -3,9 +3,12 @@ $(document).ready(function() {
     var segments = location.href.split('/');
     var action = segments[3];
 
-    if (action !== 'CustomerProfile')
+    if(action == "Customer_zone_list"){
+        fetchZoneList();
+    }else if (action !== 'CustomerProfile' && action !== 'Customer_zone_list'){
+    //alert('here');
         fetchCompaniesList();
-    else {
+    }else {
         fetchCompanyInfoForUpdate($('#companyIdForUpdate').val());
     }
     var lastOp = "add";
@@ -722,9 +725,14 @@ function fetchCompanyInfoForUpdate(id) {
 }
 
 function fetchCompaniesList() {
+    var zone_id = $('#zone_selected_id').val();
     $.ajax({
         type: 'GET',
         url: '/GetCustomersList',
+        data: {
+            _token: '{!! csrf_token() !!}',
+            zone_id: zone_id
+        },
         success: function(response) {
            console.log(response);
             $('.body').empty();
@@ -769,4 +777,24 @@ function initMap(latitude, longitude) {
 function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
+}
+
+function fetchZoneList() {
+    $.ajax({
+        type: 'GET',
+        url: '/GetZoneListForCustomers',
+        success: function(response) {
+           //console.log(response);
+            $('.body').empty();
+            $('.body').append('<table class="table table-hover dt-responsive nowrap" id="companiesListTable" style="width:100%;"><thead><tr><th>ID</th><th>Zone Name</th><th>Delivery Team</th><th>Area</th><th>Total Customers</th><th>Action</th></tr></thead><tbody></tbody></table>');
+            $('#companiesListTable tbody').empty();
+            var response = JSON.parse(response);
+            response.forEach(element => {
+                $('#companiesListTable tbody').append('<tr><td>' + element['id'] + '</td><td>' + element['zone_name'] + '</td><td>' + element['delivery_team'] + '</td><td>' + element['area_name'] + '</td><td>' + element['count'] + '</td><td><a href="/Customer_list/' + element['id'] + '"><button id="' + element['id'] + '" class="btn btn-default btn-line">View Detail</button></a></td></tr>');
+            });
+            $('#tblLoader').hide();
+            $('.body').fadeIn();
+            $('#companiesListTable').DataTable();
+        }
+    });
 }

@@ -73,7 +73,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <h2 class="_head03 PT-10">Assign Delivery <span> Team Area*</span></h2>
+                                        <label class="font-12 pt-10"> Assign Delivery <span> Team Area*</span></label>
                                         <div class="form-s2">
                                             <select class="form-control formselect" name="area_name" placeholder="Select Area">
                                                 <option value="0" disabled selected>Select Area*</option>
