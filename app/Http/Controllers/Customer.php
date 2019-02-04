@@ -180,6 +180,11 @@ class Customer extends Controller
         }
         $status = $customer->save();
         if($status){
+            DB::table('synced_data_info')->insert([
+                'customer_id' => $customer->id,
+                'operation' => "add",
+                'is_synced' => '0'
+                ]);
             echo json_encode($customer->id);
             //echo json_encode('success');
         }else{
@@ -321,6 +326,9 @@ class Customer extends Controller
             $customer->cnic = null;
         }
         
+        DB::table('synced_data_info')->where('customer_id', $id)->update([
+            'operation' => "update"
+            ]);
 
         if($request->hasFile('compPicture')){
             $existingImg = $customer->picture;
@@ -350,7 +358,7 @@ class Customer extends Controller
             // foreach($docTypes as $type){
             //     DB::table('customer_documents')->insert(array('customer_id' => $id, 'document_id' => $type));
             // }
-            echo json_encode('success');
+            echo json_encode($customer->id);
             
         }
     }
@@ -568,8 +576,24 @@ class Customer extends Controller
         }
         $status = $customer->save();
         $jar = new JsonApiResponse('failed', '103', $status);
+        // if($status){
+        //     DB::table('synced_data_info')->insert([
+        //         'customer_id' => $customer->id,
+        //         'zone_id' => $request->zone_id,
+        //         'operation' => "add",
+        //         'is_synced' => '1'
+        //         ]);
+        //     $status = "Customer has been saved";
+        //     $jar = new JsonApiResponse('success', '200', $status);
+        // }
+        // return $jar->apiResponse();
         if($status){
-            $status = "Customer has been saved";
+            // DB::table('synced_data_info')->insert([
+            //         'customer_id' => $customer->id,
+            //         'operation' => "add",
+            //         'is_synced' => '1'
+            //         ]);
+            $status = array('customer_id' => $customer->id);
             $jar = new JsonApiResponse('success', '200', $status);
         }
         return $jar->apiResponse();
@@ -583,6 +607,7 @@ class Customer extends Controller
 
         // Now we can get the content from it
         $content = json_decode($request->getContent(), true);
+        $customerData = array();
 
         foreach($content["data"] as $data){
             $customer = new Cust;
@@ -614,6 +639,7 @@ class Customer extends Controller
             $customer->business_phone = $data["business_phone"];
             $customer->mobile_phone = $data["mobile_phone"];
             $customer->email = $data["email"];
+            $customer->zone_id = $data['zone_id'];
             $customer->company_poc = $data["company_poc"];
             $customer->parent_company = $data["parent_company"];
             if($data["picture"]){
@@ -623,14 +649,107 @@ class Customer extends Controller
                 }
             }
             $status = $customer->save();
+            $customerData[] = array('old_id' => $data["customer_id"], 'new_id' => $customer->id);
+            // DB::table('synced_data_info')->insert([
+            //     'customer_id' => $customer->id,
+            //     'operation' => "add",
+            //     'is_synced' => '1'
+            //     ]);
         }
         
         
         if($status){
             $status = "All customers are saved successfully";
-            $jar = new JsonApiResponse('success', '200', $status);
+            $jar = new JsonApiResponse('success', '200', $customerData);
         }else{
             $status = "Unable to save customers";
+            $jar = new JsonApiResponse('failed', '103', $status);
+        }
+        return $jar->apiResponse();
+    }
+
+    //Api Call
+    public function updateCustomerBulk(Request $request){
+        $request = $request->instance();
+        $content = json_decode($request->getContent(), true);
+        
+        foreach($content["data"] as $data){
+            $customer = Cust::find($data['id']);
+            if($data["customer_type"] == 1){
+                $customer->company_name = $data["company_name"];
+                $customer->home_phone = $data["home_phone"];
+                $customer->cnic = $data["cnic"];
+                $customer->organization_name = null;
+                $customer->fax_number = null;
+                $customer->job_title = null;
+                $customer->strn = null;
+                $customer->ntn = null;
+                $customer->merchant_name = null;
+                $customer->merchant_type = null;
+                $customer->fax_number = null;
+                $customer->job_title = null;
+                $customer->strn = null;
+                $customer->ntn = null;
+            }else if($data["customer_type"] == 2){
+                $customer->organization_name = $data["organization_name"];
+                $customer->fax_number = $data["fax_number"];
+                $customer->job_title = $data["job_title"];
+                $customer->strn = $data["strn"];
+                $customer->ntn = $data["ntn"];
+                $customer->company_name = null;
+                $customer->home_phone = null;
+                $customer->cnic = null;
+                $customer->merchant_name = null;
+                $customer->merchant_type = null;
+                $customer->fax_number = null;
+                $customer->job_title = null;
+                $customer->strn = null;
+                $customer->ntn = null;
+            }else{
+                $customer->merchant_name = $data["merchant_name"];
+                $customer->merchant_type = $data["merchant_type"];
+                $customer->fax_number = $data["fax_number"];
+                $customer->job_title = $data["job_title"];
+                $customer->strn = $data["strn"];
+                $customer->ntn = $data["ntn"];
+                $customer->company_name = null;
+                $customer->home_phone = null;
+                $customer->cnic = null;
+                $customer->organization_name = null;
+                $customer->fax_number = null;
+                $customer->job_title = null;
+                $customer->strn = null;
+                $customer->ntn = null;
+            }
+
+            $customer->customer_type = $data["customer_type"];
+            $customer->latitude = $data["latitude"];
+            $customer->longitude = $data["longitude"];
+            $customer->address = $data["address"];
+            $customer->city = $data["city"];
+            $customer->zone_id = $data['zone_id'];
+            $customer->postal_code = $data["postal_code"];
+            $customer->business_phone = $data["business_phone"];
+            $customer->mobile_phone = $data["mobile_phone"];
+            $customer->email = $data["email"];
+            $customer->company_poc = $data["company_poc"];
+            $customer->parent_company = $data["parent_company"];
+            if($data["picture"]){
+                $pic = $this->upload_file($data["picture"]);
+                if($pic["status"] == "success"){
+                    $customer->picture = $pic["name"];
+                }
+            }
+            $status = $customer->save();
+            // DB::table('synced_data_info')->where('customer_id', $data['id'])->update([
+            //     'operation' => "update"
+            //     ]);
+        }
+        if($status){
+            $status = "All customers are updated successfully";
+            $jar = new JsonApiResponse('success', '200', $status);
+        }else{
+            $status = "Unable to update customers";
             $jar = new JsonApiResponse('failed', '103', $status);
         }
         return $jar->apiResponse();
@@ -881,12 +1000,35 @@ class Customer extends Controller
             }
         }
         $status = $customer->save();
+
         $jar = new JsonApiResponse('failed', '103', $status);
         if($status){
+            // DB::table('synced_data_info')->where('customer_id', $request->customer_id)->update([
+            //     'operation' => "update"
+            //     ]);
             $status = "Customer has been saved";
             $jar = new JsonApiResponse('success', '200', $status);
         }
         return $jar->apiResponse();
+    }
+
+    //Api Call
+    public function getUnsyncCustomers(){
+        $customers = json_decode(json_encode(DB::table('customers')->whereRaw('id IN (Select customer_id from synced_data_info where is_synced = 0 )')->get()), true);
+        $zones = json_decode(json_encode(DB::table('zone_info')->whereRaw('id IN (Select zone_id from synced_data_info where is_synced = 0 )')->get()), true);
+        $test = array();
+        $test['customers'] = $customers;
+        $test['zones'] = $zones; 
+        $jar = new JsonApiResponse('success', '200', $test);
+  		
+        return $jar->apiResponse();
+    }
+
+    //Api Call
+    public function updateSyncedData(Request $request){
+        $request = $request->instance();
+        $content = json_decode($request->getContent(), true);
+        //return $content["data"];
     }
 
 }

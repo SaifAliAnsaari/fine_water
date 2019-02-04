@@ -164,12 +164,17 @@ class Regions extends Controller
         if(DB::table('zone_info')->select('id')->whereRaw('zone_name = "'.$request->zone.'" AND area_id = "'.$request->area_name.'"')->first()){
             echo json_encode('already exist');
         }else{
-            $insert_area = DB::table('zone_info')->insert([
+            $insert_area = DB::table('zone_info')->insertGetId(
                 ['zone_name' => $request->zone,
                 'area_id' => $request->area_name]
-                ]);
+                );
 
             if($insert_area){
+                DB::table('synced_data_info')->insert([
+                'zone_id' => $insert_area,
+                'operation' => "add",
+                'is_synced' => '0'
+                ]);
                 echo json_encode("success");
             }else{
                 echo json_encode("failed");
@@ -191,10 +196,14 @@ class Regions extends Controller
         //echo json_encode($request->city_id. " - " . $request->city);
         try{
             $update_zone = DB::table('zone_info')
-        ->where('id', $request->zone_id)
-        ->update([
+            ->where('id', $request->zone_id)
+            ->update([
             'zone_name' => $request->zone,
             'area_id' => $request->area_name]);
+
+            DB::table('synced_data_info')->where('zone_id', $request->zone_id)->update([
+                'operation' => "update"
+                ]);
             
             echo json_encode("success"); 
 
