@@ -392,7 +392,7 @@ class Customer extends Controller
         where id = (SELECT delivery_team_id FROM `delivery_team_members`
         where user_id = '.$req->user()->id.'))')->get()), true);
 
-    	$customers = json_decode(json_encode(Cust::all()), true);
+    	$customers = json_decode(json_encode(Cust::where('customer_activation', 1)->get()), true);
 
   		$counter = 0;
   		foreach ($zones as $z) {
@@ -1013,12 +1013,19 @@ class Customer extends Controller
     }
 
     //Api Call
-    public function getUnsyncCustomers(){
-        $customers = json_decode(json_encode(DB::table('customers as cust')->selectRaw('id, company_name, organization_name, merchant_name, company_poc, strn, cnic, ntn, job_title, business_phone, home_phone, mobile_phone, whatsapp_phone, fax_number, latitude, longitude, address, city, state, postal_code, country, region, email, webpage, remarks, customer_type, merchant_type, zone_id, picture, is_active, customer_activation, created_at, updated_at, (Select operation from synced_data_info where customer_id = cust.id) as last_operation')->whereRaw('id IN (Select customer_id from synced_data_info where is_synced = 0 ) AND customer_activation = 1')->get()), true);
-        $zones = json_decode(json_encode(DB::table('zone_info as zi')->selectRaw('id, zone_name, area_id, (Select operation from synced_data_info where zone_id = zi.id) as last_operation')->whereRaw('id IN (Select zone_id from synced_data_info where is_synced = 0 )')->get()), true);
+    public function getUnsyncCustomers(Request $req){
+        $customers = json_decode(json_encode(DB::table('customers as cust')->selectRaw('id, company_name, organization_name, merchant_name, company_poc, strn, cnic, ntn, job_title, business_phone, home_phone, mobile_phone, whatsapp_phone, fax_number, latitude, longitude, address, city, state, postal_code, country, region, email, webpage, remarks, customer_type, merchant_type, zone_id, picture, is_active, customer_activation, created_at, updated_at, (Select operation from synced_data_info where customer_id = cust.id) as last_operation')->whereRaw('id IN (Select customer_id from synced_data_info where is_synced = 0 ) AND customer_activation = 1 and zone_id IN (SELECT id from zone_info where area_id = (SELECT area_id FROM `delivery_team` where id = (SELECT delivery_team_id FROM `delivery_team_members` where user_id = '.$req->user()->id.')))')->get()), true);
+        
+        $zones = json_decode(json_encode(DB::table('zone_info as zi')->selectRaw('id, zone_name, area_id, (Select operation from synced_data_info where zone_id = zi.id) as last_operation')->whereRaw('id IN (Select zone_id from synced_data_info where is_synced = 0) AND area_id = (SELECT area_id FROM `delivery_team`
+        where id = (SELECT delivery_team_id FROM `delivery_team_members`
+        where user_id = '.$req->user()->id.'))')->get()), true);
+
+        $deactive_customers = json_decode(json_encode(DB::table('customers')->select('id')->where('customer_activation', 0)->get()), true);
+        
         $test = array();
         $test['customers'] = $customers;
         $test['zones'] = $zones; 
+        $test['deactive_customers'] = $deactive_customers;
         $jar = new JsonApiResponse('success', '200', $test);
   		
         return $jar->apiResponse();
